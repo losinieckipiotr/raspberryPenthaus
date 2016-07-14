@@ -1,0 +1,18 @@
+PENTHAUS PROJECT - Piotr Losiniecki (c)
+
+Commands:
+print devs - prints on screen all devices
+print rules - prints on screen all rules
+print events - prints on screen all events
+clear all - removes all devices, rules and events
+clear rules - removes all rules
+clear events - removes all events
+help - prints this message
+quit - quit form program
+
+create <Device_Name> id <id> [param] [val] ...
+create Rule name <Rule_Name>
+add trigger to <Rule_Name> name <Trigger_Name> dev_id <id> logic <bool>
+add action to <Rule_Name>  name> <Action_Name> dev_id <id> [param] [val] ...
+
+execute LED id <id> <Command_Name> [param] [val] ...

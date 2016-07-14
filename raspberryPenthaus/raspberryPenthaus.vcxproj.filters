@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\gpio">
+      <UniqueIdentifier>{f57af076-76de-4c83-a389-867f63852de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io">
+      <UniqueIdentifier>{f3d4ecf1-8b20-45f5-8a38-9613684ebada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gpio">
+      <UniqueIdentifier>{050c8432-9eaa-4fe3-80f4-69ac3cf29a2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io\network">
+      <UniqueIdentifier>{7ede7d5c-857c-4583-a46c-c7717b54efcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io\network\transport">
+      <UniqueIdentifier>{7f8bad89-7a79-456b-98c0-8035fb80a2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io">
+      <UniqueIdentifier>{0380c5a9-e9dd-443d-a337-93c7cdae6884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\network">
+      <UniqueIdentifier>{9e22cad5-50f8-4f7d-897c-31a5c6e13f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\program">
+      <UniqueIdentifier>{4ae8bc31-aa16-4375-95d0-29c73f266977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\prototype">
+      <UniqueIdentifier>{b504b795-2702-462b-b948-f6a6175c68eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\print">
+      <UniqueIdentifier>{f3e31044-99f8-4274-8e76-c68999b00da5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\program">
+      <UniqueIdentifier>{edfe6370-a13b-4045-a6d0-b68643a16c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\prototype">
+      <UniqueIdentifier>{d3dfca45-ba8b-46dc-babb-c32ab2da2b03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rule">
+      <UniqueIdentifier>{77c36622-dbe3-4d58-811f-1a2cc1963137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rule">
+      <UniqueIdentifier>{03c98061-1adc-4196-a04d-b48f69ce18a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rule\events">
+      <UniqueIdentifier>{a3194878-bd99-4518-a481-fc9b94e8c6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rule\events">
+      <UniqueIdentifier>{9fd098d7-fc8e-4046-bbf9-fbcd26728648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\wiringpi">
+      <UniqueIdentifier>{f7827eb6-5630-4796-b94a-ce8e4df9ab76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\wiringpi">
+      <UniqueIdentifier>{9797c7e7-e5fd-40c6-88f3-84e77326942c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gpio\DeviceBase.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio\GPIO.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio\IDevice.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio\LED.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio\LightSensor.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="gpio\MotionSensor.h">
+      <Filter>Header Files\gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="io\IO.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\StdIO.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\network\Server.h">
+      <Filter>Header Files\io\network</Filter>
+    </ClInclude>
+    <ClInclude Include="io\network\Session.h">
+      <Filter>Header Files\io\network</Filter>
+    </ClInclude>
+    <ClInclude Include="io\network\transport\MyFrame.hpp">
+      <Filter>Header Files\io\network\transport</Filter>
+    </ClInclude>
+    <ClInclude Include="print\IToString.h">
+      <Filter>Header Files\print</Filter>
+    </ClInclude>
+    <ClInclude Include="program\Commander.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="program\Creator.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="program\Program.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="prototype\IPrototype.h">
+      <Filter>Header Files\prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="prototype\PrototypeBase.h">
+      <Filter>Header Files\prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="prototype\PrototypeManager.h">
+      <Filter>Header Files\prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\IAction.h">
+      <Filter>Header Files\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\IEvent.h">
+      <Filter>Header Files\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\ITrigger.h">
+      <Filter>Header Files\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\Rule.h">
+      <Filter>Header Files\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\RuleManager.h">
+      <Filter>Header Files\rule</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\events\DuskDetected.h">
+      <Filter>Header Files\rule\events</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\events\MotionDetected.h">
+      <Filter>Header Files\rule\events</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\events\OffTheLED.h">
+      <Filter>Header Files\rule\events</Filter>
+    </ClInclude>
+    <ClInclude Include="rule\events\SwitchTheLED.h">
+      <Filter>Header Files\rule\events</Filter>
+    </ClInclude>
+    <ClInclude Include="wiringpi\WP_LED.h">
+      <Filter>Header Files\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="wiringpi\WP_MotionSensor.h">
+      <Filter>Header Files\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="wiringpi\WP_TSL2561.h">
+      <Filter>Header Files\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="wp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="gpio\GPIO.cpp">
+      <Filter>Source Files\gpio</Filter>
+    </ClCompile>
+    <ClCompile Include="gpio\LED.cpp">
+      <Filter>Source Files\gpio</Filter>
+    </ClCompile>
+    <ClCompile Include="gpio\LightSensor.cpp">
+      <Filter>Source Files\gpio</Filter>
+    </ClCompile>
+    <ClCompile Include="gpio\MotionSensor.cpp">
+      <Filter>Source Files\gpio</Filter>
+    </ClCompile>
+    <ClCompile Include="io\IO.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\StdIO.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\network\Server.cpp">
+      <Filter>Source Files\io\network</Filter>
+    </ClCompile>
+    <ClCompile Include="io\network\Session.cpp">
+      <Filter>Source Files\io\network</Filter>
+    </ClCompile>
+    <ClCompile Include="program\Commander.cpp">
+      <Filter>Source Files\program</Filter>
+    </ClCompile>
+    <ClCompile Include="program\Creator.cpp">
+      <Filter>Source Files\program</Filter>
+    </ClCompile>
+    <ClCompile Include="program\Program.cpp">
+      <Filter>Source Files\program</Filter>
+    </ClCompile>
+    <ClCompile Include="prototype\PrototypeManager.cpp">
+      <Filter>Source Files\prototype</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\Rule.cpp">
+      <Filter>Source Files\rule</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\RuleManager.cpp">
+      <Filter>Source Files\rule</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\events\DuskDetected.cpp">
+      <Filter>Source Files\rule\events</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\events\MotionDetected.cpp">
+      <Filter>Source Files\rule\events</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\events\OffTheLED.cpp">
+      <Filter>Source Files\rule\events</Filter>
+    </ClCompile>
+    <ClCompile Include="rule\events\SwitchTheLED.cpp">
+      <Filter>Source Files\rule\events</Filter>
+    </ClCompile>
+    <ClCompile Include="wiringpi\WP_LED.cpp">
+      <Filter>Source Files\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="wiringpi\WP_MotionSensor.cpp">
+      <Filter>Source Files\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="wiringpi\WP_TSL2561.cpp">
+      <Filter>Source Files\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

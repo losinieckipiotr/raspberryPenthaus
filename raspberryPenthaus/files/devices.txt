@@ -1,0 +1,4 @@
+create LED id 0 pin 0 delay 60 logic true
+create Motion_Sensor id 1 pin 2 logic true
+create Motion_Sensor id 2 pin 4 logic true
+create Light_Sensor id 100

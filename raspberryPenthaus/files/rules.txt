@@ -1,0 +1,3 @@
+create Rule name Light_On priority 0 mode true
+create Rule name Light_Off priority 0 mode false
+create Rule name Hard_Off priority 1 mode true

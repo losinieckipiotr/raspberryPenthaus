@@ -1,0 +1,11 @@
+add trigger to Light_On name Dusk_Detected dev_id 100 val 100.000000 logic true
+add trigger to Light_On name Motion_Detected dev_id 1 logic true
+add action to Light_On name Switch_The_LED dev_id 0 logic true
+
+add trigger to Light_Off name Dusk_Detected dev_id 100 val 100.000000 logic false
+add trigger to Light_Off name Motion_Detected dev_id 1 logic false
+add action to Light_Off name Switch_The_LED dev_id 0 logic false
+
+add trigger to Hard_Off name Motion_Detected dev_id 2 logic true
+add action to Hard_Off name Off_The_LED dev_id 0
+
