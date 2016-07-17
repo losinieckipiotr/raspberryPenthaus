@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="prototype::IPrototype">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAABA=</HashCode>
+      <FileName>prototype\IPrototype.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="prototype::PrototypeBase">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="prototype::IPrototype">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="0.418" Y="0.11" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <InheritanceLine Type="print::IToString">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="-0.923" Y="0.046" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIAABAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>prototype\PrototypeBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="print::IToString">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAACCAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>print\IToString.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::DeviceBase">
+    <Position X="3.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAACAAAAAAABAgAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>gpio\DeviceBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::IDevice">
+    <Position X="3.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgACAAAAAQAAAAAgAAAAAAAQYAAAAAAAAAABAA=</HashCode>
+      <FileName>gpio\IDevice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::LED">
+    <Position X="3.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oAAAiIgEAAQAAgQkAAAACAAAEAgEAAAgAgAAIAAAEqA=</HashCode>
+      <FileName>gpio\LED.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::wiringpi::WP_LED">
+    <Position X="3.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAABAAAAAAAABAAAABRAAAAAAQAAAABhA=</HashCode>
+      <FileName>wiringpi\WP_LED.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

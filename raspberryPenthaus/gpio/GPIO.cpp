@@ -115,7 +115,6 @@ void GPIO::ReadDefaultAll()
 
 void GPIO::WriteDefaultAll()
 {
-
 	for (auto& dev : _devices)
 	{
 		dev.second->WriteDefault();

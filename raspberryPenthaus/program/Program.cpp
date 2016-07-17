@@ -92,7 +92,7 @@ bool Program::Init()
 		}
 		try
 		{
-			////dodawanie triggerow i akcji
+			//dodawanie triggerow i akcji
 			_creator->EventsFromFile(_eventsFile);
 		}
 		catch (runtime_error& re)

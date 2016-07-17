@@ -21,7 +21,7 @@ StdIO::~StdIO()
 
 list<string> StdIO::Input(string& message, network::Session& session)
 {
-	//brak implementacji, przeslonic metode
+	//brak implementacji, przeslonic metode (NO IMPLEMENTATION EXCEPTION)
 	list<std::string> reply;
 	reply.push_back("<ERROR>");
 	return reply;
