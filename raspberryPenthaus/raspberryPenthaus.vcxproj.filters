@@ -55,36 +55,33 @@
     <Filter Include="Source Files\rule">
       <UniqueIdentifier>{03c98061-1adc-4196-a04d-b48f69ce18a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\rule\events">
-      <UniqueIdentifier>{a3194878-bd99-4518-a481-fc9b94e8c6f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\rule\events">
       <UniqueIdentifier>{9fd098d7-fc8e-4046-bbf9-fbcd26728648}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\wiringpi">
+    <Filter Include="Header Files\event">
+      <UniqueIdentifier>{d3ae1f4d-7937-4457-ba6e-4a103966841f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rule\events">
+      <UniqueIdentifier>{a3194878-bd99-4518-a481-fc9b94e8c6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\event">
+      <UniqueIdentifier>{7271d973-afa4-4426-983c-d04628aa54b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\device">
+      <UniqueIdentifier>{7364a5c2-0f3d-4aee-8057-c87ac1e14d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\device\wiringpi">
       <UniqueIdentifier>{f7827eb6-5630-4796-b94a-ce8e4df9ab76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\wiringpi">
+    <Filter Include="Source Files\device">
+      <UniqueIdentifier>{e6882c8a-f40e-4716-b7e0-d498f7c8c830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\device\wiringpi">
       <UniqueIdentifier>{9797c7e7-e5fd-40c6-88f3-84e77326942c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gpio\DeviceBase.h">
-      <Filter>Header Files\gpio</Filter>
-    </ClInclude>
     <ClInclude Include="gpio\GPIO.h">
-      <Filter>Header Files\gpio</Filter>
-    </ClInclude>
-    <ClInclude Include="gpio\IDevice.h">
-      <Filter>Header Files\gpio</Filter>
-    </ClInclude>
-    <ClInclude Include="gpio\LED.h">
-      <Filter>Header Files\gpio</Filter>
-    </ClInclude>
-    <ClInclude Include="gpio\LightSensor.h">
-      <Filter>Header Files\gpio</Filter>
-    </ClInclude>
-    <ClInclude Include="gpio\MotionSensor.h">
       <Filter>Header Files\gpio</Filter>
     </ClInclude>
     <ClInclude Include="io\IO.h">
@@ -150,20 +147,38 @@
     <ClInclude Include="rule\events\SwitchTheLED.h">
       <Filter>Header Files\rule\events</Filter>
     </ClInclude>
-    <ClInclude Include="wiringpi\WP_LED.h">
-      <Filter>Header Files\wiringpi</Filter>
-    </ClInclude>
-    <ClInclude Include="wiringpi\WP_MotionSensor.h">
-      <Filter>Header Files\wiringpi</Filter>
-    </ClInclude>
-    <ClInclude Include="wiringpi\WP_TSL2561.h">
-      <Filter>Header Files\wiringpi</Filter>
-    </ClInclude>
     <ClInclude Include="wp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="program\ItemsPool.hpp">
       <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="device\DeviceBase.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\IDevice.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\LED.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\LightSensor.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\MotionSensor.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\wiringpi\WP_LED.h">
+      <Filter>Header Files\device\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="device\wiringpi\WP_MotionSensor.h">
+      <Filter>Header Files\device\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="device\wiringpi\WP_TSL2561.h">
+      <Filter>Header Files\device\wiringpi</Filter>
+    </ClInclude>
+    <ClInclude Include="event\DeviceReader.h">
+      <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,20 +233,32 @@
     <ClCompile Include="rule\events\SwitchTheLED.cpp">
       <Filter>Source Files\rule\events</Filter>
     </ClCompile>
-    <ClCompile Include="wiringpi\WP_LED.cpp">
-      <Filter>Source Files\wiringpi</Filter>
-    </ClCompile>
-    <ClCompile Include="wiringpi\WP_MotionSensor.cpp">
-      <Filter>Source Files\wiringpi</Filter>
-    </ClCompile>
-    <ClCompile Include="wiringpi\WP_TSL2561.cpp">
-      <Filter>Source Files\wiringpi</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="io\IO.cpp">
       <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="device\wiringpi\WP_LED.cpp">
+      <Filter>Source Files\device\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="device\wiringpi\WP_MotionSensor.cpp">
+      <Filter>Source Files\device\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="device\wiringpi\WP_TSL2561.cpp">
+      <Filter>Source Files\device\wiringpi</Filter>
+    </ClCompile>
+    <ClCompile Include="device\LED.cpp">
+      <Filter>Source Files\device</Filter>
+    </ClCompile>
+    <ClCompile Include="device\LightSensor.cpp">
+      <Filter>Source Files\device</Filter>
+    </ClCompile>
+    <ClCompile Include="device\MotionSensor.cpp">
+      <Filter>Source Files\device</Filter>
+    </ClCompile>
+    <ClCompile Include="event\DeviceReader.cpp">
+      <Filter>Source Files\event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

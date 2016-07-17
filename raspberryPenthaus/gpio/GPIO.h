@@ -4,7 +4,7 @@
 #include <vector>
 #include <mutex>
 #include <string>
-#include "IDevice.h"
+#include "../device/IDevice.h"
 #include "../wp.h"
 
 namespace gpio

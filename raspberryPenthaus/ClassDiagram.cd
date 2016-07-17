@@ -1,62 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="prototype::IPrototype">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+  <Class Name="gpio::wiringpi::WP_LightSensorTSL2561" Collapsed="true">
+    <Position X="3" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAABA=</HashCode>
-      <FileName>prototype\IPrototype.h</FileName>
+      <HashCode>AASCQAgACAAAAECAABAAQAAEAAABQIABgAAACAEABBA=</HashCode>
+      <FileName>wiringpi\WP_TSL2561.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="prototype::PrototypeBase">
-    <Position X="3.5" Y="3.75" Width="1.5" />
-    <InheritanceLine Type="prototype::IPrototype">
-      <InheritanceModifierLabel ManuallyPlaced="true">
-        <Position X="0.418" Y="0.11" />
-      </InheritanceModifierLabel>
-    </InheritanceLine>
-    <InheritanceLine Type="print::IToString">
-      <InheritanceModifierLabel ManuallyPlaced="true">
-        <Position X="-0.923" Y="0.046" />
-      </InheritanceModifierLabel>
-    </InheritanceLine>
+  <Class Name="gpio::wiringpi::WP_LED" Collapsed="true">
+    <Position X="7.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAABAAAAAAAABAAAABRAAAAAAQAAAABhA=</HashCode>
+      <FileName>wiringpi\WP_LED.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::wiringpi::WP_MotionSensor" Collapsed="true">
+    <Position X="5.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAiACAAAAAAAAAAAQAAAAAABQKAAAAAQAAAABBA=</HashCode>
+      <FileName>wiringpi\WP_MotionSensor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="prototype::PrototypeBase" Collapsed="true">
+    <Position X="5.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAIAABAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>prototype\PrototypeBase.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="print::IToString">
-    <Position X="6.5" Y="0.5" Width="1.5" />
+  <Class Name="prototype::IPrototype" Collapsed="true">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAABA=</HashCode>
+      <FileName>prototype\IPrototype.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="print::IToString" Collapsed="true">
+    <Position X="3" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAACCAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>print\IToString.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="gpio::DeviceBase">
-    <Position X="3.5" Y="9.75" Width="1.5" />
+  <Class Name="gpio::MotionSensor" Collapsed="true">
+    <Position X="5.25" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAAAAACAAAAAAABAgAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>gpio\DeviceBase.h</FileName>
+      <HashCode>AAAAgIAQAAAAAAQkAAAACAAAAAAEAEBAAAAAIAAAAAA=</HashCode>
+      <FileName>gpio\MotionSensor.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="gpio::IDevice">
-    <Position X="3.5" Y="6.75" Width="1.5" />
+  <Class Name="gpio::LightSensor" Collapsed="true">
+    <Position X="3" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAgACAAAAAQAAAAAgAAAAAAAQYAAAAAAAAAABAA=</HashCode>
-      <FileName>gpio\IDevice.h</FileName>
+      <HashCode>AAAAgIACAAAAAAQEAAACgAAgAAAEAAAAAACAAQAAAAA=</HashCode>
+      <FileName>gpio\LightSensor.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="gpio::LED">
-    <Position X="3.5" Y="12.5" Width="1.5" />
+  <Class Name="gpio::LED" Collapsed="true">
+    <Position X="7.75" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>oAAAiIgEAAQAAgQkAAAACAAAEAgEAAAgAgAAIAAAEqA=</HashCode>
       <FileName>gpio\LED.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="gpio::wiringpi::WP_LED">
-    <Position X="3.5" Y="19" Width="1.5" />
+  <Class Name="gpio::IDevice" Collapsed="true">
+    <Position X="5.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAAABAAAAAAAABAAAABRAAAAAAQAAAABhA=</HashCode>
-      <FileName>wiringpi\WP_LED.h</FileName>
+      <HashCode>AAAAAAgACAAAAAQAAAAAgAAAAAAAQYAAAAAAAAAABAA=</HashCode>
+      <FileName>gpio\IDevice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gpio::DeviceBase" Collapsed="true">
+    <Position X="5.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAACAAAAAAABAgAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>gpio\DeviceBase.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
