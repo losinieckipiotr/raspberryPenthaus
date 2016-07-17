@@ -20,7 +20,7 @@ public:
 
 	void Push(const Item item)
 	{
-		unique_lock<mutex> lck(mt_);
+		std::unique_lock<std::mutex> lck(mt_);
 		fifo_.push(item);
 		lck.unlock();
 		consume_.notify_one();
@@ -28,7 +28,7 @@ public:
 
 	Item Pop()
 	{
-		unique_lock<mutex> lck(mt_);
+		std::unique_lock<std::mutex> lck(mt_);
 		while (fifo_.empty())
 			consume_.wait(lck);
 		if (closeFlag_)
@@ -44,10 +44,10 @@ public:
 
 	Item Pop(unsigned int timeout)
 	{
-		unique_lock<mutex> lck(mt_);
+		std::unique_lock<std::mutex> lck(mt_);
 		while (fifo_.empty())
 		{
-			cv_status s = consume_.wait_for
+            consume_.wait_for
 			(lck, std::chrono::milliseconds(timeout));
 		}
 		if (closeFlag_)
@@ -64,7 +64,7 @@ public:
 	void Close()
 	{
 		closeFlag_ = true;
-		unique_lock<mutex> lck(mt_);
+		std::unique_lock<std::mutex> lck(mt_);
 		while (!fifo_.empty())
 			fifo_.pop();
 		fifo_.push(Item());
@@ -73,7 +73,7 @@ public:
 
 	void Open()
 	{
-		unique_lock<mutex> lck(mt_);
+		std::unique_lock<std::mutex> lck(mt_);
 		while (!fifo_.empty())
 			fifo_.pop();
 		closeFlag_ = false;

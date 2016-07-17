@@ -11,7 +11,6 @@
 #include "../gpio/GPIO.h"
 #include "Commander.h"
 #include "../io/IO.h"
-#include "../wp.h"
 
 namespace program
 {
