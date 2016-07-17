@@ -54,7 +54,6 @@ Program::Program()
 Program::~Program()
 {
 	_bus->TurnOff();
-	//delete _creator;
 
 	#ifdef STATS
 	ofstream file("files\\statistics.txt", ios::trunc);
@@ -276,10 +275,8 @@ string Program::Execute(string& line)
 	string reply;
 	try
 	{
-		{
-			lock_guard<mutex> lck(_program_mutex);
-			reply = _commander.ExecuteCommand(line);
-		}
+		lock_guard<mutex> lck(_program_mutex);
+		reply = _commander.ExecuteCommand(line);
 	}
 	catch (exception& ex)
 	{
@@ -296,7 +293,6 @@ string Program::ClearAll()
 	try
 	{
 		_bus->TurnOff();
-		//delete _creator;
 		reply = "All cleared!";
 	}
 	catch (exception& ex)
@@ -315,10 +311,8 @@ string Program::ClearEvents()
 	string reply;
 	try
 	{
-		{
-			lock_guard<mutex> lck(_program_mutex);
-			_ruleManager.ClearEvents();
-		}
+		lock_guard<mutex> lck(_program_mutex);
+		_ruleManager.ClearEvents();
 		reply = "Events cleared!";
 	}
 	catch (exception& ex)
@@ -334,10 +328,8 @@ string Program::ClearRules()
 	string reply;
 	try
 	{
-		{
-			lock_guard<mutex> lck(_program_mutex);
-			_ruleManager.ClearRules();
-		}
+		lock_guard<mutex> lck(_program_mutex);
+		_ruleManager.ClearRules();
 		reply = "Rules cleared!";
 	}
 	catch (exception& ex)

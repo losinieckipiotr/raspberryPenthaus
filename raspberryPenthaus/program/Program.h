@@ -55,11 +55,10 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
-		rule::RuleManager _ruleManager;
-		Creator _creator;
 		gpio::GPIO* _bus;
 		io::IO* _io;
-
+		rule::RuleManager _ruleManager;
+		Creator _creator;
 		Commander _commander;
 		ItemsPool<std::shared_ptr<int>> _pool;
 
