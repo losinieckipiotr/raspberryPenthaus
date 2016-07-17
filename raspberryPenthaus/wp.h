@@ -16,7 +16,7 @@ static const unsigned int LIGHT_INTERVAL = 1U;
 static const unsigned int CHECKING_INTERVAL = 1000U;
 static const unsigned int LIGHT_INTERVAL = 1U;
 //static const unsigned int PRINTING_INTERVAL = 500U;
-static const char* CLEAR_SCREEN = "cls";
+static const char* CLEAR_SCREEN __attribute__((unused))= "cls";
 #endif
 
 #endif // !IMPLEMENTATION

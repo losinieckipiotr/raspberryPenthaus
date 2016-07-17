@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "Program.h"
+#include "../wp.h"
 
 #ifdef STATS
 std::deque<long long> statistics;
@@ -47,7 +48,7 @@ Program::Program()
 		_creator(_ruleManager),
 		_bus(GPIO::Instance())
 {
-	
+
 }
 
 //destruktor, wylacza urzadzenia podlaczone do GPIO
@@ -132,7 +133,7 @@ void Program::CoreLoop()
 			//wyliczenie czasu nastepnej iteracji
 			nextTime = system_clock::now() + tick;
 		}
-		//nastapilo normalne zamkniecie aplikacji 
+		//nastapilo normalne zamkniecie aplikacji
 		lock_guard<mutex> lck(_program_mutex);
 		//zapisanie stanu do plikow konfiguracyjncyh
 		_SaveAll();
