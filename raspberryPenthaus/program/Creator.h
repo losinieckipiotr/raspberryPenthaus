@@ -15,7 +15,11 @@ namespace program
 	{
 	public:
 		Creator(rule::RuleManager&);
+		Creator(Creator& copy);
+		Creator(Creator&&) = delete;
 		~Creator();
+
+		Creator& operator=(const Creator& copy);
 
 		void DevicesFromFile(std::string&);
 		void RulesFromFile(std::string&);
@@ -26,8 +30,8 @@ namespace program
 		std::string CreateEvents(std::string&);
 
 	private:
-		std::string _CreateEvent(std::string&, std::istream&);
 		std::list<std::string> _ReadLines(std::string&);
+		std::string _CreateEvent(std::string&, std::istream&);
 
 		rule::RuleManager& _ruleManager;
 		prototype::PrototypeManager _prototypeManager;

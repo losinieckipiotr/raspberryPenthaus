@@ -44,7 +44,7 @@ Program::Program()
 	:	_devsFile("files\\devices.txt"),
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
-		_creator(new Creator(_ruleManager)),
+		_creator(_ruleManager),
 		_bus(GPIO::Instance())
 {
 	
@@ -54,7 +54,7 @@ Program::Program()
 Program::~Program()
 {
 	_bus->TurnOff();
-	delete _creator;
+	//delete _creator;
 
 	#ifdef STATS
 	ofstream file("files\\statistics.txt", ios::trunc);
@@ -75,7 +75,7 @@ bool Program::Init()
 		try
 		{
 			//tworzenie obiektow podlaczonyych do GPIO
-			_creator->DevicesFromFile(_devsFile);
+			_creator.DevicesFromFile(_devsFile);
 		}
 		catch (runtime_error& re)
 		{
@@ -84,7 +84,7 @@ bool Program::Init()
 		try
 		{
 			//tworzenie regul zapalania i wylaczania swiatla
-			_creator->RulesFromFile(_rulesFile);
+			_creator.RulesFromFile(_rulesFile);
 		}
 		catch (runtime_error& re)
 		{
@@ -93,7 +93,7 @@ bool Program::Init()
 		try
 		{
 			//dodawanie triggerow i akcji
-			_creator->EventsFromFile(_eventsFile);
+			_creator.EventsFromFile(_eventsFile);
 		}
 		catch (runtime_error& re)
 		{
@@ -216,7 +216,7 @@ string Program::Add(string& line)
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
-		reply = _creator->CreateEvents(line);
+		reply = _creator.CreateEvents(line);
 	}
 	catch (exception& ex)
 	{
@@ -236,7 +236,7 @@ string Program::Create(string& line)
 		str >> buffer >> buffer;
 		if (buffer != "Rule")
 		{
-			IDevice* dev = _creator->CreateDevice(line);
+			IDevice* dev = _creator.CreateDevice(line);
 			if (dev != nullptr)
 			{
 				lock_guard<mutex> lck(_program_mutex);
@@ -250,7 +250,7 @@ string Program::Create(string& line)
 		}
 		else
 		{
-			Rule* rule = _creator->CreateRule(line);
+			Rule* rule = _creator.CreateRule(line);
 			if (rule != nullptr)
 			{
 				lock_guard<mutex> lck(_program_mutex);
@@ -296,7 +296,7 @@ string Program::ClearAll()
 	try
 	{
 		_bus->TurnOff();
-		delete _creator;
+		//delete _creator;
 		reply = "All cleared!";
 	}
 	catch (exception& ex)
@@ -305,7 +305,7 @@ string Program::ClearAll()
 		_io->ErrorOutput(reply);
 	}
 	_ruleManager = RuleManager();
-	_creator = new Creator(_ruleManager);
+	_creator = Creator(_ruleManager);
 	_bus = GPIO::Instance();
 	return reply;
 }

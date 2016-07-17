@@ -3,8 +3,10 @@
 #include <chrono>
 #include <mutex>
 #include <string>
+#include <memory>
 
 #include "Creator.h"
+#include "ItemsPool.hpp"
 #include "../rule/RuleManager.h"
 #include "../gpio/GPIO.h"
 #include "Commander.h"
@@ -22,8 +24,8 @@ namespace program
 	{
 	public:
 		static Program* Instance();
-		Program(const Program&) { }
-		Program(const Program&&) { }
+		Program(const Program&) = delete;
+		Program(const Program&&) = delete;
 
 		void ExitProgram();
 
@@ -54,11 +56,12 @@ namespace program
 		std::string _eventsFile;
 
 		rule::RuleManager _ruleManager;
-		Creator* _creator;
+		Creator _creator;
 		gpio::GPIO* _bus;
+		io::IO* _io;
 
 		Commander _commander;
-		io::IO* _io;
+		ItemsPool<std::shared_ptr<int>> _pool;
 
 		void _Setup();
 		void _CheckAndExecute();

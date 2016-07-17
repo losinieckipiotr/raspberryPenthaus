@@ -17,9 +17,23 @@ Creator::Creator(rule::RuleManager& ruleMan)
 
 }
 
+program::Creator::Creator(Creator &copy)
+	: _ruleManager(copy._ruleManager),
+	_prototypeManager(copy._prototypeManager)
+{
+
+}
+
 Creator::~Creator()
 {
 
+}
+
+Creator & program::Creator::operator=(const Creator &copy)
+{
+	_ruleManager = copy._ruleManager;
+	_prototypeManager = copy._prototypeManager;
+	return *this;
 }
 
 void Creator::DevicesFromFile(string& filename)

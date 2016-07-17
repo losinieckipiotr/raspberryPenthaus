@@ -164,6 +164,7 @@
     <ClInclude Include="print\IToString.h" />
     <ClInclude Include="program\Commander.h" />
     <ClInclude Include="program\Creator.h" />
+    <ClInclude Include="program\ItemsPool.hpp" />
     <ClInclude Include="program\Program.h" />
     <ClInclude Include="prototype\IPrototype.h" />
     <ClInclude Include="prototype\PrototypeBase.h" />
