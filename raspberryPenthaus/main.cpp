@@ -7,17 +7,18 @@ int main()
 {
 	try
 	{
-		//creating instance of main program classs
+		//tworzenie instancji glownej klasy
 		Program* prog = Program::Instance();
-		//initalization (reading config files, setting up hardware)
+		//inicjalizacja (czytanie plikow konfiguracyjnych,
+		//inicjalizacja sprzetu)
 		if (prog->Init())
 		{
-			//starting server module
+			//wlaczanie modulu serwera
 			prog->IO();
-			//main program loop
+			//glowna petla programu
 			prog->CoreLoop();
 		}
-		//deleting instance of program class
+		//usuwanie instancji glownej klasy
 		prog->ExitProgram();
 		return 0;
 	}

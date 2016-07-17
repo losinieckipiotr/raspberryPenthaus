@@ -176,9 +176,6 @@
     <ClCompile Include="gpio\MotionSensor.cpp">
       <Filter>Source Files\gpio</Filter>
     </ClCompile>
-    <ClCompile Include="io\IO.cpp">
-      <Filter>Source Files\io</Filter>
-    </ClCompile>
     <ClCompile Include="io\StdIO.cpp">
       <Filter>Source Files\io</Filter>
     </ClCompile>
@@ -229,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="io\IO.cpp">
+      <Filter>Source Files\io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
