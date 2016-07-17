@@ -8,6 +8,7 @@ namespace gpio
 
 namespace events
 {
+	//TO DO: DeviceManager
 
 	class DeviceReader
 	{
@@ -15,7 +16,8 @@ namespace events
 		DeviceReader();
 		virtual ~DeviceReader();
 
-		void AddDevice(gpio::IDevice*);
+		void AddDevice(gpio::IDevice* dev);
+		void CheckAll();
 
 	private:
 

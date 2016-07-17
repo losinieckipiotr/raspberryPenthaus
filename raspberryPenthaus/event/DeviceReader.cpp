@@ -1,4 +1,5 @@
 #include "DeviceReader.h"
+#include "../device/IDevice.h"
 
 namespace events
 {
@@ -8,6 +9,14 @@ namespace events
 	}
 
 	DeviceReader::~DeviceReader()
+	{
+
+	}
+	void DeviceReader::AddDevice(gpio::IDevice *dev)
+	{
+
+	}
+	void DeviceReader::CheckAll()
 	{
 
 	}

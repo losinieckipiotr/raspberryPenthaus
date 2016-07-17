@@ -25,7 +25,9 @@ namespace gpio
 		void SetupGPIO();
 		void CheckAll();
 
+		//czy to jest potzebne ?
 		void ReadDefaultAll();
+		////////////////////////
 		void WriteDefaultAll();
 		std::string PrintDevices();
 		void SaveDevices(std::string& filename);
