@@ -6,7 +6,6 @@
 #include <fstream>
 
 #include "Program.h"
-#include "../device/IDevice.h"
 #include "../wp.h"
 
 #ifdef STATS
@@ -15,7 +14,6 @@ std::deque<long long> statistics;
 
 using namespace program;
 using namespace gpio;
-using namespace rule;
 using namespace std;
 using namespace chrono;
 
@@ -46,8 +44,9 @@ Program::Program()
 	:	_devsFile("files\\devices.txt"),
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
+		_deviceReader(_deviceManager),
 		_commander(_deviceManager),
-		_creator(_deviceManager, _ruleManager),
+		_creator(_deviceManager),
 		_bus(GPIO::Instance(_deviceManager)),
 		_io(io::IO::Instance())
 {
@@ -85,24 +84,26 @@ bool Program::Init()
 		{
 			_io->ErrorOutput(re.what());
 		}
-		try
-		{
-			//tworzenie regul zapalania i wylaczania swiatla
-			_creator.RulesFromFile(_rulesFile);
-		}
-		catch (runtime_error& re)
-		{
-			_io->ErrorOutput(re.what());
-		}
-		try
-		{
-			//dodawanie triggerow i akcji
-			_creator.EventsFromFile(_eventsFile);
-		}
-		catch (runtime_error& re)
-		{
-			_io->ErrorOutput(re.what());
-		}
+
+		//try
+		//{
+		//	//tworzenie regul zapalania i wylaczania swiatla
+		//	_creator.RulesFromFile(_rulesFile);
+		//}
+		//catch (runtime_error& re)
+		//{
+		//	_io->ErrorOutput(re.what());
+		//}
+		//try
+		//{
+		//	//dodawanie triggerow i akcji
+		//	_creator.EventsFromFile(_eventsFile);
+		//}
+		//catch (runtime_error& re)
+		//{
+		//	_io->ErrorOutput(re.what());
+		//}
+
 		//konfiguracja GPIO
 		_Setup();
 	}
@@ -114,27 +115,45 @@ bool Program::Init()
 	return true;
 }
 
+//konfiguracja GPIO
+void Program::_Setup()
+{
+	_deviceReader.BiuldDeviceMap();
+	//setup urzadzen podlaczonych do GPIO
+	_bus->SetupGPIO();
+	//opoznienie, dla inicjalizacji urzadzen
+	this_thread::sleep_for(chrono::milliseconds(500));
+}
+
 //glowna petla programu sterujacego
 void Program::CoreLoop()
 {
 	try
 	{
+		_deviceReader.StartRead();
+
+
 		//ustawienie flagi wyjscia
 		_coreQuit = false;
-		//inicjalizacja okresu petli
-		const auto tick = milliseconds(CHECKING_INTERVAL);
-		//wyliczenie czasu nastepnej iteracji
-		auto nextTime = system_clock::now() + tick;
+
+		////inicjalizacja okresu petli
+		//const auto tick = milliseconds(BASE_INTERVAL);
+		////wyliczenie czasu nastepnej iteracji
+		//auto nextTime = system_clock::now() + tick;
+
 		//petla glowna sterowania
 		while (!_coreQuit)
 		{
-			//odczyt czujnikow i wykonanie polecen
-			_CheckAndExecute();
-			//sprawdzenie opoznienia i odczekanie czasu do nastepnej iteracji
-			_CheckDelay(nextTime);
-			//wyliczenie czasu nastepnej iteracji
-			nextTime = system_clock::now() + tick;
+			////odczyt czujnikow i wykonanie polecen
+			//_CheckAndExecute();
+			////sprawdzenie opoznienia i odczekanie czasu do nastepnej iteracji
+			//_CheckDelay(nextTime);
+			////wyliczenie czasu nastepnej iteracji
+			//nextTime = system_clock::now() + tick;
+
+			this_thread::sleep_for(milliseconds(1000));
 		}
+
 		//nastapilo normalne zamkniecie aplikacji
 		lock_guard<mutex> lck(_program_mutex);
 		//zapisanie stanu do plikow konfiguracyjncyh
@@ -152,15 +171,6 @@ void Program::CoreLoop()
 	}
 }
 
-//konfiguracja GPIO
-void Program::_Setup()
-{
-	//setup urzadzen podlaczonych do GPIO
-	_bus->SetupGPIO();
-	//opoznienie, dla inicjalizacji urzadzen
-	this_thread::sleep_for(chrono::milliseconds(500));
-}
-
 //tutaj nastepuje odczytanie stanu czujnikow
 //oraz wykonanie ustawionych polecen wedlug regul
 void Program::_CheckAndExecute()
@@ -169,8 +179,9 @@ void Program::_CheckAndExecute()
 	{
 		lock_guard<mutex> lck(_program_mutex);
 
-		//TYMCZASOWE WYLACZENIE
-		this_thread::sleep_for(chrono::milliseconds(10));
+		//_deviceReader.ReadAll();
+
+		this_thread::sleep_for(chrono::milliseconds(500));
 
 		/*_bus->CheckAll();
 		_ruleManager.ExecuteRules();*/
@@ -187,8 +198,9 @@ void Program::_SaveAll()
 	try
 	{
 		_deviceManager.SaveDevices(_devsFile);
-		_ruleManager.SaveRules(_rulesFile);
-		_ruleManager.SaveEvents(_eventsFile);
+
+		/*_ruleManager.SaveRules(_rulesFile);
+		_ruleManager.SaveEvents(_eventsFile);*/
 	}
 	catch (exception& ex)
 	{
@@ -202,7 +214,7 @@ void Program::IO()
 	try
 	{
 		//TYMCZASOWE WYLACZENIE
-		//_io->StartIO();
+		_io->StartIO();
 	}
 	catch (exception& ex)
 	{
@@ -218,12 +230,11 @@ void Program::StopAll()
 }
 
 //metoda tworzy nowe zdarzenie(trigger albo akcje)
-//nowe urzadzenie,
 //przy wyjsciu z programu zostanie zapisane do pliku
 //konfiguracyjnego i przy ponownym uruchomieniu bedzie dzialac
 string Program::Add(string& line)
 {
-	string reply;
+	/*string reply;
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
@@ -234,7 +245,9 @@ string Program::Add(string& line)
 		reply = ex.what();
 		_io->ErrorOutput(reply);
 	}
-	return reply;
+	return reply;*/
+
+	return "No implementation exception";
 }
 
 //metoda implementuje funkcjonalnosc dodawanie nowych urzadzen
@@ -267,17 +280,19 @@ string Program::Create(string& line)
 		//dodawanie "Rule"
 		else
 		{
-			Rule* rule = _creator.CreateRule(line);
-			if (rule != nullptr)
-			{
-				lock_guard<mutex> lck(_program_mutex);
-				_ruleManager.AddRule(rule);
-				reply = "Created!";
-			}
-			else
-			{
-				reply = "Syntax error";
-			}
+			//Rule* rule = _creator.CreateRule(line);
+			//if (rule != nullptr)
+			//{
+			//	lock_guard<mutex> lck(_program_mutex);
+			//	_ruleManager.AddRule(rule);
+			//	reply = "Created!";
+			//}
+			//else
+			//{
+			//	reply = "Syntax error";
+			//}
+
+			reply = "Syntax error";
 		}
 	}
 	catch (exception& ex)
@@ -311,7 +326,8 @@ string Program::ClearAll()
 	try
 	{
 		//utworzenie nowego
-		_ruleManager.ClearRules();
+		//_ruleManager.ClearRules();
+
 		_deviceManager.DeleteAllDevices();
 		reply = "All cleared!";
 	}
@@ -330,7 +346,7 @@ string Program::ClearEvents()
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
-		_ruleManager.ClearEvents();
+		//_ruleManager.ClearEvents();
 		reply = "Events cleared!";
 	}
 	catch (exception& ex)
@@ -347,7 +363,7 @@ string Program::ClearRules()
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
-		_ruleManager.ClearRules();
+		//_ruleManager.ClearRules();
 		reply = "Rules cleared!";
 	}
 	catch (exception& ex)
@@ -367,13 +383,15 @@ string Program::GetDevsString()
 string Program::GetRulesString()
 {
 	lock_guard<mutex> lck(_program_mutex);
-	return _ruleManager.PrintRules();
+	//return _ruleManager.PrintRules();
+	return "No implementation exception";
 }
 
 string Program::GetEventsString()
 {
 	lock_guard<mutex> lck(_program_mutex);
-	return _ruleManager.PrintEvents();
+	//return _ruleManager.PrintEvents();
+	return "No implementation exception";
 }
 
 void Program::_CheckDelay(time_point<system_clock,

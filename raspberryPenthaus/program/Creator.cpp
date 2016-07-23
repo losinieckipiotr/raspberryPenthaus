@@ -2,39 +2,23 @@
 #include <fstream>
 
 #include "Program.h"
-#include "../rule/RuleManager.h"
 #include "../gpio/GPIO.h"
 
 using namespace program;
 using namespace device;
-using namespace rule;
 using namespace prototype;
 using namespace std;
 
-Creator::Creator(DeviceManager &devMan, RuleManager& ruleMan)
-	: _devManager(devMan), _ruleManager(ruleMan)
+Creator::Creator(DeviceManager &devMan)
+	: _devManager(devMan)
 {
 
 }
-
-//program::Creator::Creator(Creator &copy)
-//	: _ruleManager(copy._ruleManager),
-//	_prototypeManager(copy._prototypeManager)
-//{
-//
-//}
 
 Creator::~Creator()
 {
 
 }
-
-//Creator & program::Creator::operator=(const Creator &copy)
-//{
-//	_ruleManager = copy._ruleManager;
-//	_prototypeManager = copy._prototypeManager;
-//	return *this;
-//}
 
 void Creator::DevicesFromFile(string& filename)
 {
@@ -49,27 +33,27 @@ void Creator::DevicesFromFile(string& filename)
 	}
 }
 
-void Creator::RulesFromFile(string& filename)
-{
-	list<string> lines = _ReadLines(filename);
+//void Creator::RulesFromFile(string& filename)
+//{
+//	list<string> lines = _ReadLines(filename);
+//
+//	for (auto& line : lines)
+//	{
+//		Rule* rule = CreateRule(line);
+//		if (rule != nullptr)
+//			_ruleManager.AddRule(rule);
+//	}
+//}
 
-	for (auto& line : lines)
-	{
-		Rule* rule = CreateRule(line);
-		if (rule != nullptr)
-			_ruleManager.AddRule(rule);
-	}
-}
-
-void Creator::EventsFromFile(string& filename)
-{
-	list<string> lines = _ReadLines(filename);
-
-	for (auto& line : lines)
-	{
-		CreateEvents(line);
-	}
-}
+//void Creator::EventsFromFile(string& filename)
+//{
+//	list<string> lines = _ReadLines(filename);
+//
+//	for (auto& line : lines)
+//	{
+//		CreateEvents(line);
+//	}
+//}
 
 IDevice* Creator::CreateDevice(string& line)
 {
@@ -88,49 +72,49 @@ IDevice* Creator::CreateDevice(string& line)
 	return dev;
 }
 
-Rule* Creator::CreateRule(string& line)
-{
-	string buffer;
-	Rule* rule = nullptr;
-	stringstream str(line);
+//Rule* Creator::CreateRule(string& line)
+//{
+//	string buffer;
+//	Rule* rule = nullptr;
+//	stringstream str(line);
+//
+//	str >> buffer;
+//	if (buffer != "create")
+//		return nullptr;
+//	getline(str, buffer);
+//
+//	rule = dynamic_cast<Rule*>(
+//		_prototypeManager.CreatePrototype(buffer));
+//
+//	return rule;
+//}
 
-	str >> buffer;
-	if (buffer != "create")
-		return nullptr;
-	getline(str, buffer);
-
-	rule = dynamic_cast<Rule*>(
-		_prototypeManager.CreatePrototype(buffer));
-
-	return rule;
-}
-
-string Creator::CreateEvents(string& line)
-{
-	string buffer;
-	stringstream str(line);
-
-	str >> buffer;
-	if (buffer != "add")
-	{
-		return "Syntax error";
-	}
-	str >> buffer;
-	if (buffer == "trigger" || buffer == "action")
-	{
-		str >> buffer;
-		if (buffer != "to")
-		{
-			return "Syntax error";
-		}
-		str >> buffer;
-		return _CreateEvent(buffer, str);
-	}
-	else
-	{
-		return "Syntax error";
-	}
-}
+//string Creator::CreateEvents(string& line)
+//{
+//	string buffer;
+//	stringstream str(line);
+//
+//	str >> buffer;
+//	if (buffer != "add")
+//	{
+//		return "Syntax error";
+//	}
+//	str >> buffer;
+//	if (buffer == "trigger" || buffer == "action")
+//	{
+//		str >> buffer;
+//		if (buffer != "to")
+//		{
+//			return "Syntax error";
+//		}
+//		str >> buffer;
+//		return _CreateEvent(buffer, str);
+//	}
+//	else
+//	{
+//		return "Syntax error";
+//	}
+//}
 
 list<string> Creator::_ReadLines(string& filename)
 {
@@ -163,41 +147,41 @@ list<string> Creator::_ReadLines(string& filename)
 	return lines;
 }
 
-string Creator::_CreateEvent(string& ruleName, istream& str)
-{
-	string buffer;
-
-	Rule* rule = _ruleManager.ReturnRule(ruleName);
-	if (rule == nullptr)
-	{
-		return "Syntax error: Rule not found!";
-	}
-	str >> buffer;
-	if (buffer != "name")
-	{
-		return "Syntax error";
-	}
-	getline(str, buffer);
-	IEvent* ev = dynamic_cast<IEvent*>(
-		_prototypeManager.CreatePrototype(buffer));
-	if (ev == nullptr)
-	{
-		return "Syntax error.";
-	}
-	int id = ev->GetDeviceID();
-	IDevice* dev = _devManager.GetDevice(id);
-	if (dev == nullptr)
-	{
-		delete ev;
-		return "Syntax error: Device not found!";
-	}
-	if (!ev->AttachDevice(dev))
-	{
-		delete ev;
-		return "Syntax error.";
-	}
-
-	rule->AddEvent(ev);
-
-	return "Added!";
-}
+//string Creator::_CreateEvent(string& ruleName, istream& str)
+//{
+//	string buffer;
+//
+//	Rule* rule = _ruleManager.ReturnRule(ruleName);
+//	if (rule == nullptr)
+//	{
+//		return "Syntax error: Rule not found!";
+//	}
+//	str >> buffer;
+//	if (buffer != "name")
+//	{
+//		return "Syntax error";
+//	}
+//	getline(str, buffer);
+//	IEvent* ev = dynamic_cast<IEvent*>(
+//		_prototypeManager.CreatePrototype(buffer));
+//	if (ev == nullptr)
+//	{
+//		return "Syntax error.";
+//	}
+//	int id = ev->GetDeviceID();
+//	IDevice* dev = _devManager.GetDevice(id);
+//	if (dev == nullptr)
+//	{
+//		delete ev;
+//		return "Syntax error: Device not found!";
+//	}
+//	if (!ev->AttachDevice(dev))
+//	{
+//		delete ev;
+//		return "Syntax error.";
+//	}
+//
+//	rule->AddEvent(ev);
+//
+//	return "Added!";
+//}

@@ -70,7 +70,7 @@ bool MotionSensor::Load(string& s)
 
 IReadVal& MotionSensor::Read()
 {
-	_myVal = (_state == static_cast<int>(_logic));
+	_myVal = (_Read() == static_cast<int>(_logic));
 	return _myVal;
 }
 

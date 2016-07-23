@@ -5,14 +5,16 @@
 #include <string>
 #include <memory>
 
-#include "Creator.h"
-#include "ItemsPool.hpp"
-#include "../device/DeviceManager.h"
-#include "../gpio/GPIO.h"
-#include "../rule/RuleManager.h"
+//#include "../ItemsPool.hpp"
 
+#include "DeviceReader.h"
+#include "../device/DeviceManager.h"
 #include "Commander.h"
+#include "Creator.h"
+#include "../gpio/GPIO.h"
 #include "../io/IO.h"
+
+
 
 namespace program
 {
@@ -56,9 +58,10 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
-		ItemsPool<std::shared_ptr<int>> _pool;
+		//ItemsPool<std::shared_ptr<INTERFEJS_EVENTOW*>> _pool;
+
 		device::DeviceManager _deviceManager;
-		rule::RuleManager _ruleManager;
+		DeviceReader _deviceReader;
 		Commander _commander;
 		Creator _creator;
 		gpio::GPIO* _bus;

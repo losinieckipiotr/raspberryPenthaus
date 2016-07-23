@@ -49,20 +49,8 @@
     <Filter Include="Source Files\prototype">
       <UniqueIdentifier>{d3dfca45-ba8b-46dc-babb-c32ab2da2b03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\rule">
-      <UniqueIdentifier>{77c36622-dbe3-4d58-811f-1a2cc1963137}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rule">
-      <UniqueIdentifier>{03c98061-1adc-4196-a04d-b48f69ce18a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rule\events">
-      <UniqueIdentifier>{9fd098d7-fc8e-4046-bbf9-fbcd26728648}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\event">
       <UniqueIdentifier>{d3ae1f4d-7937-4457-ba6e-4a103966841f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\rule\events">
-      <UniqueIdentifier>{a3194878-bd99-4518-a481-fc9b94e8c6f2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\event">
       <UniqueIdentifier>{7271d973-afa4-4426-983c-d04628aa54b4}</UniqueIdentifier>
@@ -120,38 +108,8 @@
     <ClInclude Include="prototype\PrototypeManager.h">
       <Filter>Header Files\prototype</Filter>
     </ClInclude>
-    <ClInclude Include="rule\IAction.h">
-      <Filter>Header Files\rule</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\IEvent.h">
-      <Filter>Header Files\rule</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\ITrigger.h">
-      <Filter>Header Files\rule</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\Rule.h">
-      <Filter>Header Files\rule</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\RuleManager.h">
-      <Filter>Header Files\rule</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\events\DuskDetected.h">
-      <Filter>Header Files\rule\events</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\events\MotionDetected.h">
-      <Filter>Header Files\rule\events</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\events\OffTheLED.h">
-      <Filter>Header Files\rule\events</Filter>
-    </ClInclude>
-    <ClInclude Include="rule\events\SwitchTheLED.h">
-      <Filter>Header Files\rule\events</Filter>
-    </ClInclude>
     <ClInclude Include="wp.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="program\ItemsPool.hpp">
-      <Filter>Header Files\program</Filter>
     </ClInclude>
     <ClInclude Include="device\DeviceBase.h">
       <Filter>Header Files\device</Filter>
@@ -177,9 +135,6 @@
     <ClInclude Include="device\wiringpi\WP_TSL2561.h">
       <Filter>Header Files\device\wiringpi</Filter>
     </ClInclude>
-    <ClInclude Include="event\DeviceReader.h">
-      <Filter>Header Files\event</Filter>
-    </ClInclude>
     <ClInclude Include="device\DeviceManager.h">
       <Filter>Header Files\device</Filter>
     </ClInclude>
@@ -188,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="device\IWriteable.h">
       <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="program\DeviceReader.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemsPool.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,24 +176,6 @@
     <ClCompile Include="prototype\PrototypeManager.cpp">
       <Filter>Source Files\prototype</Filter>
     </ClCompile>
-    <ClCompile Include="rule\Rule.cpp">
-      <Filter>Source Files\rule</Filter>
-    </ClCompile>
-    <ClCompile Include="rule\RuleManager.cpp">
-      <Filter>Source Files\rule</Filter>
-    </ClCompile>
-    <ClCompile Include="rule\events\DuskDetected.cpp">
-      <Filter>Source Files\rule\events</Filter>
-    </ClCompile>
-    <ClCompile Include="rule\events\MotionDetected.cpp">
-      <Filter>Source Files\rule\events</Filter>
-    </ClCompile>
-    <ClCompile Include="rule\events\OffTheLED.cpp">
-      <Filter>Source Files\rule\events</Filter>
-    </ClCompile>
-    <ClCompile Include="rule\events\SwitchTheLED.cpp">
-      <Filter>Source Files\rule\events</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -257,11 +200,11 @@
     <ClCompile Include="device\MotionSensor.cpp">
       <Filter>Source Files\device</Filter>
     </ClCompile>
-    <ClCompile Include="event\DeviceReader.cpp">
-      <Filter>Source Files\event</Filter>
-    </ClCompile>
     <ClCompile Include="device\DeviceManager.cpp">
       <Filter>Source Files\device</Filter>
+    </ClCompile>
+    <ClCompile Include="program\DeviceReader.cpp">
+      <Filter>Source Files\program</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

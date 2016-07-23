@@ -8,6 +8,9 @@
 using namespace io;
 using namespace std;
 
+mutex StdIO::_std_out_mutex;
+mutex StdIO::_std_error_mutex;
+
 StdIO::StdIO()
 {
 	//powitanie uzytkownika
@@ -30,7 +33,7 @@ list<string> StdIO::Input(string& message, network::Session& session)
 void StdIO::StandardOutput(const string line)
 {
 	//nie blokujace wyslanie na standardowe wyjscie 
-	std::async(launch::async, [this, line]()
+	std::async(launch::async, [&line]()
 	{
 		lock_guard<mutex> lck(_std_out_mutex);
 		cout << line << endl;
@@ -40,7 +43,7 @@ void StdIO::StandardOutput(const string line)
 void StdIO::ErrorOutput(const string line)
 {
 	//nie blokujace wyslanie na strumien bledow
-	std::async(launch::async, [this, line]()
+	std::async(launch::async, [&line]()
 	{
 		lock_guard<mutex> lck(_std_out_mutex);
 		cerr << line << endl;

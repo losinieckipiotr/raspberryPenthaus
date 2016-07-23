@@ -161,30 +161,21 @@
     <ClInclude Include="device\wiringpi\WP_LED.h" />
     <ClInclude Include="device\wiringpi\WP_MotionSensor.h" />
     <ClInclude Include="device\wiringpi\WP_TSL2561.h" />
-    <ClInclude Include="event\DeviceReader.h" />
     <ClInclude Include="gpio\GPIO.h" />
     <ClInclude Include="io\IO.h" />
     <ClInclude Include="io\network\Server.h" />
     <ClInclude Include="io\network\Session.h" />
     <ClInclude Include="io\network\transport\MyFrame.hpp" />
     <ClInclude Include="io\StdIO.h" />
+    <ClInclude Include="ItemsPool.hpp" />
     <ClInclude Include="print\IToString.h" />
     <ClInclude Include="program\Commander.h" />
     <ClInclude Include="program\Creator.h" />
-    <ClInclude Include="program\ItemsPool.hpp" />
+    <ClInclude Include="program\DeviceReader.h" />
     <ClInclude Include="program\Program.h" />
     <ClInclude Include="prototype\IPrototype.h" />
     <ClInclude Include="prototype\PrototypeBase.h" />
     <ClInclude Include="prototype\PrototypeManager.h" />
-    <ClInclude Include="rule\events\DuskDetected.h" />
-    <ClInclude Include="rule\events\MotionDetected.h" />
-    <ClInclude Include="rule\events\OffTheLED.h" />
-    <ClInclude Include="rule\events\SwitchTheLED.h" />
-    <ClInclude Include="rule\IAction.h" />
-    <ClInclude Include="rule\IEvent.h" />
-    <ClInclude Include="rule\ITrigger.h" />
-    <ClInclude Include="rule\Rule.h" />
-    <ClInclude Include="rule\RuleManager.h" />
     <ClInclude Include="wp.h" />
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +186,6 @@
     <ClCompile Include="device\wiringpi\WP_LED.cpp" />
     <ClCompile Include="device\wiringpi\WP_MotionSensor.cpp" />
     <ClCompile Include="device\wiringpi\WP_TSL2561.cpp" />
-    <ClCompile Include="event\DeviceReader.cpp" />
     <ClCompile Include="gpio\GPIO.cpp" />
     <ClCompile Include="io\IO.cpp" />
     <ClCompile Include="io\network\Server.cpp" />
@@ -204,14 +194,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="program\Commander.cpp" />
     <ClCompile Include="program\Creator.cpp" />
+    <ClCompile Include="program\DeviceReader.cpp" />
     <ClCompile Include="program\Program.cpp" />
     <ClCompile Include="prototype\PrototypeManager.cpp" />
-    <ClCompile Include="rule\events\DuskDetected.cpp" />
-    <ClCompile Include="rule\events\MotionDetected.cpp" />
-    <ClCompile Include="rule\events\OffTheLED.cpp" />
-    <ClCompile Include="rule\events\SwitchTheLED.cpp" />
-    <ClCompile Include="rule\Rule.cpp" />
-    <ClCompile Include="rule\RuleManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

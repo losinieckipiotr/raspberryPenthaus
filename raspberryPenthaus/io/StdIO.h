@@ -17,19 +17,19 @@ namespace io
 		StdIO();
 		virtual ~StdIO();
 
+		static void StandardOutput(const std::string line);
+		static void ErrorOutput(const std::string line);
+
 		inline const std::list<std::string>& GetHello(){ return _helloMsg; }
 
 		virtual std::list<std::string> Input(std::string& message, network::Session& session);
-
-		void StandardOutput(const std::string line);
-		void ErrorOutput(const std::string line);
 
 	protected:
 		std::list<std::string> _helloMsg;
 
 	private:
-		std::mutex _std_out_mutex;
-		std::mutex _std_error_mutex;
+		static std::mutex _std_out_mutex;
+		static std::mutex _std_error_mutex;
 	};
 }
 
