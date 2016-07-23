@@ -6,6 +6,7 @@
 
 #include "../device/IDevice.h"
 #include "../rule/Rule.h"
+#include "../device/DeviceManager.h"
 #include "../rule/RuleManager.h"
 #include "../prototype/PrototypeManager.h"
 
@@ -14,7 +15,7 @@ namespace program
 	class Creator
 	{
 	public:
-		Creator(rule::RuleManager&);
+		Creator(device::DeviceManager&, rule::RuleManager&);
 		Creator(const Creator& copy) = delete;
 		Creator(Creator&&) = delete;
 		~Creator();
@@ -33,6 +34,7 @@ namespace program
 		std::list<std::string> _ReadLines(std::string&);
 		std::string _CreateEvent(std::string&, std::istream&);
 
+		device::DeviceManager& _devManager;
 		rule::RuleManager& _ruleManager;
 		prototype::PrototypeManager _prototypeManager;
 	};

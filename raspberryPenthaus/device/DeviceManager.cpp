@@ -14,34 +14,29 @@ DeviceManager::DeviceManager()
 
 DeviceManager::~DeviceManager()
 {
-	for (auto& dev : devices_)
-	{
-		delete dev.second;
-	}
+
 }
 
 void DeviceManager::AddDevice(IDevice *dev)
 {
 	if (dev == nullptr)
-		throw runtime_error("Attempt to add nullptr to GPIO");
+		throw runtime_error("Attempt to add nullptr to DeviceManager");
 	auto temp = devices_.find(dev->GetID());
 	if (temp != devices_.end())
 		throw runtime_error("Attemp to add device with non-unique ID");
 	devices_[dev->GetID()] = dev;
 }
 
-//Niebezpieczna metoda! Zawsze dodaæ block try catch
 IDevice* DeviceManager::GetDevice(const int id) const
 {
 	auto temp = devices_.find(id);
 	if (temp == devices_.end())
-		throw runtime_error("Invalid device id");
+		return nullptr;
 	return (*temp).second;
 }
 
 std::vector<IDevice*> DeviceManager::GetAllDevices() const
 {
-	//return std::vector<IDevice*>(devices_.begin(), devices_.end());
 	std::vector<IDevice*> devs;
 	devs.reserve(devices_.size());
 	for (auto &dev : devices_)
@@ -49,6 +44,15 @@ std::vector<IDevice*> DeviceManager::GetAllDevices() const
 		devs.push_back(dev.second);
 	}
 	return devs;
+}
+
+void device::DeviceManager::DeleteAllDevices()
+{
+	for (auto& dev : devices_)
+	{
+		delete dev.second;
+	}
+	devices_.clear();
 }
 
 std::vector<IReadable*> DeviceManager::GetReadDevices() const

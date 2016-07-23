@@ -11,8 +11,8 @@ using namespace rule;
 using namespace prototype;
 using namespace std;
 
-Creator::Creator(rule::RuleManager& ruleMan)
-	: _ruleManager(ruleMan)
+Creator::Creator(DeviceManager &devMan, RuleManager& ruleMan)
+	: _devManager(devMan), _ruleManager(ruleMan)
 {
 
 }
@@ -38,16 +38,15 @@ Creator::~Creator()
 
 void Creator::DevicesFromFile(string& filename)
 {
-	/*list<string> lines = _ReadLines(filename);
+	list<string> lines = _ReadLines(filename);
 
 	IDevice* dev = nullptr;
-	GPIO* bus = GPIO::Instance();
 	for (auto& line : lines)
 	{
 		dev = CreateDevice(line);
 		if (dev != nullptr)
-			bus->AddDevice(dev);
-	}*/
+			_devManager.AddDevice(dev);
+	}
 }
 
 void Creator::RulesFromFile(string& filename)
@@ -166,7 +165,7 @@ list<string> Creator::_ReadLines(string& filename)
 
 string Creator::_CreateEvent(string& ruleName, istream& str)
 {
-	/*string buffer;
+	string buffer;
 
 	Rule* rule = _ruleManager.ReturnRule(ruleName);
 	if (rule == nullptr)
@@ -186,7 +185,7 @@ string Creator::_CreateEvent(string& ruleName, istream& str)
 		return "Syntax error.";
 	}
 	int id = ev->GetDeviceID();
-	IDevice* dev = GPIO::Instance()->GetDevice(id);
+	IDevice* dev = _devManager.GetDevice(id);
 	if (dev == nullptr)
 	{
 		delete ev;
@@ -200,7 +199,5 @@ string Creator::_CreateEvent(string& ruleName, istream& str)
 
 	rule->AddEvent(ev);
 
-	return "Added!";*/
-
-	return "No implementation exception!";
+	return "Added!";
 }

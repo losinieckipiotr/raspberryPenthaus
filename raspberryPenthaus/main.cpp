@@ -1,3 +1,5 @@
+#include <thread>
+
 #include "program/Program.h"
 
 using namespace std;
@@ -9,17 +11,29 @@ int main()
 	{
 		//tworzenie instancji glownej klasy
 		Program* prog = Program::Instance();
-		//inicjalizacja (czytanie plikow konfiguracyjnych,
-		//inicjalizacja sprzetu)
-		if (prog->Init())
+
+		thread th([&prog]()
 		{
-			//wlaczanie modulu serwera
-			prog->IO();
-			//glowna petla programu
-			prog->CoreLoop();
-		}
+			//inicjalizacja (czytanie plikow konfiguracyjnych,
+			//inicjalizacja sprzetu)
+			if (prog->Init())
+			{
+				//wlaczanie modulu serwera
+				prog->IO();
+				//glowna petla programu
+				prog->CoreLoop();
+			}
+		});
+		cout << "Running...";
+		cin.get();
+		prog->StopAll();
+		cout << "Stopping program...";
+		cin.get();
+
 		//usuwanie instancji glownej klasy
 		prog->ExitProgram();
+		th.join();
+
 		return 0;
 	}
 	catch (exception&)

@@ -20,6 +20,7 @@ namespace device
 		void AddDevice(IDevice *dev);
 		IDevice* GetDevice(const int id) const;
 		std::vector<IDevice*> GetAllDevices() const;
+		void DeleteAllDevices();
 
 		std::vector<IReadable*> GetReadDevices() const;
 		std::vector<IWriteable*> GetWriteDevices() const;

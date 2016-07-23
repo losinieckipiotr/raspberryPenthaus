@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include "Program.h"
+#include "../device/IDevice.h"
 #include "../wp.h"
 
 #ifdef STATS
@@ -46,8 +47,9 @@ Program::Program()
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
 		_commander(_deviceManager),
+		_creator(_deviceManager, _ruleManager),
 		_bus(GPIO::Instance(_deviceManager)),
-		_creator(_ruleManager)
+		_io(io::IO::Instance())
 {
 
 }
@@ -101,8 +103,6 @@ bool Program::Init()
 		{
 			_io->ErrorOutput(re.what());
 		}
-		//tworzenie obiektu odpowiedzialnego za strumienie IO i serwer
-		_io = io::IO::Instance();
 		//konfiguracja GPIO
 		_Setup();
 	}
@@ -139,7 +139,10 @@ void Program::CoreLoop()
 		lock_guard<mutex> lck(_program_mutex);
 		//zapisanie stanu do plikow konfiguracyjncyh
 		_SaveAll();
+		//zapisanie wartosci domyslnych do urzadzen
 		_bus->WriteDefaultAll();
+		//usuniecie wszystkich obiektow urzadzen(zwalnianie pamieci)
+		_deviceManager.DeleteAllDevices();
 		//zamkniecie serwera
 		_io->StopIO();
 	}
@@ -198,7 +201,8 @@ void Program::IO()
 {
 	try
 	{
-		_io->StartIO();
+		//TYMCZASOWE WYLACZENIE
+		//_io->StartIO();
 	}
 	catch (exception& ex)
 	{
@@ -233,21 +237,26 @@ string Program::Add(string& line)
 	return reply;
 }
 
+//metoda implementuje funkcjonalnosc dodawanie nowych urzadzen
+//oraz zasad podczas dzialania aplikacji
 string Program::Create(string& line)
 {
 	string reply;
 	try
 	{
-		/*string buffer;
+		string buffer;
 		stringstream str(line);
 		str >> buffer >> buffer;
+		//dodawanie urzadzen
 		if (buffer != "Rule")
 		{
-			IDevice* dev = _creator.CreateDevice(line);
+			device::IDevice* dev = _creator.CreateDevice(line);
 			if (dev != nullptr)
 			{
 				lock_guard<mutex> lck(_program_mutex);
-				_bus->AddNewDevice(dev);
+				_deviceManager.AddDevice(dev);
+				//jawny Setup
+				dev->Setup();
 				reply = "Created!";
 			}
 			else
@@ -255,6 +264,7 @@ string Program::Create(string& line)
 				reply = "Syntax error";
 			}
 		}
+		//dodawanie "Rule"
 		else
 		{
 			Rule* rule = _creator.CreateRule(line);
@@ -268,9 +278,7 @@ string Program::Create(string& line)
 			{
 				reply = "Syntax error";
 			}
-		}*/
-
-		throw logic_error("No implementation exception");
+		}
 	}
 	catch (exception& ex)
 	{
@@ -298,11 +306,13 @@ string Program::Execute(string& line)
 
 string Program::ClearAll()
 {
-	/*string reply;
+	string reply;
 	lock_guard<mutex> lck(_program_mutex);
 	try
 	{
-		_bus->TurnOff();
+		//utworzenie nowego
+		_ruleManager.ClearRules();
+		_deviceManager.DeleteAllDevices();
 		reply = "All cleared!";
 	}
 	catch (exception& ex)
@@ -310,12 +320,8 @@ string Program::ClearAll()
 		reply = ex.what();
 		_io->ErrorOutput(reply);
 	}
-	_ruleManager = RuleManager();
-	_creator = Creator(_ruleManager);
-	_bus = GPIO::Instance();
-	return reply;*/
 
-	return "No implementation exception";
+	return reply;
 }
 
 string Program::ClearEvents()
@@ -337,7 +343,7 @@ string Program::ClearEvents()
 
 string Program::ClearRules()
 {
-	/*string reply;
+	string reply;
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
@@ -349,9 +355,7 @@ string Program::ClearRules()
 		reply = ex.what();
 		_io->ErrorOutput(reply);
 	}
-	return reply;*/
-
-	return "No implementation exception";
+	return reply;
 }
 
 string Program::GetDevsString()

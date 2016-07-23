@@ -56,13 +56,13 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
+		ItemsPool<std::shared_ptr<int>> _pool;
 		device::DeviceManager _deviceManager;
+		rule::RuleManager _ruleManager;
 		Commander _commander;
+		Creator _creator;
 		gpio::GPIO* _bus;
 		io::IO* _io;
-		rule::RuleManager _ruleManager;
-		Creator _creator;
-		ItemsPool<std::shared_ptr<int>> _pool;
 
 		void _Setup();
 		void _CheckAndExecute();

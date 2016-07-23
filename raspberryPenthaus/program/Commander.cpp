@@ -35,7 +35,6 @@ string Commander::ExecuteCommand(string& line)
 		return "Synatax error";
 	try
 	{
-		//dev = GPIO::Instance()->GetDevice(dev_id);
 		dev = man.GetDevice(dev_id);
 	}
 	catch (runtime_error& ex)
