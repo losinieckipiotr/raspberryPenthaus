@@ -1,23 +1,23 @@
 #include "DeviceReader.h"
 #include "../device/IDevice.h"
 
-namespace events
+using namespace device;
+
+DeviceReader::DeviceReader()
 {
-	DeviceReader::DeviceReader()
-	{
 
-	}
+}
 
-	DeviceReader::~DeviceReader()
-	{
+DeviceReader::~DeviceReader()
+{
 
-	}
-	void DeviceReader::AddDevice(gpio::IDevice *dev)
-	{
+}
 
-	}
-	void DeviceReader::CheckAll()
-	{
+void DeviceReader::AddDevice(IDevice &dev)
+{
 
-	}
+}
+void DeviceReader::CheckAll()
+{
+
 }

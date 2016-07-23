@@ -15,18 +15,18 @@
 
 namespace print
 {
+	static std::string BoolToString(bool b)
+	{
+		if (b)
+			return std::string("true");
+		else
+			return std::string("false");
+	}
+
 	class IToString
 	{
 	public:
 		virtual ~IToString() { }
-
-		static std::string BoolToString(bool b)
-		{
-			if (b)
-				return std::string("true");
-			else
-				return std::string("false");
-		}
 
 		virtual std::string ToString() const = 0;
 	};

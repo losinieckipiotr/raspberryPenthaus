@@ -7,8 +7,10 @@
 
 #include "Creator.h"
 #include "ItemsPool.hpp"
-#include "../rule/RuleManager.h"
+#include "../device/DeviceManager.h"
 #include "../gpio/GPIO.h"
+#include "../rule/RuleManager.h"
+
 #include "Commander.h"
 #include "../io/IO.h"
 
@@ -54,11 +56,12 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
+		device::DeviceManager _deviceManager;
+		Commander _commander;
 		gpio::GPIO* _bus;
 		io::IO* _io;
 		rule::RuleManager _ruleManager;
 		Creator _creator;
-		Commander _commander;
 		ItemsPool<std::shared_ptr<int>> _pool;
 
 		void _Setup();

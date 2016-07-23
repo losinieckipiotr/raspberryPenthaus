@@ -151,7 +151,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="device\DeviceBase.h" />
+    <ClInclude Include="device\DeviceManager.h" />
     <ClInclude Include="device\IDevice.h" />
+    <ClInclude Include="device\IReadable.h" />
+    <ClInclude Include="device\IWriteable.h" />
     <ClInclude Include="device\LED.h" />
     <ClInclude Include="device\LightSensor.h" />
     <ClInclude Include="device\MotionSensor.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="wp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="device\DeviceManager.cpp" />
     <ClCompile Include="device\LED.cpp" />
     <ClCompile Include="device\LightSensor.cpp" />
     <ClCompile Include="device\MotionSensor.cpp" />
@@ -193,9 +197,6 @@
     <ClCompile Include="device\wiringpi\WP_TSL2561.cpp" />
     <ClCompile Include="event\DeviceReader.cpp" />
     <ClCompile Include="gpio\GPIO.cpp" />
-    <ClCompile Include="gpio\LED.cpp" />
-    <ClCompile Include="gpio\LightSensor.cpp" />
-    <ClCompile Include="gpio\MotionSensor.cpp" />
     <ClCompile Include="io\IO.cpp" />
     <ClCompile Include="io\network\Server.cpp" />
     <ClCompile Include="io\network\Session.cpp" />
@@ -211,9 +212,6 @@
     <ClCompile Include="rule\events\SwitchTheLED.cpp" />
     <ClCompile Include="rule\Rule.cpp" />
     <ClCompile Include="rule\RuleManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

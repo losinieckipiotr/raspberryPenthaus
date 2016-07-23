@@ -3,7 +3,6 @@
 
 using namespace rule;
 using namespace events;
-using namespace gpio;
 using namespace prototype;
 using namespace std;
 
@@ -26,7 +25,7 @@ string SwitchTheLED::ToString() const
 {
 	string s(name
 		+ " dev_id " + to_string(_devID)
-		+ " logic " + BoolToString(_onOff));
+		+ " logic " + print::BoolToString(_onOff));
 	return s;
 }
 
@@ -68,10 +67,10 @@ IPrototype* SwitchTheLED::Clone() const
 	return new SwitchTheLED(prototype);
 }
 
-bool SwitchTheLED::AttachDevice(gpio::IDevice* dev)
+bool SwitchTheLED::AttachDevice(device::IDevice* dev)
 {
 	_led = nullptr;
-	_led = dynamic_cast<LED*>(dev);
+	_led = dynamic_cast<device::LED*>(dev);
 	if (_led)
 		return true;
 	else

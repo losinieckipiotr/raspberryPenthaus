@@ -1,7 +1,7 @@
 #ifndef DUSK_DETECTED_H
 #define DUSK_DETECTED_H
 #include "../ITrigger.h"
-#include "../../gpio/LightSensor.h"
+#include "../../device/LightSensor.h"
 
 namespace rule
 {
@@ -20,7 +20,7 @@ namespace rule
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual bool AttachDevice(gpio::IDevice*);
+			virtual bool AttachDevice(device::IDevice*);
 			virtual int GetDeviceID(){ return _devID; }
 
 			virtual bool IsActivated();
@@ -32,7 +32,7 @@ namespace rule
 			bool _logic;
 			int _devID;
 			double _threshold;
-			gpio::LightSensor* _sensor;
+			device::LightSensor* _sensor;
 		};
 	}
 }

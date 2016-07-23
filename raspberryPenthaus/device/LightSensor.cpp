@@ -4,7 +4,7 @@
 #include <iomanip>
 #include "LightSensor.h"
 
-using namespace gpio;
+using namespace device;
 using namespace std;
 
 const string LightSensor::name = "Light_Sensor";
@@ -14,24 +14,24 @@ LightSensor::LightSensor(int id) : DeviceBase(id)
 
 }
 
-string LightSensor::ToString() const
-{
-	stringstream ss;
-	ss << fixed << setprecision(2);
-	ss << name << "\tID " << _id;
-	ss << "\tI2C";
-	if (_lux == numeric_limits<double>::max())
-	{
-		ss << "\tLUX Out of range!";
-	}
-	else
-	{
-		ss << "\tLUX " << _lux;
-	}
-	ss << "\tVIS+IR " << _ch0;
-	ss << "\tIR " << _ch1;
-	return ss.str();
-}
+//string LightSensor::ToString() const
+//{
+//	stringstream ss;
+//	ss << fixed << setprecision(2);
+//	ss << name << "\tID " << _id;
+//	ss << "\tI2C";
+//	if (_lux == numeric_limits<double>::max())
+//	{
+//		ss << "\tLUX Out of range!";
+//	}
+//	else
+//	{
+//		ss << "\tLUX " << _lux;
+//	}
+//	ss << "\tVIS+IR " << _ch0;
+//	ss << "\tIR " << _ch1;
+//	return ss.str();
+//}
 
 
 void LightSensor::Save(ostream& str) const
@@ -57,6 +57,12 @@ bool LightSensor::Load(string& s)
 
 	_isInit = true;
 	return true;
+}
+
+IReadVal& LightSensor::Read()
+{
+	_myVal = _Read();
+	return _myVal;
 }
 
 string LightSensor::Execute(string& s)

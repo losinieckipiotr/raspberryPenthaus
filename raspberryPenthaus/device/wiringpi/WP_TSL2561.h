@@ -3,10 +3,10 @@
 #include <random>
 #include <chrono>
 
-#include "../gpio/LightSensor.h"
-#include "../wp.h"
+#include "../LightSensor.h"
+#include "../../wp.h"
 
-namespace gpio
+namespace device
 {
 	namespace wiringpi
 	{
@@ -23,7 +23,7 @@ namespace gpio
 			X16
 		};
 
-		class WP_LightSensorTSL2561 : public gpio::LightSensor
+		class WP_LightSensorTSL2561 : public device::LightSensor
 		{
 		public:
 			WP_LightSensorTSL2561(int);
@@ -31,13 +31,18 @@ namespace gpio
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual void Check();
+			//virtual void Check();
 
-			virtual unsigned int GetCheckInterval() { return LIGHT_INTERVAL; };
+			//virtual unsigned int GetCheckInterval() { return LIGHT_INTERVAL; };
 
-			virtual void ReadDefault();
-			virtual void WriteDefault();
+			virtual unsigned int GetReadInterval() { return LIGHT_INTERVAL; };
+
+			//virtual void ReadDefault();
+			//virtual void WriteDefault();
+
 			virtual void Setup();
+
+			virtual std::string ToString() const;
 
 			void PowerOn();
 			void PowerOff();
@@ -46,6 +51,12 @@ namespace gpio
 			static const WP_LightSensorTSL2561 prototype;
 
 		protected:
+			virtual double _Read();
+
+			double _ch0;
+			double _ch1;
+			double _lux;
+
 			int _fd;
 			IntegrationTiming _intTiming;
 			Gain _gain;

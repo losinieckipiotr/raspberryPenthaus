@@ -6,7 +6,7 @@
 #include "../gpio/GPIO.h"
 
 using namespace program;
-using namespace gpio;
+using namespace device;
 using namespace rule;
 using namespace prototype;
 using namespace std;
@@ -17,28 +17,28 @@ Creator::Creator(rule::RuleManager& ruleMan)
 
 }
 
-program::Creator::Creator(Creator &copy)
-	: _ruleManager(copy._ruleManager),
-	_prototypeManager(copy._prototypeManager)
-{
-
-}
+//program::Creator::Creator(Creator &copy)
+//	: _ruleManager(copy._ruleManager),
+//	_prototypeManager(copy._prototypeManager)
+//{
+//
+//}
 
 Creator::~Creator()
 {
 
 }
 
-Creator & program::Creator::operator=(const Creator &copy)
-{
-	_ruleManager = copy._ruleManager;
-	_prototypeManager = copy._prototypeManager;
-	return *this;
-}
+//Creator & program::Creator::operator=(const Creator &copy)
+//{
+//	_ruleManager = copy._ruleManager;
+//	_prototypeManager = copy._prototypeManager;
+//	return *this;
+//}
 
 void Creator::DevicesFromFile(string& filename)
 {
-	list<string> lines = _ReadLines(filename);
+	/*list<string> lines = _ReadLines(filename);
 
 	IDevice* dev = nullptr;
 	GPIO* bus = GPIO::Instance();
@@ -47,7 +47,7 @@ void Creator::DevicesFromFile(string& filename)
 		dev = CreateDevice(line);
 		if (dev != nullptr)
 			bus->AddDevice(dev);
-	}
+	}*/
 }
 
 void Creator::RulesFromFile(string& filename)
@@ -166,7 +166,7 @@ list<string> Creator::_ReadLines(string& filename)
 
 string Creator::_CreateEvent(string& ruleName, istream& str)
 {
-	string buffer;
+	/*string buffer;
 
 	Rule* rule = _ruleManager.ReturnRule(ruleName);
 	if (rule == nullptr)
@@ -199,5 +199,8 @@ string Creator::_CreateEvent(string& ruleName, istream& str)
 	}
 
 	rule->AddEvent(ev);
-	return "Added!";
+
+	return "Added!";*/
+
+	return "No implementation exception!";
 }

@@ -3,7 +3,7 @@
 #include <sstream>
 #include "MotionSensor.h"
 
-using namespace gpio;
+using namespace device;
 using namespace std;
 
 const string MotionSensor::name = "Motion_Sensor";
@@ -33,7 +33,7 @@ void MotionSensor::Save(ostream& str) const
 	string s(name
 		+ " id " + to_string(_id)
 		+ " pin " + to_string(_pin)
-		+ " logic " + BoolToString(_logic));
+		+ " logic " + print::BoolToString(_logic));
 	str << s;
 }
 
@@ -68,15 +68,21 @@ bool MotionSensor::Load(string& s)
 	return true;
 }
 
+IReadVal& MotionSensor::Read()
+{
+	_myVal = (_state == static_cast<int>(_logic));
+	return _myVal;
+}
+
 string MotionSensor::Execute(string& s)
 {
 	return "Syntax error";
 }
 
-bool MotionSensor::IsMotionDetected()
-{
-	if (_state == static_cast<int>(_logic))
-		return true;
-	else
-		return false;
-}
+//bool MotionSensor::IsMotionDetected()
+//{
+//	if (_state == static_cast<int>(_logic))
+//		return true;
+//	else
+//		return false;
+//}

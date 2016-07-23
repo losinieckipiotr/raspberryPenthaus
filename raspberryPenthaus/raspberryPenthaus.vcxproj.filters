@@ -180,18 +180,18 @@
     <ClInclude Include="event\DeviceReader.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="device\DeviceManager.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\IReadable.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\IWriteable.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpio\GPIO.cpp">
-      <Filter>Source Files\gpio</Filter>
-    </ClCompile>
-    <ClCompile Include="gpio\LED.cpp">
-      <Filter>Source Files\gpio</Filter>
-    </ClCompile>
-    <ClCompile Include="gpio\LightSensor.cpp">
-      <Filter>Source Files\gpio</Filter>
-    </ClCompile>
-    <ClCompile Include="gpio\MotionSensor.cpp">
       <Filter>Source Files\gpio</Filter>
     </ClCompile>
     <ClCompile Include="io\StdIO.cpp">
@@ -260,8 +260,8 @@
     <ClCompile Include="event\DeviceReader.cpp">
       <Filter>Source Files\event</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="device\DeviceManager.cpp">
+      <Filter>Source Files\device</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 
 using namespace rule;
 using namespace events;
-using namespace gpio;
+using namespace device;
 using namespace prototype;
 using namespace std;
 
@@ -27,7 +27,7 @@ string DuskDetected::ToString() const
 	string s(name
 		+ " dev_id " + to_string(_devID)
 		+ " val " + to_string(_threshold)
-		+ " logic " + BoolToString(_logic));
+		+ " logic " + print::BoolToString(_logic));
 	return s;
 }
 
@@ -72,10 +72,10 @@ IPrototype* DuskDetected::Clone() const
 	return new DuskDetected(prototype);
 }
 
-bool DuskDetected::AttachDevice(IDevice* dev)
+bool DuskDetected::AttachDevice(device::IDevice* dev)
 {
 	_sensor = nullptr;
-	_sensor = dynamic_cast<LightSensor*>(dev);
+	_sensor = dynamic_cast<device::LightSensor*>(dev);
 	if (_sensor)
 		return true;
 	else
@@ -84,7 +84,7 @@ bool DuskDetected::AttachDevice(IDevice* dev)
 
 bool DuskDetected::IsActivated()
 {
-	if (_logic)
+	/*if (_logic)
 	{
 		if (_sensor->GetLight() < _threshold)
 			return true;
@@ -97,5 +97,7 @@ bool DuskDetected::IsActivated()
 			return true;
 		else
 			return false;
-	}
+	}*/
+
+	throw logic_error("No implementation exception");
 }

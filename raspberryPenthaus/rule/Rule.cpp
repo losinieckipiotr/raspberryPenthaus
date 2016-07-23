@@ -33,7 +33,7 @@ string Rule::ToString() const
 {
 	string s(_name
 		+ " priority " + to_string(_priority)
-		+ " mode " + BoolToString(_mode));
+		+ " mode " + print::BoolToString(_mode));
 	return s;
 }
 

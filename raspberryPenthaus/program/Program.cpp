@@ -45,8 +45,9 @@ Program::Program()
 	:	_devsFile("files\\devices.txt"),
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
-		_creator(_ruleManager),
-		_bus(GPIO::Instance())
+		_commander(_deviceManager),
+		_bus(GPIO::Instance(_deviceManager)),
+		_creator(_ruleManager)
 {
 
 }
@@ -54,6 +55,7 @@ Program::Program()
 //destruktor, wylacza urzadzenia podlaczone do GPIO
 Program::~Program()
 {
+	//usuniecie obiektu GPIO
 	_bus->TurnOff();
 
 	#ifdef STATS
@@ -137,6 +139,7 @@ void Program::CoreLoop()
 		lock_guard<mutex> lck(_program_mutex);
 		//zapisanie stanu do plikow konfiguracyjncyh
 		_SaveAll();
+		_bus->WriteDefaultAll();
 		//zamkniecie serwera
 		_io->StopIO();
 	}
@@ -149,7 +152,7 @@ void Program::CoreLoop()
 //konfiguracja GPIO
 void Program::_Setup()
 {
-	//ustawienie gipo
+	//setup urzadzen podlaczonych do GPIO
 	_bus->SetupGPIO();
 	//opoznienie, dla inicjalizacji urzadzen
 	this_thread::sleep_for(chrono::milliseconds(500));
@@ -162,8 +165,12 @@ void Program::_CheckAndExecute()
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
-		_bus->CheckAll();
-		_ruleManager.ExecuteRules();
+
+		//TYMCZASOWE WYLACZENIE
+		this_thread::sleep_for(chrono::milliseconds(10));
+
+		/*_bus->CheckAll();
+		_ruleManager.ExecuteRules();*/
 	}
 	catch (exception& ex)
 	{
@@ -176,7 +183,7 @@ void Program::_SaveAll()
 {
 	try
 	{
-		_bus->SaveDevices(_devsFile);
+		_deviceManager.SaveDevices(_devsFile);
 		_ruleManager.SaveRules(_rulesFile);
 		_ruleManager.SaveEvents(_eventsFile);
 	}
@@ -231,7 +238,7 @@ string Program::Create(string& line)
 	string reply;
 	try
 	{
-		string buffer;
+		/*string buffer;
 		stringstream str(line);
 		str >> buffer >> buffer;
 		if (buffer != "Rule")
@@ -261,7 +268,9 @@ string Program::Create(string& line)
 			{
 				reply = "Syntax error";
 			}
-		}
+		}*/
+
+		throw logic_error("No implementation exception");
 	}
 	catch (exception& ex)
 	{
@@ -289,7 +298,7 @@ string Program::Execute(string& line)
 
 string Program::ClearAll()
 {
-	string reply;
+	/*string reply;
 	lock_guard<mutex> lck(_program_mutex);
 	try
 	{
@@ -304,7 +313,9 @@ string Program::ClearAll()
 	_ruleManager = RuleManager();
 	_creator = Creator(_ruleManager);
 	_bus = GPIO::Instance();
-	return reply;
+	return reply;*/
+
+	return "No implementation exception";
 }
 
 string Program::ClearEvents()
@@ -326,7 +337,7 @@ string Program::ClearEvents()
 
 string Program::ClearRules()
 {
-	string reply;
+	/*string reply;
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
@@ -338,13 +349,15 @@ string Program::ClearRules()
 		reply = ex.what();
 		_io->ErrorOutput(reply);
 	}
-	return reply;
+	return reply;*/
+
+	return "No implementation exception";
 }
 
 string Program::GetDevsString()
 {
 	lock_guard<mutex> lck(_program_mutex);
-	return _bus->PrintDevices();
+	return _deviceManager.PrintDevices();
 }
 
 string Program::GetRulesString()

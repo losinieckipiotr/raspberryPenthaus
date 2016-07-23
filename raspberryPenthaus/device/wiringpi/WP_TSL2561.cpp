@@ -1,11 +1,13 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
+#include <iomanip>//setprecision
 
-#include "../gpio/GPIO.h"
+#include "../../gpio/GPIO.h"
 #include "WP_TSL2561.h"
 
-using namespace gpio;
+using namespace device;
 using namespace wiringpi;
 using namespace prototype;
 using namespace std;
@@ -43,7 +45,26 @@ IPrototype* WP_LightSensorTSL2561::Clone() const
 	return new WP_LightSensorTSL2561(prototype);
 }
 
-void WP_LightSensorTSL2561::Check()
+string WP_LightSensorTSL2561::ToString() const
+{
+	stringstream ss;
+	ss << fixed << setprecision(2);
+	ss << name << "\tID " << _id;
+	ss << "\tI2C";
+	if (_lux == numeric_limits<double>::max())
+	{
+		ss << "\tLUX Out of range!";
+	}
+	else
+	{
+		ss << "\tLUX " << _lux;
+	}
+	ss << "\tVIS+IR " << _ch0;
+	ss << "\tIR " << _ch1;
+	return ss.str();
+}
+
+double WP_LightSensorTSL2561::_Read()
 {
 	_ch0 = wiringPiI2CReadReg16(_fd, COMMAND_BIT | CHAN0_LOW_REGISTER);
 	if (_ch0 < 0)
@@ -56,8 +77,7 @@ void WP_LightSensorTSL2561::Check()
 
 	if ((_ch0 == 0xFFFF) || (_ch1 == 0xFFFF))//przekroczenie zakresu pomiarowego
 	{
-		_lux = numeric_limits<double>::max();
-		return;
+		return _lux = numeric_limits<double>::max();
 	}
 
 	ratio = _ch1 / _ch0;
@@ -102,17 +122,19 @@ void WP_LightSensorTSL2561::Check()
 	{
 		_lux = 0.0;
 	}
+
+	return _lux;
 }
 
-void WP_LightSensorTSL2561::ReadDefault()
-{
-	Check();
-}
+//void WP_LightSensorTSL2561::ReadDefault()
+//{
+//	Check();
+//}
 
-void WP_LightSensorTSL2561::WriteDefault()
-{
-
-}
+//void WP_LightSensorTSL2561::WriteDefault()
+//{
+//
+//}
 
 void WP_LightSensorTSL2561::Setup()
 {
@@ -121,7 +143,7 @@ void WP_LightSensorTSL2561::Setup()
 		runtime_error("Cannot Setup I2C");
 	PowerOn();
 	SetGainAndTiming(_gain, _intTiming);
-	ReadDefault();
+	_Read();
 }
 
 void WP_LightSensorTSL2561::PowerOn()

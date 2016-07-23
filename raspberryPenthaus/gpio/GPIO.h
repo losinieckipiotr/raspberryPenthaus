@@ -4,49 +4,57 @@
 #include <vector>
 #include <mutex>
 #include <string>
-#include "../device/IDevice.h"
+
 #include "../wp.h"
+
+namespace device
+{
+	class DeviceManager;
+}
 
 namespace gpio
 {
+	//Klasa singleton. Po utworzeniu instancji automatycznie, konfiguruje GPIO
+	//oraz urzadzenia ktore znajduja sie  w DeviceManager, tak wiec
+	//1. Utworzenie urzadzen (klasa DeviceManager)
+	//2. Opoznione utworzenie instancji GPIO (w konstruktorze program dac nullptr)
+	//3. Automatyczna konfiguracja wszystkich urzadzen
+	
+	//Zas zmiany
+
 	class GPIO
 	{
 	public:
-		static GPIO* Instance();
-		GPIO(const GPIO&) { }
-		GPIO(const GPIO&&) { }
+		static GPIO* Instance(device::DeviceManager &man);
+		GPIO(const GPIO&) = delete;
+		GPIO(GPIO&&) = delete;
 
 		void TurnOff();
 
-		void AddDevice(IDevice*);
-		void AddNewDevice(IDevice*);
-		IDevice* GetDevice(int id);
+		/*void AddDevice(device::IDevice*);
+		void AddNewDevice(device::IDevice*);
+		device::IDevice* GetDevice(int id);*/
 
-		void SetupGPIO();
-		void CheckAll();
+		//void CheckAll();
 
 		//czy to jest potzebne ?
-		void ReadDefaultAll();
+		//void ReadDefaultAll();
 		////////////////////////
+
+		void SetupGPIO();
 		void WriteDefaultAll();
-		std::string PrintDevices();
-		void SaveDevices(std::string& filename);
+
+		/*std::string PrintDevices();
+		void SaveDevices(std::string& filename);*/
 
 	private:
-		GPIO();
+		GPIO(device::DeviceManager &man);
 		~GPIO();
 
-		static bool _DeviceComp(IDevice* a, IDevice* b)
+		/*static bool _DeviceComp(device::IDevice* a, device::IDevice* b)
 		{
 			return a->GetID() < b->GetID();
-		}
-
-		static GPIO* _instance;
-		unsigned int _checkCounter;
-
-		std::map<int, IDevice*, std::less<int>> _devices;
-		std::map<int, IDevice*, std::less<int>> _newDevices;
-		std::vector<std::pair<int, IDevice*>> _checkTable;
+		}*/
 
 		#ifndef WP
 		void wiringPiSetup()
@@ -54,6 +62,17 @@ namespace gpio
 
 		}
 		#endif
+
+		static GPIO* _instance;
+
+		device::DeviceManager& man;
+
+		//unsigned int _checkCounter;
+
+		/*std::map<int, device::IDevice*, std::less<int>> _devices;
+		std::map<int, device::IDevice*, std::less<int>> _newDevices;*/
+
+		//std::vector<std::pair<int, device::IDevice*>> _checkTable;
 	};
 }
 

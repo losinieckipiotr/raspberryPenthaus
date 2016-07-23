@@ -3,7 +3,8 @@
 #include <sstream>
 #include "LED.h"
 
-using namespace gpio;
+//using namespace gpio;
+using namespace device;
 using namespace std;
 using namespace chrono;
 
@@ -55,7 +56,7 @@ void LED::Save(ostream& str) const
 		+ " id " + to_string(_id)
 		+ " pin " + to_string(_pin)
 		+ " delay " + to_string(_delay.count())
-		+ " logic " + BoolToString(_logic));
+		+ " logic " + print::BoolToString(_logic));
 	str << s;
 }
 
@@ -100,6 +101,18 @@ bool LED::Load(string& s)
 
 	_isInit = true;
 	return true;
+}
+
+bool device::LED::Write(IWriteVal * val)
+{
+	LEDWriteVal * vPtr = nullptr;
+	if (vPtr = dynamic_cast<LEDWriteVal*>(val))
+	{
+		_Write(vPtr->val);
+		return true;
+	}
+	else
+		return false;
 }
 
 string LED::Execute(string& s)
@@ -195,4 +208,9 @@ void LED::ChangeDelay(int delay)
 {
 	duration<int> newDelay(delay);
 	_delay = newDelay;
+}
+
+void device::LED::_Write(bool)
+{
+
 }

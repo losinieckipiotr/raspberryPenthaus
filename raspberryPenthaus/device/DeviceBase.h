@@ -2,7 +2,7 @@
 #define DEVICE_BASE_H
 #include "IDevice.h"
 
-namespace gpio
+namespace device
 {
 	class DeviceBase : public IDevice
 	{
@@ -10,8 +10,7 @@ namespace gpio
 		DeviceBase(int id) : _id(id) { }
 		virtual ~DeviceBase() { }
 
-		virtual int GetID() { return _id; }
-		virtual unsigned int GetCheckInterval() { return 0; }
+		virtual const int GetID() { return _id; }
 
 	protected:
 		int _id;

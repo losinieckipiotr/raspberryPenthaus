@@ -1,9 +1,9 @@
 #include <chrono>
 
-#include "../gpio/GPIO.h"
+#include "../../gpio/GPIO.h"
 #include "WP_LED.h"
 
-using namespace gpio;
+using namespace device;
 using namespace wiringpi;
 using namespace prototype;
 using namespace std;
@@ -30,15 +30,16 @@ IPrototype* WP_LED::Clone() const
 	return new WP_LED(prototype);
 }
 
-void WP_LED::ReadDefault()
-{
-
-}
+//void WP_LED::ReadDefault()
+//{
+//
+//}
 
 void WP_LED::WriteDefault()
 {
 	_state = _defaultValue;
-	_Write(_defaultValue);
+	bool temp = (_defaultValue > 0);
+	_Write(temp);
 }
 
 void WP_LED::Setup()
@@ -48,7 +49,8 @@ void WP_LED::Setup()
 }
 
 
-void WP_LED::_Write(int val)
+void WP_LED::_Write(bool val)
 {
-	digitalWrite(_pin, val);
+	int v = static_cast<int>(val);
+	digitalWrite(_pin, v);
 }

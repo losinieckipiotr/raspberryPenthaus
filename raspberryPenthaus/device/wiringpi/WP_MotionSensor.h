@@ -3,14 +3,14 @@
 #include <random>
 #include <chrono>
 
-#include "../gpio/MotionSensor.h"
-#include "../wp.h"
+#include "../MotionSensor.h"
+#include "../../wp.h"
 
-namespace gpio
+namespace device
 {
 	namespace wiringpi
 	{
-		class WP_MotionSensor : public gpio::MotionSensor
+		class WP_MotionSensor : public device::MotionSensor
 		{
 		public:
 			WP_MotionSensor(int, int, bool = true);
@@ -18,15 +18,21 @@ namespace gpio
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual void Check();
+			//virtual void Check();
 
-			virtual unsigned int GetCheckInterval() { return 1; };
+			//virtual unsigned int GetCheckInterval() { return 1; };
 
-			virtual void ReadDefault();
-			virtual void WriteDefault();
+			virtual unsigned int GetReadInterval() { return MOTION_INTERVAL; };
+
+			//virtual void ReadDefault();
+			//virtual void WriteDefault();
+
 			virtual void Setup();
 
 			static const WP_MotionSensor prototype;
+
+		protected:
+			virtual bool _Read();
 
 		private:
 			#ifndef WP

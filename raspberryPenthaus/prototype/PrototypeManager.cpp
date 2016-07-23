@@ -1,9 +1,9 @@
 #include <sstream>
 #include "PrototypeManager.h"
 
-#include "../wiringpi/WP_LED.h"
-#include "../wiringpi/WP_MotionSensor.h"
-#include "../wiringpi/WP_TSL2561.h"
+#include "../device/wiringpi/WP_LED.h"
+#include "../device/wiringpi/WP_MotionSensor.h"
+#include "../device/wiringpi/WP_TSL2561.h"
 
 #include "../rule/Rule.h"
 
@@ -13,7 +13,7 @@
 #include "../rule/events/SwitchTheLED.h"
 
 using namespace prototype;
-using namespace gpio;
+using namespace device;
 using namespace wiringpi;
 using namespace rule;
 using namespace events;

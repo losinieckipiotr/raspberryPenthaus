@@ -3,7 +3,6 @@
 
 using namespace rule;
 using namespace events;
-using namespace gpio;
 using namespace prototype;
 using namespace std;
 
@@ -56,10 +55,10 @@ IPrototype* OffTheLED::Clone() const
 	return new OffTheLED(prototype);
 }
 
-bool OffTheLED::AttachDevice(gpio::IDevice* dev)
+bool OffTheLED::AttachDevice(device::IDevice* dev)
 {
 	_led = nullptr;
-	_led = dynamic_cast<LED*>(dev);
+	_led = dynamic_cast<device::LED*>(dev);
 	if (_led)
 		return true;
 	else

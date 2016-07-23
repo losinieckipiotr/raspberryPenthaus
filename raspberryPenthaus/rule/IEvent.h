@@ -2,7 +2,7 @@
 #define IEVENT_H
 #include <fstream>
 #include "../prototype/PrototypeBase.h"
-#include "../gpio/IDevice.h"
+#include "../device/IDevice.h"
 
 namespace rule
 {
@@ -11,7 +11,7 @@ namespace rule
 	public:
 		virtual ~IEvent() { }
 
-		virtual bool AttachDevice(gpio::IDevice*) = 0;
+		virtual bool AttachDevice(device::IDevice*) = 0;
 		virtual int GetDeviceID() = 0;
 	};
 }

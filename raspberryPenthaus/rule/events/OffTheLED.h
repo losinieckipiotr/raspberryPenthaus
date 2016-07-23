@@ -1,7 +1,7 @@
 #ifndef OFF_THE_LED_H
 #define OFF_THE_LED_H
 #include "../IAction.h"
-#include "../../gpio/LED.h"
+#include "../../device/LED.h"
 
 namespace rule
 {
@@ -20,7 +20,7 @@ namespace rule
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual bool AttachDevice(gpio::IDevice*);
+			virtual bool AttachDevice(device::IDevice*);
 			virtual int GetDeviceID(){ return _devID; }
 
 			virtual void Execute();
@@ -30,7 +30,7 @@ namespace rule
 
 		private:
 			int _devID;
-			gpio::LED* _led;
+			device::LED* _led;
 		};
 	}
 }

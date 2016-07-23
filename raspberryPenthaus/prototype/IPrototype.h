@@ -10,6 +10,7 @@ namespace prototype
 	public:
 		virtual ~IPrototype() { }
 
+		//czy to jest potrzebne ?
 		virtual bool IsInitialized() const = 0;
 
 		virtual void Save(std::ostream&) const = 0;

@@ -1,13 +1,13 @@
 #ifndef WP_LED_H
 #define WP_LED_H
-#include "../gpio/LED.h"
-#include "../wp.h"
+#include "../LED.h"
+#include "../../wp.h"
 
-namespace gpio
+namespace device
 {
 	namespace wiringpi
 	{
-		class WP_LED : public gpio::LED
+		class WP_LED : public device::LED
 		{
 		public:
 			WP_LED(int, int, int, bool = true);
@@ -15,14 +15,16 @@ namespace gpio
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual void ReadDefault();
+			//virtual void ReadDefault();
+
 			virtual void WriteDefault();
+
 			virtual void Setup();
 
 			static const WP_LED prototype;
 
 		protected:
-			virtual void _Write(int);
+			virtual void _Write(bool);
 
 		private:
 			#ifndef WP

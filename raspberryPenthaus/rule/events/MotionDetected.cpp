@@ -3,7 +3,6 @@
 
 using namespace rule;
 using namespace events;
-using namespace gpio;
 using namespace prototype;
 using namespace std;
 
@@ -25,7 +24,7 @@ string MotionDetected::ToString() const
 {
 	string s(name
 		+ " dev_id " + to_string(_devID)
-		+ " logic " + BoolToString(_logic));
+		+ " logic " + print::BoolToString(_logic));
 	return s;
 }
 
@@ -67,10 +66,10 @@ IPrototype* MotionDetected::Clone() const
 	return new MotionDetected(prototype);
 }
 
-bool MotionDetected::AttachDevice(IDevice* dev)
+bool MotionDetected::AttachDevice(device::IDevice* dev)
 {
 	_sensor = nullptr;
-	_sensor = dynamic_cast<MotionSensor*>(dev);
+	_sensor = dynamic_cast<device::MotionSensor*>(dev);
 	if (_sensor)
 		return true;
 	else
@@ -79,8 +78,10 @@ bool MotionDetected::AttachDevice(IDevice* dev)
 
 bool MotionDetected::IsActivated()
 {
-	if (_logic)
+	/*if (_logic)
 		return _sensor->IsMotionDetected();
 	else
-		return !_sensor->IsMotionDetected();
+		return !_sensor->IsMotionDetected();*/
+
+	throw logic_error("No implementation exception");
 }

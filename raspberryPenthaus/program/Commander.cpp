@@ -4,16 +4,16 @@
 #include <iostream>
 
 #include "Commander.h"
-#include "../gpio/GPIO.h"
-#include "../gpio/LED.h"
-#include "../gpio/MotionSensor.h"
-#include "../gpio/LightSensor.h"
+#include "../device/DeviceManager.h"
+#include "../device/LED.h"
+#include "../device/MotionSensor.h"
+#include "../device/LightSensor.h"
 
 using namespace program;
-using namespace gpio;
+using namespace device;
 using namespace std;
 
-Commander::Commander()
+Commander::Commander(device::DeviceManager &man) : man(man)
 {
 
 }
@@ -35,7 +35,8 @@ string Commander::ExecuteCommand(string& line)
 		return "Synatax error";
 	try
 	{
-		dev = GPIO::Instance()->GetDevice(dev_id);
+		//dev = GPIO::Instance()->GetDevice(dev_id);
+		dev = man.GetDevice(dev_id);
 	}
 	catch (runtime_error& ex)
 	{

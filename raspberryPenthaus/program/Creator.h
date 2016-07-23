@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 
-#include "../gpio/IDevice.h"
+#include "../device/IDevice.h"
 #include "../rule/Rule.h"
 #include "../rule/RuleManager.h"
 #include "../prototype/PrototypeManager.h"
@@ -15,17 +15,17 @@ namespace program
 	{
 	public:
 		Creator(rule::RuleManager&);
-		Creator(Creator& copy);
+		Creator(const Creator& copy) = delete;
 		Creator(Creator&&) = delete;
 		~Creator();
 
-		Creator& operator=(const Creator& copy);
+		//Creator& operator=(const Creator& copy);
 
 		void DevicesFromFile(std::string&);
 		void RulesFromFile(std::string&);
 		void EventsFromFile(std::string&);
 
-		gpio::IDevice* CreateDevice(std::string&);
+		device::IDevice* CreateDevice(std::string&);
 		rule::Rule* CreateRule(std::string&);
 		std::string CreateEvents(std::string&);
 
