@@ -26,19 +26,12 @@ namespace device
 		class WP_LightSensorTSL2561 : public device::LightSensor
 		{
 		public:
-			WP_LightSensorTSL2561(int);
+			WP_LightSensorTSL2561(int, double);
 			virtual ~WP_LightSensorTSL2561();
 
 			virtual prototype::IPrototype* Clone() const;
 
-			//virtual void Check();
-
-			//virtual unsigned int GetCheckInterval() { return LIGHT_INTERVAL; };
-
 			virtual unsigned int GetReadInterval() { return LIGHT_INTERVAL; };
-
-			//virtual void ReadDefault();
-			//virtual void WriteDefault();
 
 			virtual void Setup();
 

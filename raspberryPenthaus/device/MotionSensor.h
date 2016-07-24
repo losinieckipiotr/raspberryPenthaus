@@ -6,16 +6,17 @@
 
 namespace device
 {
-	class MotionSensorReadVal : public IReadVal
+	struct MotionSensorReadVal
 	{
 	public:
-		MotionSensorReadVal() { }
-		MotionSensorReadVal(bool val) : val(val) { }
-		virtual ~MotionSensorReadVal() { }
-
-		operator bool() { return val; }
+		MotionSensorReadVal(
+			bool val,
+			unsigned int deviceID)
+				: val(val), deviceID(deviceID)
+		{ }
 
 		bool val;
+		unsigned int deviceID;
 	};
 
 	class MotionSensor : public DeviceBase, public IReadable
@@ -29,11 +30,9 @@ namespace device
 		virtual void Save(std::ostream&) const;
 		virtual bool Load(std::string&);
 
-		virtual IReadVal& Read();
+		virtual std::shared_ptr<event::IEvent> Read();
 
 		virtual std::string Execute(std::string&);
-
-		//bool IsMotionDetected();
 
 		static const std::string name;
 

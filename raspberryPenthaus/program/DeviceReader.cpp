@@ -7,13 +7,14 @@
 #include "DeviceReader.h"
 #include "../device/IDevice.h"
 
-#include "../device/MotionSensor.h"
-#include "../device/LightSensor.h"
+#include "../event/LightDetected.hpp"
+#include "../event/MotionDetected.hpp"
 
 #include "../io/StdIO.h"
 
 using namespace program;
 using namespace device;
+using namespace event;
 using namespace std;
 using namespace chrono;
 
@@ -28,14 +29,9 @@ DeviceReader::~DeviceReader()
 
 }
 
-void program::DeviceReader::BiuldDeviceMap()
+void DeviceReader::BiuldDeviceMap()
 {
-	readFlag = false;
-	for (auto &th : readThreads)
-	{
-		th.join();
-	}
-	readThreads.clear();
+	StopRead();
 
 	intrvMap_.clear();
 	auto readDevs = devMan_.GetReadDevices();
@@ -74,7 +70,7 @@ void program::DeviceReader::BiuldDeviceMap()
 //	++readCounter;
 //}
 
-void program::DeviceReader::StartRead()
+void DeviceReader::StartRead()
 {
 	readFlag = true;
 	for (auto &elm : intrvMap_)
@@ -82,6 +78,16 @@ void program::DeviceReader::StartRead()
 		auto loop = [this, &elm]() { ReadLoop(elm.first, elm.second); };
 		readThreads.push_back(thread(loop));
 	}
+}
+
+void DeviceReader::StopRead()
+{
+	readFlag = false;
+	for (auto &th : readThreads)
+	{
+		th.detach();
+	}
+	readThreads.clear();
 }
 
 void program::DeviceReader::ReadLoop
@@ -95,7 +101,6 @@ void program::DeviceReader::ReadLoop
 	{
 		for (auto &dev : devs)
 		{
-			
 			ReadDev(dev);
 		}
 
@@ -110,27 +115,48 @@ void program::DeviceReader::ReadDev(device::IReadable *dev)
 {
 	//TYMCZASOWO WYPISYWANIE WARTOSCI NA EKRAN
 
-	MotionSensor* motSens = dynamic_cast<MotionSensor*>(dev);
-	if (motSens != nullptr)
+	auto readEvent = dev->Read();
+	if (readEvent == nullptr)
+		return;
+
+	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
+	if (motionPtr)
 	{
-		MotionSensorReadVal& rVal = 
-			static_cast<MotionSensorReadVal&>(motSens->Read());
-		stringstream ss;
-		ss << boolalpha << rVal;
-		io::StdIO::StandardOutput(ss.str());
+		io::StdIO::StandardOutput(motionPtr->ToString());
 		return;
 	}
-	
-	LightSensor* lightSens = dynamic_cast<LightSensor*>(dev);
-	if (lightSens != nullptr)
+
+	LightDetected* lightPtr = dynamic_cast<LightDetected*>(readEvent.get());
+	if (lightPtr)
 	{
-		LightSensorReadVal& rVal =
-			static_cast<LightSensorReadVal&>(lightSens->Read());
-		stringstream ss;
-		ss << rVal;
-		io::StdIO::StandardOutput(ss.str());
+		io::StdIO::StandardOutput(lightPtr->ToString());
 		return;
 	}
+
+	throw runtime_error("Unexpected exception");
+
+
+	//MotionSensor* motSens = dynamic_cast<MotionSensor*>(dev);
+	//if (motSens != nullptr)
+	//{
+	//	MotionSensorReadVal& rVal = 
+	//		static_cast<MotionSensorReadVal&>(motSens->Read());
+	//	stringstream ss;
+	//	ss << boolalpha << rVal;
+	//	io::StdIO::StandardOutput(ss.str());
+	//	return;
+	//}
+	//
+	//LightSensor* lightSens = dynamic_cast<LightSensor*>(dev);
+	//if (lightSens != nullptr)
+	//{
+	//	LightSensorReadVal& rVal =
+	//		static_cast<LightSensorReadVal&>(lightSens->Read());
+	//	stringstream ss;
+	//	ss << rVal;
+	//	io::StdIO::StandardOutput(ss.str());
+	//	return;
+	//}
 }
 
 

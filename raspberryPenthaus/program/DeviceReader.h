@@ -20,6 +20,7 @@ namespace program
 		void BiuldDeviceMap();
 		//void ReadAll();
 		void StartRead();
+		void StopRead();
 
 	private:
 		void ReadLoop(unsigned int interval, std::vector<device::IReadable*>& devs);
@@ -28,7 +29,6 @@ namespace program
 		const unsigned int baseInterval;
 		bool readFlag;
 		//unsigned int readCounter;
-
 
 		device::DeviceManager& devMan_;
 		std::map<const unsigned int, std::vector<device::IReadable*>> intrvMap_;

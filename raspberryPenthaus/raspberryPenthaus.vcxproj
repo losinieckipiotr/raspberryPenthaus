@@ -161,6 +161,9 @@
     <ClInclude Include="device\wiringpi\WP_LED.h" />
     <ClInclude Include="device\wiringpi\WP_MotionSensor.h" />
     <ClInclude Include="device\wiringpi\WP_TSL2561.h" />
+    <ClInclude Include="event\IEvent.h" />
+    <ClInclude Include="event\LightDetected.hpp" />
+    <ClInclude Include="event\MotionDetected.hpp" />
     <ClInclude Include="gpio\GPIO.h" />
     <ClInclude Include="io\IO.h" />
     <ClInclude Include="io\network\Server.h" />

@@ -150,6 +150,15 @@
     <ClInclude Include="ItemsPool.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="event\IEvent.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\MotionDetected.hpp">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\LightDetected.hpp">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpio\GPIO.cpp">

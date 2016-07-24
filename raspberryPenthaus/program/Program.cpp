@@ -154,6 +154,8 @@ void Program::CoreLoop()
 			this_thread::sleep_for(milliseconds(1000));
 		}
 
+		_deviceReader.StopRead();
+
 		//nastapilo normalne zamkniecie aplikacji
 		lock_guard<mutex> lck(_program_mutex);
 		//zapisanie stanu do plikow konfiguracyjncyh
@@ -214,7 +216,7 @@ void Program::IO()
 	try
 	{
 		//TYMCZASOWE WYLACZENIE
-		_io->StartIO();
+		//_io->StartIO();
 	}
 	catch (exception& ex)
 	{

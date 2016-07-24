@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include "MotionSensor.h"
+#include "../event/MotionDetected.hpp"
 
 using namespace device;
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 const string MotionSensor::name = "Motion_Sensor";
 
 MotionSensor::MotionSensor(int id, int pin, bool logic)
-	: DeviceBase(id), _pin(pin), _logic(logic)
+	: DeviceBase(id), _pin(pin), _logic(logic), _myVal(false, id)
 {
 	_state = -1;
 }
@@ -64,25 +65,23 @@ bool MotionSensor::Load(string& s)
 	else
 		return false;
 
+	_myVal.deviceID = _id;
+
+
 	_isInit = true;
 	return true;
 }
 
-IReadVal& MotionSensor::Read()
+shared_ptr<event::IEvent> MotionSensor::Read()
 {
-	_myVal = (_Read() == static_cast<int>(_logic));
-	return _myVal;
+	_myVal.val = (_Read() == static_cast<int>(_logic));
+	if (_myVal.val)
+		return make_shared<event::MotionDetected>(_myVal);
+	else
+		return nullptr;
 }
 
 string MotionSensor::Execute(string& s)
 {
 	return "Syntax error";
 }
-
-//bool MotionSensor::IsMotionDetected()
-//{
-//	if (_state == static_cast<int>(_logic))
-//		return true;
-//	else
-//		return false;
-//}

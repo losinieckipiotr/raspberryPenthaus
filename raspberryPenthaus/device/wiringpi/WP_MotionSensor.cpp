@@ -33,30 +33,14 @@ IPrototype* WP_MotionSensor::Clone() const
 	return new WP_MotionSensor(prototype);
 }
 
-//void WP_MotionSensor::Check()
-//{
-//	_state = digitalRead(_pin);
-//}
-
 bool WP_MotionSensor::_Read()
 {
 	_state = digitalRead(_pin);
 	return (_state > 0);
 }
 
-//void WP_MotionSensor::ReadDefault()
-//{
-//	Check();
-//}
-
-//void WP_MotionSensor::WriteDefault()
-//{
-//
-//}
-
 void WP_MotionSensor::Setup()
 {
 	pinMode(_pin, INPUT);
-	//ReadDefault();
-	_Read();
+	MotionSensor::Read();
 }

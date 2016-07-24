@@ -24,7 +24,7 @@ int main()
 				prog->CoreLoop();
 			}
 		});
-		cout << "Running...";
+		cout << "Running..." << endl;
 		cin.get();
 		prog->StopAll();
 		cout << "Stopping program...";

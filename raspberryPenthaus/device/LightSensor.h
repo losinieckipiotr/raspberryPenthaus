@@ -7,47 +7,43 @@
 
 namespace device
 {
-	class LightSensorReadVal : public IReadVal
+	struct LightSensorReadVal
 	{
 	public:
-		LightSensorReadVal() { }
-		LightSensorReadVal(double val) : val(val) { }
-		virtual ~LightSensorReadVal() { }
-
-		operator double() { return val; }
+		LightSensorReadVal(
+			double val,
+			double threshold,
+			unsigned int deviceID)
+				: val(val), threshold(threshold), deviceID(deviceID)
+		{ }
 
 		double val;
+		double threshold;
+		unsigned int deviceID;
 	};
 
 	class LightSensor : public DeviceBase, public IReadable
 	{
 	public:
-		LightSensor(int);
+		LightSensor(int, double);
 		virtual ~LightSensor() { }
 
-		//virtual std::string ToString() const;
+		virtual std::string ToString() const;
 
 		virtual void Save(std::ostream&) const;
 		virtual bool Load(std::string&);
 
-		//virtual bool IsReadable() { return true; };
-
-		virtual IReadVal& Read();
+		virtual std::shared_ptr<event::IEvent> Read();
 
 		virtual std::string Execute(std::string&);
-
-		//double GetLight() const { return _lux; }
 
 		static const std::string name;
 
 	protected:
 		virtual double _Read() = 0;
 
+		double _threshold;
 		LightSensorReadVal _myVal;
-
-		/*double _ch0;
-		double _ch1;
-		double _lux;*/
 	};
 }
 
