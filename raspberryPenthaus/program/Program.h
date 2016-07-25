@@ -5,8 +5,8 @@
 #include <string>
 #include <memory>
 
-//#include "../ItemsPool.hpp"
-
+#include "../ItemsPool.hpp"
+#include "../event/IEvent.h"
 #include "DeviceReader.h"
 #include "../device/DeviceManager.h"
 #include "Commander.h"
@@ -58,8 +58,7 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
-		//ItemsPool<std::shared_ptr<INTERFEJS_EVENTOW*>> _pool;
-
+		ItemsPool<std::shared_ptr<event::IEvent>> _eventPool;
 		device::DeviceManager _deviceManager;
 		DeviceReader _deviceReader;
 		Commander _commander;

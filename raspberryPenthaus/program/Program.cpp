@@ -8,6 +8,9 @@
 #include "Program.h"
 #include "../wp.h"
 
+#include "../event/LightDetected.hpp"
+#include "../event/MotionDetected.hpp"
+
 #ifdef STATS
 std::deque<long long> statistics;
 #endif
@@ -16,6 +19,7 @@ using namespace program;
 using namespace gpio;
 using namespace std;
 using namespace chrono;
+using namespace event;
 
 Program* Program::_instance = nullptr;
 
@@ -44,7 +48,7 @@ Program::Program()
 	:	_devsFile("files\\devices.txt"),
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
-		_deviceReader(_deviceManager),
+		_deviceReader(_deviceManager, _eventPool),
 		_commander(_deviceManager),
 		_creator(_deviceManager),
 		_bus(GPIO::Instance(_deviceManager)),
@@ -132,7 +136,6 @@ void Program::CoreLoop()
 	{
 		_deviceReader.StartRead();
 
-
 		//ustawienie flagi wyjscia
 		_coreQuit = false;
 
@@ -151,10 +154,32 @@ void Program::CoreLoop()
 			////wyliczenie czasu nastepnej iteracji
 			//nextTime = system_clock::now() + tick;
 
-			this_thread::sleep_for(milliseconds(1000));
-		}
+			//this_thread::sleep_for(milliseconds(1000));
 
-		_deviceReader.StopRead();
+			try
+			{
+				auto readEvent = _eventPool.Pop();
+				MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
+				if (motionPtr)
+				{
+					io::StdIO::StandardOutput(motionPtr->ToString());
+					continue;
+				}
+				LightDetected* lightPtr = dynamic_cast<LightDetected*>(readEvent.get());
+				if (lightPtr)
+				{
+					io::StdIO::StandardOutput(lightPtr->ToString());
+					continue;
+				}
+				throw runtime_error("Unexpected exception");
+			}
+			catch (runtime_error& ex)
+			{
+				string s = ex.what();
+				if (s != "Pool has been closed.")
+					io::StdIO::ErrorOutput(ex.what());
+			}
+		}
 
 		//nastapilo normalne zamkniecie aplikacji
 		lock_guard<mutex> lck(_program_mutex);
@@ -180,10 +205,6 @@ void Program::_CheckAndExecute()
 	try
 	{
 		lock_guard<mutex> lck(_program_mutex);
-
-		//_deviceReader.ReadAll();
-
-		this_thread::sleep_for(chrono::milliseconds(500));
 
 		/*_bus->CheckAll();
 		_ruleManager.ExecuteRules();*/
@@ -228,6 +249,8 @@ void Program::IO()
 //ustawienie flagi wyjscia z programu
 void Program::StopAll()
 {
+	_deviceReader.StopRead();
+	_eventPool.Close();
 	_coreQuit = true;
 }
 

@@ -3,7 +3,10 @@
 #include <map>
 #include <vector>
 #include <thread>
+#include <memory>
 
+#include "../ItemsPool.hpp"
+#include "../event/IEvent.h"
 #include "../device/DeviceManager.h"
 
 namespace program
@@ -14,11 +17,12 @@ namespace program
 		DeviceReader() = delete;
 		DeviceReader(const DeviceReader&) = delete;
 		DeviceReader(DeviceReader&&) = delete;
-		DeviceReader(device::DeviceManager& devMan);
+		DeviceReader(
+			device::DeviceManager& devMan,
+			ItemsPool<std::shared_ptr<event::IEvent>>& eventPool);
 		virtual ~DeviceReader();
 
 		void BiuldDeviceMap();
-		//void ReadAll();
 		void StartRead();
 		void StopRead();
 
@@ -28,9 +32,9 @@ namespace program
 
 		const unsigned int baseInterval;
 		bool readFlag;
-		//unsigned int readCounter;
 
 		device::DeviceManager& devMan_;
+		ItemsPool<std::shared_ptr<event::IEvent>>& eventPool_;
 		std::map<const unsigned int, std::vector<device::IReadable*>> intrvMap_;
 		std::vector<std::thread> readThreads;
 	};

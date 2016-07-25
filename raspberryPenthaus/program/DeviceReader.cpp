@@ -7,9 +7,6 @@
 #include "DeviceReader.h"
 #include "../device/IDevice.h"
 
-#include "../event/LightDetected.hpp"
-#include "../event/MotionDetected.hpp"
-
 #include "../io/StdIO.h"
 
 using namespace program;
@@ -18,8 +15,13 @@ using namespace event;
 using namespace std;
 using namespace chrono;
 
-DeviceReader::DeviceReader(DeviceManager &devMan)
-	:	devMan_(devMan), baseInterval(BASE_INTERVAL), readFlag(false)
+DeviceReader::DeviceReader(
+	DeviceManager &devMan,
+	ItemsPool<shared_ptr<IEvent>>& eventPool)
+	:	devMan_(devMan),
+		eventPool_(eventPool),
+		baseInterval(BASE_INTERVAL),
+		readFlag(false)
 {
 
 }
@@ -52,23 +54,6 @@ void DeviceReader::BiuldDeviceMap()
 		}
 	}
 }
-
-//void DeviceReader::ReadAll()
-//{
-//	for (auto &elm : intrvMap_)
-//	{
-//		unsigned int i = elm.first;
-//		if (readCounter % i == 0)
-//		{
-//			auto &devs = elm.second;
-//			for (auto &dev : devs)
-//			{
-//				ReadDev(dev);
-//			}
-//		}
-//	}
-//	++readCounter;
-//}
 
 void DeviceReader::StartRead()
 {
@@ -119,7 +104,9 @@ void program::DeviceReader::ReadDev(device::IReadable *dev)
 	if (readEvent == nullptr)
 		return;
 
-	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
+	eventPool_.Push(readEvent);
+
+	/*MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
 	if (motionPtr)
 	{
 		io::StdIO::StandardOutput(motionPtr->ToString());
@@ -133,30 +120,7 @@ void program::DeviceReader::ReadDev(device::IReadable *dev)
 		return;
 	}
 
-	throw runtime_error("Unexpected exception");
-
-
-	//MotionSensor* motSens = dynamic_cast<MotionSensor*>(dev);
-	//if (motSens != nullptr)
-	//{
-	//	MotionSensorReadVal& rVal = 
-	//		static_cast<MotionSensorReadVal&>(motSens->Read());
-	//	stringstream ss;
-	//	ss << boolalpha << rVal;
-	//	io::StdIO::StandardOutput(ss.str());
-	//	return;
-	//}
-	//
-	//LightSensor* lightSens = dynamic_cast<LightSensor*>(dev);
-	//if (lightSens != nullptr)
-	//{
-	//	LightSensorReadVal& rVal =
-	//		static_cast<LightSensorReadVal&>(lightSens->Read());
-	//	stringstream ss;
-	//	ss << rVal;
-	//	io::StdIO::StandardOutput(ss.str());
-	//	return;
-	//}
+	throw runtime_error("Unexpected exception");*/
 }
 
 

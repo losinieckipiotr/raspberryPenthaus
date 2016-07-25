@@ -25,19 +25,13 @@ namespace event
 		{
 			std::stringstream ss;
 			ss.precision(2);
-			ss << "LightDetected ";
+			ss << print::TimeToString(time_);
+			ss << " LightDetected ";
 			ss << "device ID: " << readVal_.deviceID;
 			ss << " lux: " << std::fixed << readVal_.val;
-			ss << " threshold: " << (readVal_.threshold) << " ";
-			ss << print::TimeToString(time_);
+			ss << " threshold: " << (readVal_.threshold);
+			
 			return ss.str();
-
-			/*std::string s("LightDetected ");
-			s += "device ID: " + std::to_string(readVal_.deviceID);
-			s += " lux: " + std::to_string(readVal_.val);
-			s += " threshold: " + std::to_string(readVal_.threshold);
-			s += " " + print::TimeToString(time_);
-			return s;*/
 		}
 
 		virtual unsigned int GetDeviceID()

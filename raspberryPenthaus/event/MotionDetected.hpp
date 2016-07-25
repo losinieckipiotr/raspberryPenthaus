@@ -26,17 +26,12 @@ namespace event
 		virtual std::string ToString() const
 		{
 			std::stringstream ss;
-			ss << "MotionDetected ";
-			ss << "device ID: " << readVal_.deviceID;
-			ss << " val: " << print::BoolToString(readVal_.val) << " ";
 			ss << print::TimeToString(time_);
+			ss << " MotionDetected ";
+			ss << "device ID: " << readVal_.deviceID;
+			ss << " val: " << print::BoolToString(readVal_.val);
+			
 			return ss.str();
-
-			/*std::string s("MotionDetected ");
-			s +=  "device ID: " + std::to_string(readVal_.deviceID);
-			s += "val: " + print::BoolToString(readVal_.val);
-			s += " " + print::TimeToString(time_);
-			return s;*/
 		}
 
 		virtual unsigned int GetDeviceID()
