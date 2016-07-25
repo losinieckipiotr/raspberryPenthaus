@@ -129,7 +129,7 @@ list<string> Creator::_ReadLines(string& filename)
 	file.close();
 
 	stringstream ss(buffer);
-	delete buffer;
+	delete[]buffer;
 	string buffer2;
 	list<string> lines;
 	while (true)

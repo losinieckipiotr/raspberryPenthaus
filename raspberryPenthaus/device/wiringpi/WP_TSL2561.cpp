@@ -156,6 +156,7 @@ void WP_LightSensorTSL2561::SetGainAndTiming(Gain g, IntegrationTiming it)
 		gain = GAIN_16X;
 		break;
 	default:
+		throw runtime_error("Bad gain value");
 		break;
 	}
 	switch (it)
@@ -170,6 +171,7 @@ void WP_LightSensorTSL2561::SetGainAndTiming(Gain g, IntegrationTiming it)
 		timing = INTEGRATIONTIME_402MS;
 		break;
 	default:
+		throw runtime_error("Bad timing value");
 		break;
 	}
 
