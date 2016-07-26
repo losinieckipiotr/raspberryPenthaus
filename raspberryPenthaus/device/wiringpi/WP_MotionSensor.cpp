@@ -11,7 +11,7 @@ using namespace std;
 default_random_engine WP_MotionSensor::gen(
 	(unsigned)chrono::system_clock()
 	.now().time_since_epoch().count());
-bernoulli_distribution WP_MotionSensor::dist(0.1);
+bernoulli_distribution WP_MotionSensor::dist(0.01);
 
 #endif // !WP
 

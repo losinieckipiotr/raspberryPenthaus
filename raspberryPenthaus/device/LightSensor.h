@@ -17,6 +17,11 @@ namespace device
 				: val(val), threshold(threshold), deviceID(deviceID)
 		{ }
 
+		bool operator()()
+		{
+			return val > threshold;
+		}
+
 		double val;
 		double threshold;
 		unsigned int deviceID;

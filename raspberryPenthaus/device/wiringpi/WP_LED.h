@@ -15,8 +15,6 @@ namespace device
 
 			virtual prototype::IPrototype* Clone() const;
 
-			//virtual void ReadDefault();
-
 			virtual void WriteDefault();
 
 			virtual void Setup();
@@ -24,7 +22,7 @@ namespace device
 			static const WP_LED prototype;
 
 		protected:
-			virtual void _Write(bool);
+			virtual void _Write(bool val);
 
 		private:
 			#ifndef WP

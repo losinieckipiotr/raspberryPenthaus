@@ -1,9 +1,12 @@
 #include <chrono>
 #include <string>
 #include <sstream>
-#include "LED.h"
+#include <future>
+#include <thread>
 
-//using namespace gpio;
+#include "LED.h"
+#include "../program/Program.h"
+
 using namespace device;
 using namespace std;
 using namespace chrono;
@@ -103,9 +106,9 @@ bool LED::Load(string& s)
 	return true;
 }
 
-bool device::LED::Write(IWriteVal * val)
+bool device::LED::Write(IWriteVal *val)
 {
-	LEDWriteVal * vPtr = nullptr;
+	LEDWriteVal *vPtr = nullptr;
 	if (vPtr = dynamic_cast<LEDWriteVal*>(val))
 	{
 		_Write(vPtr->val);
@@ -146,11 +149,11 @@ string LED::Execute(string& s)
 	return "Executed!";
 }
 
+//TO DO: Wywalic time point, posprzatac ta klase
 void LED::On()
 {
 	if (_isLocked)
 		return;
-	_lightingTime = system_clock::now();
 	if (!_IsOn())
 	{
 		_lightingTime = system_clock::now();
@@ -161,21 +164,7 @@ void LED::On()
 
 void LED::Off()
 {
-	if (_isLocked)
-		return;
-	if (_IsOn())
-	{
-		timePoint now = system_clock::now();
-		if (now > (_lightingTime + _delay))
-		{
-			_Write(!static_cast<int>(_logic));
-			_state = !static_cast<int>(_logic);
-		}
-	}
-}
 
-void LED::HardOff()
-{
 	if (_isLocked)
 		return;
 	if (_IsOn())
@@ -195,7 +184,7 @@ void LED::LockOn()
 void LED::LockOff()
 {
 	Unlock();
-	HardOff();
+	Off();
 	_isLocked = true;
 }
 
@@ -210,7 +199,7 @@ void LED::ChangeDelay(int delay)
 	_delay = newDelay;
 }
 
-void device::LED::_Write(bool)
+std::chrono::seconds device::LED::GetDelay()
 {
-
+	return _delay;
 }

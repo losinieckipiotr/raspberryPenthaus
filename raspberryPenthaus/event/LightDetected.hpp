@@ -26,8 +26,8 @@ namespace event
 			std::stringstream ss;
 			ss.precision(2);
 			ss << print::TimeToString(time_);
-			ss << " LightDetected ";
-			ss << "device ID: " << readVal_.deviceID;
+			ss << " LightDetected";
+			ss << " device ID: " << readVal_.deviceID;
 			ss << " lux: " << std::fixed << readVal_.val;
 			ss << " threshold: " << (readVal_.threshold);
 			
@@ -42,6 +42,11 @@ namespace event
 		virtual timePoint GetTime()
 		{
 			return time_;
+		}
+
+		virtual device::LightSensorReadVal GetLightReadVal()
+		{
+			return readVal_;
 		}
 
 	private:

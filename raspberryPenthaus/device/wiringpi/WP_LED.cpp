@@ -30,11 +30,6 @@ IPrototype* WP_LED::Clone() const
 	return new WP_LED(prototype);
 }
 
-//void WP_LED::ReadDefault()
-//{
-//
-//}
-
 void WP_LED::WriteDefault()
 {
 	_state = _defaultValue;

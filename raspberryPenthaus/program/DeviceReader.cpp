@@ -98,29 +98,11 @@ void program::DeviceReader::ReadLoop
 
 void program::DeviceReader::ReadDev(device::IReadable *dev)
 {
-	//TYMCZASOWO WYPISYWANIE WARTOSCI NA EKRAN
-
 	auto readEvent = dev->Read();
 	if (readEvent == nullptr)
 		return;
 
 	eventPool_.Push(readEvent);
-
-	/*MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
-	if (motionPtr)
-	{
-		io::StdIO::StandardOutput(motionPtr->ToString());
-		return;
-	}
-
-	LightDetected* lightPtr = dynamic_cast<LightDetected*>(readEvent.get());
-	if (lightPtr)
-	{
-		io::StdIO::StandardOutput(lightPtr->ToString());
-		return;
-	}
-
-	throw runtime_error("Unexpected exception");*/
 }
 
 

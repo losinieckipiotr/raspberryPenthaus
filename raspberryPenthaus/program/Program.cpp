@@ -48,6 +48,7 @@ Program::Program()
 	:	_devsFile("files\\devices.txt"),
 		_rulesFile("files\\rules.txt"),
 		_eventsFile("files\\events.txt"),
+		_lightDriver(_eventPool, _deviceManager),
 		_deviceReader(_deviceManager, _eventPool),
 		_commander(_deviceManager),
 		_creator(_deviceManager),
@@ -158,20 +159,7 @@ void Program::CoreLoop()
 
 			try
 			{
-				auto readEvent = _eventPool.Pop();
-				MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(readEvent.get());
-				if (motionPtr)
-				{
-					io::StdIO::StandardOutput(motionPtr->ToString());
-					continue;
-				}
-				LightDetected* lightPtr = dynamic_cast<LightDetected*>(readEvent.get());
-				if (lightPtr)
-				{
-					io::StdIO::StandardOutput(lightPtr->ToString());
-					continue;
-				}
-				throw runtime_error("Unexpected exception");
+				_lightDriver.HandleEvent(_eventPool.Pop());
 			}
 			catch (runtime_error& ex)
 			{
@@ -252,6 +240,11 @@ void Program::StopAll()
 	_deviceReader.StopRead();
 	_eventPool.Close();
 	_coreQuit = true;
+}
+
+ItemsPool<std::shared_ptr<event::IEvent>>& program::Program::GetEventPool()
+{
+	return _eventPool;
 }
 
 //metoda tworzy nowe zdarzenie(trigger albo akcje)

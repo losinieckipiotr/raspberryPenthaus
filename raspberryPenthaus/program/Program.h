@@ -11,10 +11,9 @@
 #include "../device/DeviceManager.h"
 #include "Commander.h"
 #include "Creator.h"
+#include "LightDriver.h"
 #include "../gpio/GPIO.h"
 #include "../io/IO.h"
-
-
 
 namespace program
 {
@@ -26,6 +25,8 @@ namespace program
 	class Program
 	{
 	public:
+		typedef std::shared_ptr<event::IEvent> evnetPtr;
+
 		static Program* Instance();
 		Program(const Program&) = delete;
 		Program(const Program&&) = delete;
@@ -36,6 +37,9 @@ namespace program
 		void CoreLoop();
 		void IO();
 		void StopAll();
+
+		//niewiadmo jeszcze czy bedzie potrzebne
+		ItemsPool<evnetPtr>& GetEventPool();
 
 		std::string Add(std::string&);
 		std::string Create(std::string&);
@@ -58,8 +62,9 @@ namespace program
 		std::string _rulesFile;
 		std::string _eventsFile;
 
-		ItemsPool<std::shared_ptr<event::IEvent>> _eventPool;
+		ItemsPool<evnetPtr> _eventPool;
 		device::DeviceManager _deviceManager;
+		LightDriver _lightDriver;
 		DeviceReader _deviceReader;
 		Commander _commander;
 		Creator _creator;

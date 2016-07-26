@@ -156,7 +156,13 @@
     <ClInclude Include="event\MotionDetected.hpp">
       <Filter>Header Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="program\LightDriver.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
     <ClInclude Include="event\LightDetected.hpp">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\LEDExpired.hpp">
       <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
@@ -213,6 +219,9 @@
       <Filter>Source Files\device</Filter>
     </ClCompile>
     <ClCompile Include="program\DeviceReader.cpp">
+      <Filter>Source Files\program</Filter>
+    </ClCompile>
+    <ClCompile Include="program\LightDriver.cpp">
       <Filter>Source Files\program</Filter>
     </ClCompile>
   </ItemGroup>
