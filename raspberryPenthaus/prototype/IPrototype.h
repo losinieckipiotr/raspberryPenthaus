@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include <boost/property_tree/ptree.hpp>
+
 namespace prototype
 {
 	class IPrototype
@@ -14,6 +16,7 @@ namespace prototype
 		virtual bool IsInitialized() const = 0;
 
 		virtual void Save(std::ostream&) const = 0;
+		virtual void SaveToTree(boost::property_tree::ptree&, const std::string&) const = 0;
 		virtual bool Load(std::string&) = 0;
 
 		virtual IPrototype* Clone() const = 0;

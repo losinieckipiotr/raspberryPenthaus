@@ -3,12 +3,18 @@
 #include <sstream>
 #include <iomanip>
 #include <memory>
+#include <exception>
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 #include "LightSensor.h"
 #include "../event/LightDetected.hpp"
 
 using namespace device;
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 const string LightSensor::name = "Light_Sensor";
 
@@ -43,6 +49,13 @@ void LightSensor::Save(ostream& str) const
 		+ " id " + to_string(_id)
 		+ " threshold " + to_string(_threshold));
 	str << s;
+}
+
+void LightSensor::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
+{
+	pt::ptree &sensNode = tree.add(path + "lightsensor", "");
+	sensNode.put("id", _id);
+	sensNode.put("threshold", _threshold);
 }
 
 bool LightSensor::Load(string& s)

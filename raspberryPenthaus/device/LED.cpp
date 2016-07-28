@@ -3,6 +3,10 @@
 #include <sstream>
 #include <future>
 #include <thread>
+#include <exception>
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 #include "LED.h"
 #include "../program/Program.h"
@@ -10,6 +14,8 @@
 using namespace device;
 using namespace std;
 using namespace chrono;
+
+namespace pt = boost::property_tree;
 
 const string LED::name = "LED";
 
@@ -61,6 +67,15 @@ void LED::Save(ostream& str) const
 		+ " delay " + to_string(_delay.count())
 		+ " logic " + print::BoolToString(_logic));
 	str << s;
+}
+
+void LED::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
+{
+	pt::ptree &ledNode = tree.add(path + "led", "");
+	ledNode.put("id", _id);
+	ledNode.put("pin", _pin);
+	ledNode.put("delay", _delay.count());
+	ledNode.put("logic", _logic);
 }
 
 bool LED::Load(string& s)

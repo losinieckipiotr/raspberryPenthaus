@@ -31,13 +31,18 @@ void program::LightDriver::HandleEvent(eventPtr eventPtr)
 {
 	eventHanled = false;
 
+	//castowanie dac tutaj?
+	//a unikalne dzialanie wyzej?
+	//jak zrobic aby castowanie eventow bylo tylku raz
+	//w jednym miejscu?
+
 	switch (state_)
 	{
 	case program::LightDriver::State::Day:
-		Day(eventPtr);
+		Day_(eventPtr);
 		break;
 	case program::LightDriver::State::Night:
-		Night(eventPtr);
+		Night_(eventPtr);
 		break;
 	default:
 		break;
@@ -47,7 +52,7 @@ void program::LightDriver::HandleEvent(eventPtr eventPtr)
 		io::StdIO::StandardOutput("Unhandled event: " + eventPtr->ToString());
 }
 
-void program::LightDriver::Day(eventPtr eventPtr)
+void LightDriver::Day_(eventPtr eventPtr)
 {
 	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(eventPtr.get());
 	if (motionPtr)
@@ -63,17 +68,17 @@ void program::LightDriver::Day(eventPtr eventPtr)
 		if (!lightRead())
 		{
 			state_ = State::Night;
-			io::StdIO::StandardOutput("Day -> Night");
+			io::StdIO::StandardOutput("=====__NIGHT__=====");
 		}
 		io::StdIO::StandardOutput(lightPtr->ToString());
 		eventHanled = true;
 		return;
 	}
 
-	Default(eventPtr);
+	Default_(eventPtr);
 }
 
-void program::LightDriver::Night(eventPtr eventPtr)
+void LightDriver::Night_(eventPtr eventPtr)
 {
 	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(eventPtr.get());
 	if (motionPtr)
@@ -108,17 +113,17 @@ void program::LightDriver::Night(eventPtr eventPtr)
 		if (lightRead())
 		{
 			state_ = State::Day;
-			io::StdIO::StandardOutput("Night -> Day");
+			io::StdIO::StandardOutput("=====''DAY''=====");
 		}
 		io::StdIO::StandardOutput(lightPtr->ToString());
 		eventHanled = true;
 		return;
 	}
 
-	Default(eventPtr);
+	Default_(eventPtr);
 }
 
-void program::LightDriver::Default(eventPtr eventPtr)
+void LightDriver::Default_(eventPtr eventPtr)
 {
 	LEDExpired* ledPtr = dynamic_cast<LEDExpired*>(eventPtr.get());
 	if (ledPtr)
@@ -127,8 +132,10 @@ void program::LightDriver::Default(eventPtr eventPtr)
 		if (dev)
 		{
 			dev->Off();
+			io::StdIO::StandardOutput("LightOff()");
 			io::StdIO::StandardOutput(ledPtr->ToString());
 			eventHanled = true;
 		}
 	}
 }
+

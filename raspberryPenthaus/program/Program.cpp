@@ -5,6 +5,9 @@
 #include <deque>
 #include <fstream>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
 #include "Program.h"
 #include "../wp.h"
 
@@ -20,6 +23,8 @@ using namespace gpio;
 using namespace std;
 using namespace chrono;
 using namespace event;
+
+namespace pt = boost::property_tree;
 
 Program* Program::_instance = nullptr;
 
@@ -84,6 +89,32 @@ bool Program::Init()
 		{
 			//tworzenie obiektow podlaczonyych do GPIO
 			_creator.DevicesFromFile(_devsFile);
+
+			pt::ptree tree;
+			pt::read_xml("serialize3.xml", tree);
+
+			auto container = tree.get_child("serialize.devices");
+			for (pt::ptree::value_type &v : container)
+			{
+				string s = v.first;
+				cout << s << endl;
+				cout << "id " << v.second.get<int>("id") << endl;
+				if (s == "led")
+				{
+					cout << "pin " << v.second.get<int>("pin") << endl;
+					cout << "delay " << v.second.get<int>("delay") << endl;
+					cout << "logic " << boolalpha << v.second.get<bool>("logic") << endl;
+				}
+				else if (s == "motionsensor")
+				{
+					cout << "pin " << v.second.get<int>("pin") << endl;
+					cout << "logic " << boolalpha << v.second.get<bool>("logic") << endl;
+				}
+				else if (s == "lightsensor")
+				{
+					cout << "threshold " << v.second.get<double>("threshold") << endl;
+				}
+			}
 		}
 		catch (runtime_error& re)
 		{

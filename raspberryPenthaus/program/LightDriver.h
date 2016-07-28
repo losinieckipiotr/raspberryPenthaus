@@ -25,9 +25,10 @@ namespace program
 		void HandleEvent(eventPtr eventPtr);
 
 	private:
-		void Day(eventPtr eventPtr);
-		void Night(eventPtr eventPtr);
-		void Default(eventPtr eventPtr);
+		void Day_(eventPtr eventPtr);
+		void Night_(eventPtr eventPtr);
+		void Default_(eventPtr eventPtr);
+
 
 		bool eventHanled;
 		State state_;

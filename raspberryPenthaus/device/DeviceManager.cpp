@@ -1,11 +1,16 @@
 #include <stdexcept>
+#include <exception>
 #include <fstream>
 #include <string>
+
+#include <boost/property_tree/xml_parser.hpp>
 
 #include "DeviceManager.h"
 
 using namespace device;
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 DeviceManager::DeviceManager()
 {
@@ -104,4 +109,16 @@ void DeviceManager::SaveDevices(std::string &filename) const
 		file << endl;
 	}
 	file.close();
+
+	pt::ptree tree;
+	string path = "serialize.devices";
+	tree.put(path, "");
+	path.append(1, '.');
+
+	for (auto& dev : devices_)
+	{
+		dev.second->SaveToTree(tree, path);
+	}
+
+	pt::write_xml("serialize3.xml", tree);
 }

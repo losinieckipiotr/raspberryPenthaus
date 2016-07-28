@@ -1,11 +1,14 @@
 #include <chrono>
 #include <string>
 #include <sstream>
+
 #include "MotionSensor.h"
 #include "../event/MotionDetected.hpp"
 
 using namespace device;
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 const string MotionSensor::name = "Motion_Sensor";
 
@@ -36,6 +39,14 @@ void MotionSensor::Save(ostream& str) const
 		+ " pin " + to_string(_pin)
 		+ " logic " + print::BoolToString(_logic));
 	str << s;
+}
+
+void MotionSensor::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
+{
+	pt::ptree &sensNode = tree.add(path + "motionsensor", "");
+	sensNode.put("id", _id);
+	sensNode.put("pin", _pin);
+	sensNode.put("logic", _logic);
 }
 
 bool MotionSensor::Load(string& s)
