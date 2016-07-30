@@ -270,7 +270,7 @@ string Program::Create(string& line)
 		//dodawanie urzadzen
 		if (buffer != "Rule")
 		{
-			device::IDevice* dev = _creator.CreateDevice(line);
+			/*device::IDevice* dev = _creator.CreateDevice(line);
 			if (dev != nullptr)
 			{
 				lock_guard<mutex> lck(_program_mutex);
@@ -283,6 +283,7 @@ string Program::Create(string& line)
 			{
 				reply = "Syntax error";
 			}
+			*/
 		}
 		//dodawanie "Rule"
 		else
