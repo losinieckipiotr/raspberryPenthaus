@@ -6,6 +6,7 @@
 #include "../wp.h"
 #include "DeviceReader.h"
 #include "../device/IDevice.h"
+#include "Program.h"
 
 #include "../io/StdIO.h"
 
@@ -16,10 +17,9 @@ using namespace std;
 using namespace chrono;
 
 DeviceReader::DeviceReader(
-	DeviceManager &devMan,
-	ItemsPool<shared_ptr<IEvent>>& eventPool)
+	DeviceManager &devMan)
 	:	devMan_(devMan),
-		eventPool_(eventPool),
+		eventPool_(Program::GetEventPool()),
 		baseInterval(BASE_INTERVAL),
 		readFlag(false)
 {

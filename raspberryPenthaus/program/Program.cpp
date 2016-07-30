@@ -27,6 +27,7 @@ using namespace event;
 namespace pt = boost::property_tree;
 
 Program* Program::_instance = nullptr;
+ItemsPool<event::eventPtr> Program::_eventPool;
 
 //wzorzec Singleton (statyczny konstruktor)
 Program* Program::Instance()
@@ -50,11 +51,8 @@ void Program::ExitProgram()
 
 //konstruktor, inicjuje sciezki do plikow konfiguracyjnych
 Program::Program()
-	:	_devsFile("files\\devices.txt"),
-		_rulesFile("files\\rules.txt"),
-		_eventsFile("files\\events.txt"),
-		_lightDriver(_eventPool, _deviceManager),
-		_deviceReader(_deviceManager, _eventPool),
+	:	_serializeFile("files\\serialize.xml"),
+		_deviceReader(_deviceManager),
 		_commander(_deviceManager),
 		_creator(_deviceManager),
 		_bus(GPIO::Instance(_deviceManager)),
@@ -63,9 +61,16 @@ Program::Program()
 
 }
 
-//destruktor, wylacza urzadzenia podlaczone do GPIO
+//destruktor, zwolnienie pamieci dla obiektow drivers,
+//usuniecie GPIO ktory tez jest singletonem
 Program::~Program()
 {
+	for (auto &driver : _drivers)
+	{
+		delete driver;
+	}
+	_drivers.clear();
+
 	//usuniecie obiektu GPIO
 	_bus->TurnOff();
 
@@ -87,60 +92,14 @@ bool Program::Init()
 	{
 		try
 		{
-			//tworzenie obiektow podlaczonyych do GPIO
-			_creator.DevicesFromFile(_devsFile);
-
-			pt::ptree tree;
-			pt::read_xml("serialize3.xml", tree);
-
-			auto container = tree.get_child("serialize.devices");
-			for (pt::ptree::value_type &v : container)
-			{
-				string s = v.first;
-				cout << s << endl;
-				cout << "id " << v.second.get<int>("id") << endl;
-				if (s == "led")
-				{
-					cout << "pin " << v.second.get<int>("pin") << endl;
-					cout << "delay " << v.second.get<int>("delay") << endl;
-					cout << "logic " << boolalpha << v.second.get<bool>("logic") << endl;
-				}
-				else if (s == "motionsensor")
-				{
-					cout << "pin " << v.second.get<int>("pin") << endl;
-					cout << "logic " << boolalpha << v.second.get<bool>("logic") << endl;
-				}
-				else if (s == "lightsensor")
-				{
-					cout << "threshold " << v.second.get<double>("threshold") << endl;
-				}
-			}
+			_drivers =  _creator.DriversFromFile(_serializeFile);
 		}
 		catch (runtime_error& re)
 		{
 			_io->ErrorOutput(re.what());
 		}
 
-		//try
-		//{
-		//	//tworzenie regul zapalania i wylaczania swiatla
-		//	_creator.RulesFromFile(_rulesFile);
-		//}
-		//catch (runtime_error& re)
-		//{
-		//	_io->ErrorOutput(re.what());
-		//}
-		//try
-		//{
-		//	//dodawanie triggerow i akcji
-		//	_creator.EventsFromFile(_eventsFile);
-		//}
-		//catch (runtime_error& re)
-		//{
-		//	_io->ErrorOutput(re.what());
-		//}
-
-		//konfiguracja GPIO
+		//konfiguracja potrzebnych obiektow
 		_Setup();
 	}
 	catch (exception& ex)
@@ -151,9 +110,26 @@ bool Program::Init()
 	return true;
 }
 
-//konfiguracja GPIO
+//konfiguracja listy zobowiazan driverow, 
+//pogrupowanie urzadzen do czytania w DeviceReader,
+//ustawienie GPIO(wywolanie wiringPiSetup),
+//probne odczyty z urzadzen
 void Program::_Setup()
 {
+	auto it = _drivers.begin();
+	auto nextDriv = (++_drivers.begin());
+	auto endList = _drivers.end();
+	for (; it != endList; ++it)
+	{
+		if (nextDriv != endList)
+		{
+			(*it)->AddHandler(*nextDriv);
+			++nextDriv;
+		}
+		else
+			break;
+	}
+
 	_deviceReader.BiuldDeviceMap();
 	//setup urzadzen podlaczonych do GPIO
 	_bus->SetupGPIO();
@@ -161,36 +137,30 @@ void Program::_Setup()
 	this_thread::sleep_for(chrono::milliseconds(500));
 }
 
-//glowna petla programu sterujacego
+//glowna petla programu sterujacego,
+//sterowanie to 1 watek odbierajacy eventy gdy tylko jest dostepny
+//eventy powstaja w kilku watkach czytajacych z urzadzen
+//obsluga evenow przez lancuch  zobowiazan - poczatek lancucha to 1 driver
+//TO DO: stworzyc driver konczacy lancuch ktroy odbierze wszystkie eventy
+//i wyswietli blad o nieobsluzonym evencie
 void Program::CoreLoop()
 {
 	try
 	{
+		//start watkow czytajacych z urzadzen(tworzacych eventy)
 		_deviceReader.StartRead();
-
 		//ustawienie flagi wyjscia
 		_coreQuit = false;
-
-		////inicjalizacja okresu petli
-		//const auto tick = milliseconds(BASE_INTERVAL);
-		////wyliczenie czasu nastepnej iteracji
-		//auto nextTime = system_clock::now() + tick;
-
+		//sprawdzenie czy istnieje co najmniej 1 driver
+		if (!_drivers.size())
+			throw logic_error("No drivers to handle events");
+		auto beginOfChain = _drivers.front();
 		//petla glowna sterowania
 		while (!_coreQuit)
 		{
-			////odczyt czujnikow i wykonanie polecen
-			//_CheckAndExecute();
-			////sprawdzenie opoznienia i odczekanie czasu do nastepnej iteracji
-			//_CheckDelay(nextTime);
-			////wyliczenie czasu nastepnej iteracji
-			//nextTime = system_clock::now() + tick;
-
-			//this_thread::sleep_for(milliseconds(1000));
-
 			try
 			{
-				_lightDriver.HandleEvent(_eventPool.Pop());
+				beginOfChain->HandleEvent(_eventPool.Pop());
 			}
 			catch (runtime_error& ex)
 			{
@@ -217,32 +187,20 @@ void Program::CoreLoop()
 	}
 }
 
-//tutaj nastepuje odczytanie stanu czujnikow
-//oraz wykonanie ustawionych polecen wedlug regul
-void Program::_CheckAndExecute()
-{
-	try
-	{
-		lock_guard<mutex> lck(_program_mutex);
-
-		/*_bus->CheckAll();
-		_ruleManager.ExecuteRules();*/
-	}
-	catch (exception& ex)
-	{
-		_io->ErrorOutput(string(ex.what()));
-	}
-}
-
-//zapisanie konfiguracji do plikow
+//zapisanie konfiguracji do pliku
 void Program::_SaveAll()
 {
 	try
 	{
-		_deviceManager.SaveDevices(_devsFile);
-
-		/*_ruleManager.SaveRules(_rulesFile);
-		_ruleManager.SaveEvents(_eventsFile);*/
+		pt::ptree tree;
+		string path = "serialize.drivers";
+		tree.put(path, "");
+		path.append(1, '.');
+		for (auto &driver : _drivers)
+		{
+			driver->SaveToTree(tree, path);
+		}
+		pt::write_xml(_serializeFile, tree);
 	}
 	catch (exception& ex)
 	{

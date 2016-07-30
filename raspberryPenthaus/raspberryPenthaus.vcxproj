@@ -162,6 +162,7 @@
     <ClInclude Include="device\wiringpi\WP_MotionSensor.h" />
     <ClInclude Include="device\wiringpi\WP_TSL2561.h" />
     <ClInclude Include="event\IEvent.h" />
+    <ClInclude Include="event\IEventHandler.h" />
     <ClInclude Include="event\LEDExpired.hpp" />
     <ClInclude Include="event\LightDetected.hpp" />
     <ClInclude Include="event\MotionDetected.hpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="program\Commander.h" />
     <ClInclude Include="program\Creator.h" />
     <ClInclude Include="program\DeviceReader.h" />
+    <ClInclude Include="program\IDriver.h" />
     <ClInclude Include="program\LightDriver.h" />
     <ClInclude Include="program\Program.h" />
     <ClInclude Include="prototype\IPrototype.h" />

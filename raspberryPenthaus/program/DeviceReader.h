@@ -17,9 +17,7 @@ namespace program
 		DeviceReader() = delete;
 		DeviceReader(const DeviceReader&) = delete;
 		DeviceReader(DeviceReader&&) = delete;
-		DeviceReader(
-			device::DeviceManager& devMan,
-			ItemsPool<std::shared_ptr<event::IEvent>>& eventPool);
+		DeviceReader(device::DeviceManager& devMan);
 		virtual ~DeviceReader();
 
 		void BiuldDeviceMap();

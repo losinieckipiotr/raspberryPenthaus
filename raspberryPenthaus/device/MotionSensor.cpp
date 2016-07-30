@@ -10,7 +10,7 @@ using namespace std;
 
 namespace pt = boost::property_tree;
 
-const string MotionSensor::name = "Motion_Sensor";
+const string MotionSensor::name = "motionsensor";
 
 MotionSensor::MotionSensor(int id, int pin, bool logic)
 	: DeviceBase(id), _pin(pin), _logic(logic), _myVal(false, id)
@@ -83,7 +83,26 @@ bool MotionSensor::Load(string& s)
 	return true;
 }
 
-shared_ptr<event::IEvent> MotionSensor::Read()
+bool MotionSensor::LoadFromTree(pt::ptree::value_type &val)
+{
+	if (_isInit)
+		return false;
+	try
+	{
+		_id = val.second.get<int>("id");
+		_pin = val.second.get<int>("pin");
+		_logic = val.second.get<bool>("logic");
+	}
+	catch (exception&)
+	{
+		return false;
+	}
+
+	_isInit = true;
+	return true;
+}
+
+event::eventPtr MotionSensor::Read()
 {
 	_myVal.val = (_Read() == static_cast<int>(_logic));
 	if (_myVal.val)

@@ -18,14 +18,7 @@ namespace device
 
 			virtual prototype::IPrototype* Clone() const;
 
-			//virtual void Check();
-
-			//virtual unsigned int GetCheckInterval() { return 1; };
-
 			virtual unsigned int GetReadInterval() { return MOTION_INTERVAL; };
-
-			//virtual void ReadDefault();
-			//virtual void WriteDefault();
 
 			virtual void Setup();
 

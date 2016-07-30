@@ -34,6 +34,7 @@ namespace device
 		virtual void Save(std::ostream&) const;
 		virtual void SaveToTree(boost::property_tree::ptree&, const std::string&) const;
 		virtual bool Load(std::string&);
+		virtual bool LoadFromTree(boost::property_tree::ptree::value_type&);
 
 		virtual bool Write(IWriteVal* val);
 

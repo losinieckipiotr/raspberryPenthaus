@@ -17,7 +17,7 @@ using namespace chrono;
 
 namespace pt = boost::property_tree;
 
-const string LED::name = "LED";
+const string LED::name = "led";
 
 LED::LED(int id, int pin, int delay, bool logic)
 	: DeviceBase(id), _pin(pin), _delay(delay), 
@@ -116,6 +116,28 @@ bool LED::Load(string& s)
 	}
 	else
 		return false;
+
+	_isInit = true;
+	return true;
+}
+
+bool LED::LoadFromTree(pt::ptree::value_type &val)
+{
+	if (_isInit)
+		return false;
+
+	try
+	{
+		_id = val.second.get<int>("id");
+		_pin = val.second.get<int>("pin");
+		_delay = seconds(val.second.get<int>("delay"));
+		_logic = val.second.get<bool>("logic");
+	}
+	catch (exception&)
+	{
+		//TO DO: dodac logowanie bledu
+		return false;
+	}
 
 	_isInit = true;
 	return true;

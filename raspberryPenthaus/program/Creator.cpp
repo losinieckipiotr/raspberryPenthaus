@@ -1,13 +1,20 @@
 #include <sstream>
 #include <fstream>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
 #include "Program.h"
 #include "../gpio/GPIO.h"
+
+#include "LightDriver.h"
 
 using namespace program;
 using namespace device;
 using namespace prototype;
 using namespace std;
+
+namespace pt = boost::property_tree;
 
 Creator::Creator(DeviceManager &devMan)
 	: _devManager(devMan)
@@ -20,6 +27,28 @@ Creator::~Creator()
 
 }
 
+list<IDriver*> Creator::DriversFromFile(const string &filename)
+{
+	list<IDriver*> drivers;
+	pt::ptree tree;
+	pt::read_xml(filename, tree);
+
+	auto driversNode = tree.get_child("serialize.drivers");
+	for (pt::ptree::value_type &v : driversNode)
+	{
+		if (v.first == "lightdriver")
+		{
+			IDriver *ld = new LightDriver(_devManager);
+			if (ld->LoadFromTree(v))
+				drivers.push_back(ld);
+			else
+				delete ld;
+		}
+	}
+
+	return drivers;
+}
+
 void Creator::DevicesFromFile(string& filename)
 {
 	list<string> lines = _ReadLines(filename);
@@ -28,6 +57,22 @@ void Creator::DevicesFromFile(string& filename)
 	for (auto& line : lines)
 	{
 		dev = CreateDevice(line);
+		if (dev != nullptr)
+			_devManager.AddDevice(dev);
+	}
+}
+
+void Creator::DevicesFromXML(const string& filename)
+{
+	IDevice* dev;
+	pt::ptree tree;
+	pt::read_xml(filename, tree);
+
+	auto container = tree.get_child("serialize.devices");
+	for (pt::ptree::value_type &v : container)
+	{
+		dev = dynamic_cast<IDevice*>
+			(_prototypeManager.CreatePrototype(v));
 		if (dev != nullptr)
 			_devManager.AddDevice(dev);
 	}

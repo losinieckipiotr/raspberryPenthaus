@@ -16,7 +16,7 @@ using namespace std;
 
 namespace pt = boost::property_tree;
 
-const string LightSensor::name = "Light_Sensor";
+const string LightSensor::name = "lightsensor";
 
 LightSensor::LightSensor(int id, double threshold)
 	:	 DeviceBase(id),
@@ -82,7 +82,25 @@ bool LightSensor::Load(string& s)
 	return true;
 }
 
-shared_ptr<event::IEvent> LightSensor::Read()
+bool LightSensor::LoadFromTree(pt::ptree::value_type &val)
+{
+	if (_isInit)
+		return false;
+	try
+	{
+		_id = val.second.get<int>("id");
+		_threshold = val.second.get<double>("threshold");
+	}
+	catch (exception&)
+	{
+		return false;
+	}
+
+	_isInit = true;
+	return true;
+}
+
+event::eventPtr LightSensor::Read()
 {
 	_myVal.val = _Read();
 	_myVal.threshold = _threshold;

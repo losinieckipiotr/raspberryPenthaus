@@ -4,6 +4,7 @@
 #include <mutex>
 #include <string>
 #include <memory>
+#include <list>
 
 #include "../ItemsPool.hpp"
 #include "../event/IEvent.h"
@@ -11,9 +12,9 @@
 #include "../device/DeviceManager.h"
 #include "Commander.h"
 #include "Creator.h"
-#include "LightDriver.h"
 #include "../gpio/GPIO.h"
 #include "../io/IO.h"
+#include "IDriver.h"
 
 namespace program
 {
@@ -25,11 +26,11 @@ namespace program
 	class Program
 	{
 	public:
-		typedef std::shared_ptr<event::IEvent> evnetPtr;
-
 		static Program* Instance();
 		Program(const Program&) = delete;
 		Program(const Program&&) = delete;
+
+		static ItemsPool<event::eventPtr>& GetEventPool();
 
 		void ExitProgram();
 
@@ -37,9 +38,6 @@ namespace program
 		void CoreLoop();
 		void IO();
 		void StopAll();
-
-		//niewiadmo jeszcze czy bedzie potrzebne
-		ItemsPool<evnetPtr>& GetEventPool();
 
 		std::string Add(std::string&);
 		std::string Create(std::string&);
@@ -56,27 +54,25 @@ namespace program
 		Program();
 		~Program();
 
+		void _Setup();
+		void _SaveAll();
+		void _CheckDelay(std::chrono::time_point
+			< std::chrono::system_clock,
+			std::chrono::system_clock::duration >);
+
 		static Program* _instance;
+		static ItemsPool<event::eventPtr> _eventPool;
 
-		std::string _devsFile;
-		std::string _rulesFile;
-		std::string _eventsFile;
+		std::string _serializeFile;
 
-		ItemsPool<evnetPtr> _eventPool;
 		device::DeviceManager _deviceManager;
-		LightDriver _lightDriver;
 		DeviceReader _deviceReader;
 		Commander _commander;
 		Creator _creator;
 		gpio::GPIO* _bus;
 		io::IO* _io;
 
-		void _Setup();
-		void _CheckAndExecute();
-		void _SaveAll();
-		void _CheckDelay(std::chrono::time_point
-			< std::chrono::system_clock,
-			std::chrono::system_clock::duration > );
+		std::list<IDriver*> _drivers;
 
 		bool _coreQuit;
 		std::mutex _program_mutex;

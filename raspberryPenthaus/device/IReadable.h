@@ -1,11 +1,6 @@
 #ifndef IREADABLE_H
 #define IREADABLE_H
-#include <memory>
-
-namespace event
-{
-	class IEvent;
-}
+#include "../event/IEvent.h"
 
 namespace device
 {
@@ -14,7 +9,7 @@ namespace device
 	public:
 		virtual ~IReadable() { }
 
-		virtual std::shared_ptr<event::IEvent> Read() = 0;
+		virtual event::eventPtr Read() = 0;
 		virtual unsigned int GetReadInterval() = 0;
 	};
 }

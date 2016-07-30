@@ -165,6 +165,12 @@
     <ClInclude Include="event\LEDExpired.hpp">
       <Filter>Header Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="program\IDriver.h">
+      <Filter>Header Files\program</Filter>
+    </ClInclude>
+    <ClInclude Include="event\IEventHandler.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpio\GPIO.cpp">

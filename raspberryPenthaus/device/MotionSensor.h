@@ -30,8 +30,9 @@ namespace device
 		virtual void Save(std::ostream&) const;
 		virtual void SaveToTree(boost::property_tree::ptree&, const std::string&) const;
 		virtual bool Load(std::string&);
+		virtual bool LoadFromTree(boost::property_tree::ptree::value_type&);
 
-		virtual std::shared_ptr<event::IEvent> Read();
+		virtual event::eventPtr Read();
 
 		virtual std::string Execute(std::string&);
 

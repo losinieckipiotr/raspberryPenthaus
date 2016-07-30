@@ -101,14 +101,14 @@ std::string DeviceManager::PrintDevices() const
 //JSON?
 void DeviceManager::SaveDevices(std::string &filename) const
 {
-	ofstream file(filename, ofstream::trunc);
+	/*ofstream file(filename, ofstream::trunc);
 	for (auto& dev : devices_)
 	{
 		file << "create ";
 		dev.second->Save(file);
 		file << endl;
 	}
-	file.close();
+	file.close();*/
 
 	pt::ptree tree;
 	string path = "serialize.devices";
