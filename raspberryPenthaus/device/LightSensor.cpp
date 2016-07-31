@@ -43,43 +43,11 @@ string LightSensor::ToString() const
 	return ss.str();
 }
 
-void LightSensor::Save(ostream& str) const
-{
-	string s(name
-		+ " id " + to_string(_id)
-		+ " threshold " + to_string(_threshold));
-	str << s;
-}
-
 void LightSensor::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
 {
 	pt::ptree &sensNode = tree.add(path + "lightsensor", "");
 	sensNode.put("id", _id);
 	sensNode.put("threshold", _threshold);
-}
-
-bool LightSensor::Load(string& s)
-{
-	if (_isInit)
-		return false;
-
-	stringstream ss(s);
-	string buffer;
-	ss >> buffer;
-	if (buffer != name)
-		return false;
-	ss >> buffer >> _id;
-	if (buffer != "id")
-		return false;
-	ss >> buffer >> _threshold;
-	if (buffer != "threshold")
-		return false;
-
-	_myVal.deviceID = _id;
-	_myVal.threshold = _threshold;
-
-	_isInit = true;
-	return true;
 }
 
 bool LightSensor::LoadFromTree(pt::ptree::value_type &val)
@@ -88,8 +56,8 @@ bool LightSensor::LoadFromTree(pt::ptree::value_type &val)
 		return false;
 	try
 	{
-		_id = val.second.get<int>("id");
-		_threshold = val.second.get<double>("threshold");
+		_myVal.deviceID =_id = val.second.get<int>("id");
+		_myVal.threshold = _threshold = val.second.get<double>("threshold");
 	}
 	catch (exception&)
 	{

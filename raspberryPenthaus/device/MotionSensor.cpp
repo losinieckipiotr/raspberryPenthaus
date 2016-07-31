@@ -32,15 +32,6 @@ string MotionSensor::ToString() const
 	return s;
 }
 
-void MotionSensor::Save(ostream& str) const
-{
-	string s(name
-		+ " id " + to_string(_id)
-		+ " pin " + to_string(_pin)
-		+ " logic " + print::BoolToString(_logic));
-	str << s;
-}
-
 void MotionSensor::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
 {
 	pt::ptree &sensNode = tree.add(path + "motionsensor", "");
@@ -49,47 +40,13 @@ void MotionSensor::SaveToTree(boost::property_tree::ptree& tree, const string& p
 	sensNode.put("logic", _logic);
 }
 
-bool MotionSensor::Load(string& s)
-{
-	if (_isInit)
-		return false;
-
-	stringstream ss(s);
-	string buffer;
-	ss >> buffer;
-	if (buffer != name)
-		return false;
-	ss >> buffer >> _id;
-	if (buffer != "id")
-		return false;
-	ss >> buffer >> _pin;
-	if (buffer != "pin")
-		return false;
-	ss >> buffer;
-	if (buffer != "logic")
-		return false;
-	ss >> buffer;
-	if (buffer == "true")
-		_logic = true;
-	else if (buffer == "false")
-		_logic = false;
-	else
-		return false;
-
-	_myVal.deviceID = _id;
-
-
-	_isInit = true;
-	return true;
-}
-
 bool MotionSensor::LoadFromTree(pt::ptree::value_type &val)
 {
 	if (_isInit)
 		return false;
 	try
 	{
-		_id = val.second.get<int>("id");
+		_myVal.deviceID = _id = val.second.get<int>("id");
 		_pin = val.second.get<int>("pin");
 		_logic = val.second.get<bool>("logic");
 	}

@@ -59,16 +59,6 @@ string LED::ToString() const
 	return s;
 }
 
-void LED::Save(ostream& str) const
-{
-	string s(name
-		+ " id " + to_string(_id)
-		+ " pin " + to_string(_pin)
-		+ " delay " + to_string(_delay.count())
-		+ " logic " + print::BoolToString(_logic));
-	str << s;
-}
-
 void LED::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
 {
 	pt::ptree &ledNode = tree.add(path + "led", "");
@@ -76,49 +66,6 @@ void LED::SaveToTree(boost::property_tree::ptree& tree, const string& path) cons
 	ledNode.put("pin", _pin);
 	ledNode.put("delay", _delay.count());
 	ledNode.put("logic", _logic);
-}
-
-bool LED::Load(string& s)
-{
-	if (_isInit)
-		return false;
-
-	stringstream ss(s);
-	string buffer;
-	ss >> buffer;
-	if (buffer != name)
-		return false;
-	ss >> buffer >> _id;
-	if (buffer != "id")
-		return false;
-	ss >> buffer >> _pin;
-	if (buffer != "pin")
-		return false;
-	ss >> buffer;
-	int t;
-	ss >> t;
-	_delay = duration<int>(t);
-	if (buffer != "delay")
-		return false;
-	ss >> buffer;
-	if (buffer != "logic")
-		return false;
-	ss >> buffer;
-	if (buffer == "true")
-	{
-		_logic = true;
-		_defaultValue = 0;
-	}
-	else if (buffer == "false")
-	{
-		_logic = false;
-		_defaultValue = 1;
-	}
-	else
-		return false;
-
-	_isInit = true;
-	return true;
 }
 
 bool LED::LoadFromTree(pt::ptree::value_type &val)
@@ -187,28 +134,38 @@ string LED::Execute(string& s)
 	return "Executed!";
 }
 
-//TO DO: Wywalic time point, posprzatac ta klase
 void LED::On()
 {
 	if (_isLocked)
 		return;
 	if (!_IsOn())
 	{
-		_lightingTime = system_clock::now();
+		_lightingTime = system_clock::now() + _delay;
 		_Write(static_cast<int>(_logic));
 		_state = static_cast<int>(_logic);
+
+		io::StdIO::StandardOutput(
+			print::TimeToString(system_clock::now())
+			+ " LED.On()");
 	}
 }
 
 void LED::Off()
 {
-
 	if (_isLocked)
 		return;
 	if (_IsOn())
 	{
-		_Write(!static_cast<int>(_logic));
-		_state = !static_cast<int>(_logic);
+		auto now = system_clock::now();
+		if (now >= _lightingTime)
+		{
+			_Write(!static_cast<int>(_logic));
+			_state = !static_cast<int>(_logic);
+
+			io::StdIO::StandardOutput(
+				print::TimeToString(system_clock::now())
+				+ " LED.Off()");
+		}
 	}
 }
 

@@ -25,25 +25,6 @@ PrototypeManager::~PrototypeManager()
 
 }
 
-IPrototype* PrototypeManager::CreatePrototype(std::string& line)
-{
-	IPrototype* prot = nullptr;
-	string buffer;
-	stringstream ss(line);
-	ss >> buffer;
-	auto it = _prototypes.find(buffer);
-	if (it != _prototypes.end())
-	{
-		prot = (*it).second->Clone();
-		if (!prot->Load(line))
-		{
-			delete prot;
-			prot = nullptr;
-		}
-	}
-	return prot;
-}
-
 IPrototype* PrototypeManager::CreatePrototype(pt::ptree::value_type &v)
 {
 	IPrototype* prot = nullptr;

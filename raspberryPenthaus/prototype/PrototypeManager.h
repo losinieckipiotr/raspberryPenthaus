@@ -15,7 +15,6 @@ namespace prototype
 		PrototypeManager();
 		~PrototypeManager();
 
-		IPrototype* CreatePrototype(std::string&);
 		IPrototype* CreatePrototype(boost::property_tree::ptree::value_type &v);
 
 	private:
