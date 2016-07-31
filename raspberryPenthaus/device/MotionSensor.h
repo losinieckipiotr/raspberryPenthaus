@@ -41,11 +41,12 @@ namespace device
 
 		//TO DO: WYWALIC STATE I LOGIC I ZOSTWIC
 		//TYLKO TO
-		MotionSensorReadVal _myVal;
 
 		int _pin;
 		bool _logic;
 		int _state;
+
+		MotionSensorReadVal _myVal;
 	};
 }
 

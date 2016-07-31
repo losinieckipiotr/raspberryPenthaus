@@ -28,11 +28,12 @@ namespace program
 		void ReadLoop(unsigned int interval, std::vector<device::IReadable*>& devs);
 		void ReadDev(device::IReadable *dev);
 
-		const unsigned int baseInterval;
-		bool readFlag;
+        bool readFlag;
+        const unsigned int baseInterval;
 
 		device::DeviceManager& devMan_;
-		ItemsPool<std::shared_ptr<event::IEvent>>& eventPool_;
+		ItemsPool<event::eventPtr>& eventPool_;
+
 		std::map<const unsigned int, std::vector<device::IReadable*>> intrvMap_;
 		std::vector<std::thread> readThreads;
 	};

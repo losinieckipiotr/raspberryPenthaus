@@ -1,4 +1,5 @@
 #include <thread>
+#include <iostream>
 
 #include "program/Program.h"
 
@@ -36,8 +37,9 @@ int main()
 
 		return 0;
 	}
-	catch (exception&)
+	catch (exception& ex)
 	{
+        cerr << ex.what() << endl;
 		return 1;
 	}
 }

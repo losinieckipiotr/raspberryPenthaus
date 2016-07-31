@@ -51,7 +51,7 @@ void Program::ExitProgram()
 
 //konstruktor, inicjuje sciezki do plikow konfiguracyjnych
 Program::Program()
-	:	_serializeFile("files\\serialize.xml"),
+	:	_serializeFile("files/serialize.xml"),
 		_deviceReader(_deviceManager),
 		_commander(_deviceManager),
 		_creator(_deviceManager),
@@ -110,7 +110,7 @@ bool Program::Init()
 	return true;
 }
 
-//konfiguracja listy zobowiazan driverow, 
+//konfiguracja listy zobowiazan driverow,
 //pogrupowanie urzadzen do czytania w DeviceReader,
 //ustawienie GPIO(wywolanie wiringPiSetup),
 //probne odczyty z urzadzen

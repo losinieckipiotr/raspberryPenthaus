@@ -18,10 +18,10 @@ using namespace chrono;
 
 DeviceReader::DeviceReader(
 	DeviceManager &devMan)
-	:	devMan_(devMan),
-		eventPool_(Program::GetEventPool()),
-		baseInterval(BASE_INTERVAL),
-		readFlag(false)
+	:	readFlag(false),
+        baseInterval(BASE_INTERVAL),
+        devMan_(devMan),
+		eventPool_(Program::GetEventPool())
 {
 
 }

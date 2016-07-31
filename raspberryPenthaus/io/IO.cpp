@@ -28,9 +28,9 @@ IO* IO::Instance()
 
 IO::IO() : _server(nullptr)
 {
-	ifstream file("files\\header.txt", ifstream::in);
+	fstream file("files/header.txt", ifstream::in);
 	if (!file)
-		throw runtime_error("Cannot open file: files\\header.txt");
+		throw runtime_error("Cannot open file: files/header.txt");
 	file.seekg(0, file.end);
 	int length = (int)file.tellg();
 	file.seekg(0, file.beg);
@@ -68,7 +68,7 @@ void IO::StopIO()
 
 IO::~IO()
 {
-	
+
 }
 
 void IO::StartIO()

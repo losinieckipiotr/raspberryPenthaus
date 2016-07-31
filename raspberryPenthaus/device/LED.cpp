@@ -20,7 +20,7 @@ namespace pt = boost::property_tree;
 const string LED::name = "led";
 
 LED::LED(int id, int pin, int delay, bool logic)
-	: DeviceBase(id), _pin(pin), _delay(delay), 
+	: DeviceBase(id), _pin(pin), _delay(delay),
 	_logic(logic), _defaultValue(!static_cast<int>(logic))
 {
 	_state = -1;
@@ -93,8 +93,8 @@ bool LED::LoadFromTree(pt::ptree::value_type &val)
 
 bool device::LED::Write(IWriteVal *val)
 {
-	LEDWriteVal *vPtr = nullptr;
-	if (vPtr = dynamic_cast<LEDWriteVal*>(val))
+	LEDWriteVal *vPtr = dynamic_cast<LEDWriteVal*>(val);
+	if (vPtr)
 	{
 		_Write(vPtr->val);
 		return true;
@@ -107,7 +107,7 @@ string LED::Execute(string& s)
 {
 	string buffer;
 	stringstream ss(s);
-	
+
 	ss >> buffer >> buffer;
 	if (buffer != this->name)
 		return "Invalid device ID";
