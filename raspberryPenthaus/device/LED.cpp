@@ -138,9 +138,9 @@ void LED::On()
 {
 	if (_isLocked)
 		return;
+	_lightingTime = system_clock::now() + _delay;
 	if (!_IsOn())
 	{
-		_lightingTime = system_clock::now() + _delay;
 		_Write(static_cast<int>(_logic));
 		_state = static_cast<int>(_logic);
 
