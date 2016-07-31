@@ -29,37 +29,6 @@ LightDriver::~LightDriver()
 
 void LightDriver::SaveToTree(pt::ptree& tree, const string& path) const
 {
-	/*pt::ptree myTree;
-	string myPath = "serialize.drivers";
-	myTree.put(myPath, "");
-
-	myPath = "serialize.drivers.lightdriver";
-	pt::ptree &driverNode = myTree.add(myPath, "");
-	driverNode.put("devices", "");
-
-	auto dev = devMan_.GetDevice(0);
-	dev->SaveToTree(driverNode, "devices.");
-
-	dev = devMan_.GetDevice(1);
-	dev->SaveToTree(driverNode, "devices.");
-
-	dev = devMan_.GetDevice(2);
-	dev->SaveToTree(driverNode, "devices.");
-
-	pt::ptree &driverNode2 = myTree.add(myPath, "");
-	driverNode2.put("devices", "");
-
-	dev = devMan_.GetDevice(0);
-	dev->SaveToTree(driverNode2, "devices.");
-
-	dev = devMan_.GetDevice(1);
-	dev->SaveToTree(driverNode2, "devices.");
-
-	dev = devMan_.GetDevice(2);
-	dev->SaveToTree(driverNode2, "devices.");
-
-	pt::write_xml("serialize4.xml", myTree);*/
-
 	string myPath = path + "lightdriver";
 	pt::ptree &driverNode = tree.add(myPath, "");
 	myPath = "devices";
@@ -79,18 +48,26 @@ void LightDriver::SaveToTree(pt::ptree& tree, const string& path) const
 
 bool LightDriver::LoadFromTree(pt::ptree::value_type &v)
 {
-	IDevice* dev = nullptr;
-	pt::ptree &devsNode = v.second.get_child("devices");
-	for (pt::ptree::value_type &v : devsNode)
+	//TO DO: zastanowic sie czy gdzies nie lepiej zrobic
+	//try catch
+	try
 	{
-		dev = dynamic_cast<IDevice*>
-			(protoMan_.CreatePrototype(v));
-		if (dev)
+		IDevice* dev = nullptr;
+		pt::ptree &devsNode = v.second.get_child("devices");
+		for (pt::ptree::value_type &v : devsNode)
 		{
-			//TO DO: try catch block
-			devMan_.AddDevice(dev);
-			AddDev_(dev);
+			dev = dynamic_cast<IDevice*>
+				(protoMan_.CreatePrototype(v));
+			if (dev)
+			{
+				devMan_.AddDevice(dev);
+				AddDev_(dev);
+			}
 		}
+	}
+	catch (exception&)
+	{
+		return false;
 	}
 	return true;
 }
@@ -125,7 +102,6 @@ void LightDriver::Day_(event::eventPtr evPtr)
 	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(evPtr.get());
 	if (motionPtr)
 	{
-		//io::StdIO::StandardOutput( motionPtr->ToString());
 		eventHanled = true;
 		return;
 	}
@@ -153,24 +129,19 @@ void LightDriver::Night_(event::eventPtr evPtr)
 	{
 		io::StdIO::StandardOutput(motionPtr->ToString());
 
-		//test
-		auto dev = dynamic_cast<LED*>(devMan_.GetDevice(0));
-		if (dev)
+		for (auto &led : leds_)
 		{
-			dev->On();
-			io::StdIO::StandardOutput("LightON(), waiting 3s");
-			auto throwExpiredEvent = [this, dev]()
+			led.second->On();
+			auto throwExpiredEvent = [this, led]()
 			{
 				this_thread::sleep_for(chrono::seconds(3));
-				auto exp = make_shared<LEDExpired>(*dev);
+				auto exp = make_shared<LEDExpired>(*(led.second));
 				eventPool_.Push(exp);
-
-				//io::StdIO::StandardOutput("Time expired event");
 			};
 			async(launch::async, throwExpiredEvent);
 			eventHanled = true;
 		}
-		//koniec testu
+		io::StdIO::StandardOutput("LightON(), waiting 3s");
 		
 		return;
 	}

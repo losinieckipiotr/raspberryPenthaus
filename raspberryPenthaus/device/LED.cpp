@@ -132,6 +132,7 @@ bool LED::LoadFromTree(pt::ptree::value_type &val)
 		_pin = val.second.get<int>("pin");
 		_delay = seconds(val.second.get<int>("delay"));
 		_logic = val.second.get<bool>("logic");
+		_defaultValue = !static_cast<int>(_logic);
 	}
 	catch (exception&)
 	{
