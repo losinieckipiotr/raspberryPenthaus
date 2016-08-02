@@ -34,7 +34,7 @@ string LED::ToString() const
 		+ "\tpin " + to_string(_pin));
 	if (_state == -1)
 		s += "\tUndef";
-	else if (_IsOn())
+	else if (IsOn())
 		s += "\tOn";
 	else
 		s += "\tOff";
@@ -42,7 +42,7 @@ string LED::ToString() const
 	{
 		s += "\tLocked";
 	}
-	else if (_IsOn())
+	else if (IsOn())
 	{
 		timePoint now = system_clock::now();
 		if (now > _lightingTime)
@@ -136,17 +136,17 @@ string LED::Execute(string& s)
 
 void LED::On()
 {
+	io::StdIO::StandardOutput(
+		print::TimeToString(system_clock::now())
+		+ " LED.On()");
+
 	if (_isLocked)
 		return;
 	_lightingTime = system_clock::now() + _delay;
-	if (!_IsOn())
+	if (!IsOn())
 	{
 		_Write(static_cast<int>(_logic));
 		_state = static_cast<int>(_logic);
-
-		io::StdIO::StandardOutput(
-			print::TimeToString(system_clock::now())
-			+ " LED.On()");
 	}
 }
 
@@ -154,7 +154,7 @@ void LED::Off()
 {
 	if (_isLocked)
 		return;
-	if (_IsOn())
+	if (IsOn())
 	{
 		auto now = system_clock::now();
 		if (now >= _lightingTime)
@@ -194,7 +194,3 @@ void LED::ChangeDelay(int delay)
 	_delay = newDelay;
 }
 
-std::chrono::seconds device::LED::GetDelay()
-{
-	return _delay;
-}

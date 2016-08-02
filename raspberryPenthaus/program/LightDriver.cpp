@@ -21,7 +21,9 @@ namespace pt = boost::property_tree;
 LightDriver::LightDriver(device::DeviceManager& devMan)
 	: state_(State::Day),
 	eventPool_(program::Program::GetEventPool()),
-	devMan_(devMan), work_(service_)
+	devMan_(devMan),
+	work_(service_),
+	timer_(service_)
 {
 	thread([this]()
 	{
@@ -144,8 +146,9 @@ void LightDriver::Night_(event::eventPtr evPtr)
 
 		for (auto &led : leds_)
 		{
+			bool wasOn = led.second->IsOn();
 			led.second->On();
-			LEDExpiredCreator(led.second);
+			LEDExpiredCreator(led.second, wasOn);
 		}
 		
 		eventHanled = true;
@@ -182,6 +185,7 @@ void LightDriver::Default_(event::eventPtr evPtr)
 		if (dev)
 		{
 			dev->Off();
+			//timers_.clear();
 			eventHanled = true;
 			return;
 		}
@@ -216,26 +220,51 @@ void LightDriver::AddDev_(IDevice *dev)
 	throw std::logic_error("Try to add unknow device");
 }
 
-void LightDriver::LEDExpiredCreator(LED *led)
+void LightDriver::LEDExpiredCreator(LED *led, bool wasOn)
 {
 	unsigned long delay = static_cast<unsigned long>
 		(led->GetDelay().count());
-	timerPtr tPtr(
-		new ba::deadline_timer(service_, boost::posix_time::seconds(delay)));
-	timers_.insert(tPtr);
-	tPtr->async_wait([this, led, tPtr](const boost::system::error_code& ec)
+	auto handler = [this, led](const boost::system::error_code& ec)
 	{
 		if (!ec)
 		{
 			auto exp = make_shared<LEDExpired>(*led);
 			eventPool_.Push(exp);
 		}
+		else if (ec == ba::error::operation_aborted)
+		{
+			//io::StdIO::ErrorOutput(ec.message());
+		}
 		else
 		{
-			throw runtime_error(ec.message());
+			io::StdIO::ErrorOutput(ec.message());
 		}
-		timers_.erase(tPtr);
-	});
+	};
+	if (wasOn)
+	{
+		try
+		{
+			size_t val = timer_.expires_from_now(boost::posix_time::seconds(delay));
+			if (val)
+			{
+				io::StdIO::StandardOutput(to_string(val) + " timers expired!");
+			}
+			else
+			{
+				io::StdIO::StandardOutput("no timer expired!");
+			}
+			timer_.async_wait(handler);
+		}
+		catch (const std::exception& ex)
+		{
+			io::StdIO::ErrorOutput(ex.what());
+		}
+	}
+	else
+	{
+		timer_.expires_from_now(boost::posix_time::seconds(delay));
+		timer_.async_wait(handler);
+	}
 }
 
 

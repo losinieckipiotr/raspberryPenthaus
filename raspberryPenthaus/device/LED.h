@@ -45,14 +45,15 @@ namespace device
 		void LockOff();
 		void Unlock();
 		void ChangeDelay(int);
-		std::chrono::seconds GetDelay();
+
+		bool IsOn() const { return _state == static_cast<int>(_logic); }
+		bool IsLocked() const { return _isLocked; }
+		std::chrono::seconds GetDelay() const { return _delay; }
 
 		static const std::string name;
 
 	protected:
 		virtual void _Write(bool val) = 0;
-
-		bool _IsOn() const { return _state == static_cast<int>(_logic); }
 
 		int _pin;
 		std::chrono::seconds _delay;

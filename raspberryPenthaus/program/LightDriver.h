@@ -1,8 +1,7 @@
 #ifndef LIGHT_DRIVER_H
 #define LIGHT_DRIVER_H
 #include <memory>
-#include <set>
-#include <list>
+#include <map>
 #include <thread>
 
 #include "IDriver.h"
@@ -27,8 +26,6 @@ namespace program
 			Night
 		};
 
-		typedef std::shared_ptr<boost::asio::deadline_timer> timerPtr;
-
 	public:
 		LightDriver(device::DeviceManager& devMan);
 		virtual ~LightDriver();
@@ -45,7 +42,7 @@ namespace program
 
 		void AddDev_(device::IDevice* dev);
 
-		void LEDExpiredCreator(device::LED* led);
+		void LEDExpiredCreator(device::LED* led, bool wasOn);
 
 		/*
 		MotionDetected* TryCastMotionDetected_(event::eventPtr evPtr);
@@ -65,9 +62,8 @@ namespace program
 
 		boost::asio::io_service service_;
 		boost::asio::io_service::work work_;
-		
 
-		std::set<timerPtr> timers_;
+		boost::asio::deadline_timer timer_;
 	};
 }
 
