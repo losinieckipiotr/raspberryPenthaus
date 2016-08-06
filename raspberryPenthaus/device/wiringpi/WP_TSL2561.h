@@ -53,8 +53,9 @@ namespace device
 			int _fd;
 			IntegrationTiming _intTiming;
 			Gain _gain;
-
 		private:
+			static bool _isOn;
+
 			enum Constants
 			{
 				ADDR_LOW = 0x29,//GND ADDR

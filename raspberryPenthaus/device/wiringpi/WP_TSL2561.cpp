@@ -24,15 +24,18 @@ binomial_distribution<int> WP_LightSensorTSL2561::d1(0xFFFF, 0.001);
 
 const WP_LightSensorTSL2561 WP_LightSensorTSL2561::prototype(-1, -1.0);
 
+bool WP_LightSensorTSL2561::_isOn(false);
+
 WP_LightSensorTSL2561::WP_LightSensorTSL2561(int id, double threshold)
-	: LightSensor(id, threshold)
+	:	LightSensor(id, threshold),
+		_fd(-1),
+		_lux(0.0),
+		_ch0(0.0),
+		_ch1(0.0),
+		_gain(Gain::X16),
+		_intTiming(IntegrationTiming::MS_402)
 {
-	_fd = -1;
-	_lux = 0.0;
-	_ch0 = 0.0;
-	_ch1 = 0.0;
-	_gain = Gain::X16;
-	_intTiming = IntegrationTiming::MS_402;
+
 }
 
 WP_LightSensorTSL2561::~WP_LightSensorTSL2561()
@@ -133,14 +136,19 @@ void WP_LightSensorTSL2561::PowerOn()
 		COMMAND_BIT | CONTROL_REGISTER, CONTROL_POWERON);
 	if (code < 0)
 		throw runtime_error("Error in writting I2C");
+	_isOn = true;
 }
 
 void WP_LightSensorTSL2561::PowerOff()
 {
-	int code = wiringPiI2CWriteReg8(_fd,
-		COMMAND_BIT | CONTROL_REGISTER, CONTROL_POWEROFF);
-	if (code < 0)
-		throw runtime_error("Error in writting I2C");
+	if (_isOn)
+	{
+		int code = wiringPiI2CWriteReg8(_fd,
+			COMMAND_BIT | CONTROL_REGISTER, CONTROL_POWEROFF);
+		if (code < 0)
+			throw runtime_error("Error in writting I2C");
+		_isOn = false;
+	}
 }
 
 void WP_LightSensorTSL2561::SetGainAndTiming(Gain g, IntegrationTiming it)
