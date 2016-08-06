@@ -146,9 +146,8 @@ void LightDriver::Night_(event::eventPtr evPtr)
 
 		for (auto &led : leds_)
 		{
-			bool wasOn = led.second->IsOn();
 			led.second->On();
-			LEDExpiredCreator(led.second, wasOn);
+			LEDExpiredCreator(led.second);
 		}
 		
 		eventHanled = true;
@@ -220,10 +219,8 @@ void LightDriver::AddDev_(IDevice *dev)
 	throw std::logic_error("Try to add unknow device");
 }
 
-void LightDriver::LEDExpiredCreator(LED *led, bool wasOn)
+void LightDriver::LEDExpiredCreator(LED *led)
 {
-	unsigned long delay = static_cast<unsigned long>
-		(led->GetDelay().count());
 	auto handler = [this, led](const boost::system::error_code& ec)
 	{
 		if (!ec)
@@ -231,58 +228,15 @@ void LightDriver::LEDExpiredCreator(LED *led, bool wasOn)
 			auto exp = make_shared<LEDExpired>(*led);
 			eventPool_.Push(exp);
 		}
-		else if (ec == ba::error::operation_aborted)
-		{
-			//io::StdIO::ErrorOutput(ec.message());
-		}
-		else
+		else if (ec != ba::error::operation_aborted)
 		{
 			io::StdIO::ErrorOutput(ec.message());
 		}
 	};
-	if (wasOn)
-	{
-		try
-		{
-			size_t val = timer_.expires_from_now(boost::posix_time::seconds(delay));
-			if (val)
-			{
-				io::StdIO::StandardOutput(to_string(val) + " timers expired!");
-			}
-			else
-			{
-				io::StdIO::StandardOutput("no timer expired!");
-			}
-			timer_.async_wait(handler);
-		}
-		catch (const std::exception& ex)
-		{
-			io::StdIO::ErrorOutput(ex.what());
-		}
-	}
-	else
-	{
-		timer_.expires_from_now(boost::posix_time::seconds(delay));
-		timer_.async_wait(handler);
-	}
+	unsigned int delay = static_cast<unsigned long>
+		(led->GetDelay().count());
+	timer_.expires_from_now(boost::posix_time::seconds(delay));
+	timer_.async_wait(handler);
 }
 
-
-
-/*
-MotionDetected* LightDriver::TryCastMotionDetected_(event::eventPtr evPtr)
-{
-	return dynamic_cast<MotionDetected*>(evPtr.get());
-}
-
-LightDetected* LightDriver::TryCastLightDetected_(event::eventPtr evPtr)
-{
-	return dynamic_cast<LightDetected*>(evPtr.get());
-}
-
-LEDExpired* LightDriver::TryCastLEDExpired_(event::eventPtr evPtr)
-{
-	return dynamic_cast<LEDExpired*>(evPtr.get());
-}
-*/
 

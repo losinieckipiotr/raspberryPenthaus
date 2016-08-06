@@ -42,13 +42,7 @@ namespace program
 
 		void AddDev_(device::IDevice* dev);
 
-		void LEDExpiredCreator(device::LED* led, bool wasOn);
-
-		/*
-		MotionDetected* TryCastMotionDetected_(event::eventPtr evPtr);
-		LightDetected* TryCastLightDetected_(event::eventPtr evPtr);
-		LEDExpired* TryCastLEDExpired_(event::eventPtr evPtr);
-		*/
+		void LEDExpiredCreator(device::LED* led);
 
 		bool eventHanled;
 		State state_;
