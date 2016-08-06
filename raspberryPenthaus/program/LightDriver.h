@@ -1,7 +1,7 @@
 #ifndef LIGHT_DRIVER_H
 #define LIGHT_DRIVER_H
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <thread>
 
 #include "IDriver.h"
@@ -36,13 +36,23 @@ namespace program
 		virtual bool LoadFromTree(boost::property_tree::ptree::value_type &v);
 
 	private:
+		inline bool isItMyDevEvent(int id)
+		{
+			return (myDevs_.find(id) != myDevs_.end());
+		}
+
 		void Day_(event::eventPtr evPtr);
 		void Night_(event::eventPtr evPtr);
 		void Default_(event::eventPtr evPtr);
 
-		void AddDev_(device::IDevice* dev);
+		void MotionEventDay_(event::eventPtr evPtr);
+		void MotionEventNight_(event::eventPtr evPtr);
+		void LightEventDay_(event::eventPtr evPtr);
+		void LightEventNight_(event::eventPtr evPtr);
+		void LEDExpiredHandler_(event::eventPtr evPtr);
 
 		void LEDExpiredCreator(device::LED* led);
+		void AddDev_(device::IDevice* dev);
 
 		bool eventHanled;
 		State state_;
@@ -50,8 +60,9 @@ namespace program
 		device::DeviceManager& devMan_;
 		prototype::PrototypeManager protoMan_;
 
-		std::map<int, device::LED*, std::less<int>> leds_;
-		std::map<int, device::MotionSensor*, std::less<int>> motionSensors_;
+		std::unordered_map<int, device::IDevice*> myDevs_;
+		std::unordered_map<int, device::LED*> leds_;
+		std::unordered_map<int, device::MotionSensor*> motionSensors_;
 		device::LightSensor* lightSensor_;
 
 		boost::asio::io_service service_;

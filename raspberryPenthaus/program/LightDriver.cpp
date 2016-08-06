@@ -44,9 +44,11 @@ LightDriver::LightDriver(device::DeviceManager& devMan)
 
 LightDriver::~LightDriver()
 {
+	//wylaczenie watka timerow
 	service_.stop();
 }
 
+//zapis do drzewa
 void LightDriver::SaveToTree(pt::ptree& tree, const string& path) const
 {
 	string myPath = path + "lightdriver";
@@ -66,6 +68,7 @@ void LightDriver::SaveToTree(pt::ptree& tree, const string& path) const
 	lightSensor_->SaveToTree(driverNode, myPath);
 }
 
+//wczytanie z drzewa
 bool LightDriver::LoadFromTree(pt::ptree::value_type &v)
 {
 	try
@@ -90,133 +93,150 @@ bool LightDriver::LoadFromTree(pt::ptree::value_type &v)
 	return true;
 }
 
+//obsluga eventow
 void LightDriver::HandleEvent(event::eventPtr evPtr)
 {
 	eventHanled = false;
 
-	switch (state_)
+	if (isItMyDevEvent(evPtr->GetDeviceID()))
 	{
-	case program::LightDriver::State::Day:
-		Day_(evPtr);
-		break;
-	case program::LightDriver::State::Night:
-		Night_(evPtr);
-		break;
-	default:
-		break;
+		switch (state_)
+		{
+		case program::LightDriver::State::Day:
+			Day_(evPtr);
+			break;
+		case program::LightDriver::State::Night:
+			Night_(evPtr);
+			break;
+		default:
+			break;
+		}
 	}
 
 	if (!eventHanled)
 		IEventHandler::HandleEvent(evPtr);
 }
 
+//obsluga eventow w dzien
 void LightDriver::Day_(event::eventPtr evPtr)
 {
-	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(evPtr.get());
-	if (motionPtr)
-	{
-		eventHanled = true;
+	MotionEventDay_(evPtr);
+	if (eventHanled)
 		return;
-	}
 
-	LightDetected* lightPtr = dynamic_cast<LightDetected*>(evPtr.get());
-	if (lightPtr)
-	{
-		auto lightRead = lightPtr->GetLightReadVal();
-		if (!lightRead())
-		{
-			state_ = State::Night;
-			io::StdIO::StandardOutput("=====__NIGHT__=====");
-		}
-		io::StdIO::StandardOutput(lightPtr->ToString());
-		eventHanled = true;
+	LightEventDay_(evPtr);
+	if (eventHanled)
 		return;
-	}
 
 	Default_(evPtr);
 }
 
+//oblsuga eventow w nocy
 void LightDriver::Night_(event::eventPtr evPtr)
 {
-	MotionDetected* motionPtr = dynamic_cast<MotionDetected*>(evPtr.get());
-	if (motionPtr)
+	MotionEventNight_(evPtr);
+	if (eventHanled)
+		return;
+
+	LightEventNight_(evPtr);
+	if (eventHanled)
+		return;
+
+	Default_(evPtr);
+}
+
+//eventy niezalezne od pory dnia
+void LightDriver::Default_(event::eventPtr evPtr)
+{
+	LEDExpiredHandler_(evPtr);
+	if (eventHanled)
+		return;
+
+	//mozliwe nastepne eventy...
+}
+
+//ingoruj
+void LightDriver::MotionEventDay_(event::eventPtr evPtr)
+{
+	MotionDetected* motionDet = dynamic_cast<MotionDetected*>(evPtr.get());
+	if (motionDet)
 	{
-		io::StdIO::StandardOutput(motionPtr->ToString());
+		eventHanled = true;
+	}
+}
+
+//zapal swiatla
+void LightDriver::MotionEventNight_(event::eventPtr evPtr)
+{
+	MotionDetected* motionDet = dynamic_cast<MotionDetected*>(evPtr.get());
+	if (motionDet)
+	{
+		io::StdIO::StandardOutput(motionDet->ToString());
 
 		for (auto &led : leds_)
 		{
 			led.second->On();
 			LEDExpiredCreator(led.second);
 		}
-
 		eventHanled = true;
-		return;
 	}
+}
 
-	LightDetected* lightPtr = dynamic_cast<LightDetected*>(evPtr.get());
-	if (lightPtr)
+//sprawdz czy jest juz noc
+void LightDriver::LightEventDay_(event::eventPtr evPtr)
+{
+	LightDetected* lightDet = dynamic_cast<LightDetected*>(evPtr.get());
+	if (lightDet)
 	{
-		io::StdIO::StandardOutput(lightPtr->ToString());
+		io::StdIO::StandardOutput(lightDet->ToString());
 
-		auto lightRead = lightPtr->GetLightReadVal();
+		auto lightRead = lightDet->GetLightReadVal();
+		//val <= threshold ?
+		if (!lightRead())
+		{
+			state_ = State::Night;
+			io::StdIO::StandardOutput("=====__NIGHT__=====");
+		}
+		eventHanled = true;
+	}
+}
+
+//sprawdz czy jest juz dzien
+void LightDriver::LightEventNight_(event::eventPtr evPtr)
+{
+	LightDetected* lightDet = dynamic_cast<LightDetected*>(evPtr.get());
+	if (lightDet)
+	{
+		io::StdIO::StandardOutput(lightDet->ToString());
+
+		auto lightRead = lightDet->GetLightReadVal();
+		//val > threshold ?
 		if (lightRead())
 		{
 			state_ = State::Day;
 			io::StdIO::StandardOutput("=====''DAY''=====");
 		}
-
 		eventHanled = true;
-		return;
 	}
-
-	Default_(evPtr);
 }
 
-void LightDriver::Default_(event::eventPtr evPtr)
+//wylacz swiatla
+void LightDriver::LEDExpiredHandler_(event::eventPtr evPtr)
 {
-	LEDExpired* ledPtr = dynamic_cast<LEDExpired*>(evPtr.get());
-	if (ledPtr)
+	LEDExpired* ledExp = dynamic_cast<LEDExpired*>(evPtr.get());
+	if (ledExp)
 	{
-		io::StdIO::StandardOutput(ledPtr->ToString());
+		io::StdIO::StandardOutput(ledExp->ToString());
 
-		LED* dev = leds_[ledPtr->GetDeviceID()];
-		if (dev)
+		for (auto &led : leds_)
 		{
-			dev->Off();
-			eventHanled = true;
-			return;
+			led.second->Off();
 		}
+		eventHanled = true;
 	}
-
-	//mozliwe nastepne eventy...
 }
 
-void LightDriver::AddDev_(IDevice *dev)
-{
-	LED *led = dynamic_cast<LED*>(dev);
-	if (led)
-	{
-		leds_[led->GetID()] = led;
-		return;
-	}
-
-	MotionSensor *motSens = dynamic_cast<MotionSensor*>(dev);
-	if (motSens)
-	{
-		motionSensors_[motSens->GetID()] = motSens;
-		return;
-	}
-
-	LightSensor *lighSens = dynamic_cast<LightSensor*>(dev);
-	if (lighSens)
-	{
-		lightSensor_ = lighSens;
-		return;
-	}
-
-	throw std::logic_error("Try to add unknow device");
-}
-
+//ustaw timer wylaczenia swiatla
 void LightDriver::LEDExpiredCreator(LED *led)
 {
 	auto handler = [this, led](const boost::system::error_code& ec)
@@ -237,4 +257,33 @@ void LightDriver::LEDExpiredCreator(LED *led)
 	timer_.async_wait(handler);
 }
 
+//dodawanie urzadzen
+void LightDriver::AddDev_(IDevice *dev)
+{
+	LED *led = dynamic_cast<LED*>(dev);
+	if (led)
+	{
+		leds_[led->GetID()] = led;
+		myDevs_[led->GetID()] = led;
+		return;
+	}
+
+	MotionSensor *motSens = dynamic_cast<MotionSensor*>(dev);
+	if (motSens)
+	{
+		motionSensors_[motSens->GetID()] = motSens;
+		myDevs_[motSens->GetID()] = motSens;
+		return;
+	}
+
+	LightSensor *lighSens = dynamic_cast<LightSensor*>(dev);
+	if (lighSens)
+	{
+		lightSensor_ = lighSens;
+		myDevs_[lighSens->GetID()] = lighSens;
+		return;
+	}
+
+	throw std::logic_error("Try to add unknow device");
+}
 
