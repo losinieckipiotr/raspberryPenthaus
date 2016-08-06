@@ -2,6 +2,7 @@
 #define IMPLEMENTATION
 
 //#define WP			//<= ODKOMECTOWAC PRZY KOMPILACJI NA RASPBERRY!
+//#define LOG			//<= ODKOMECTOWAC ABY UZYSKAC LOGI NA KONSOLI
 
 #ifdef WP
 #include <wiringPi.h>

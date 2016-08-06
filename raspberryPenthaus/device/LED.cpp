@@ -136,9 +136,11 @@ string LED::Execute(string& s)
 
 void LED::On()
 {
+	#ifdef LOG
 	io::StdIO::StandardOutput(
 		print::TimeToString(system_clock::now())
 		+ " LED.On()");
+	#endif
 
 	if (_isLocked)
 		return;
@@ -162,9 +164,11 @@ void LED::Off()
 			_Write(!static_cast<int>(_logic));
 			_state = !static_cast<int>(_logic);
 
+			#ifdef LOG
 			io::StdIO::StandardOutput(
 				print::TimeToString(system_clock::now())
 				+ " LED.Off()");
+			#endif
 		}
 	}
 }

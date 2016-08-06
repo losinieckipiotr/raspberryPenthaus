@@ -161,6 +161,9 @@ void LightDriver::MotionEventDay_(event::eventPtr evPtr)
 	MotionDetected* motionDet = dynamic_cast<MotionDetected*>(evPtr.get());
 	if (motionDet)
 	{
+		#ifdef LOG
+		io::StdIO::StandardOutput(lightDet->ToString() + "- ignored");
+		#endif
 		eventHanled = true;
 	}
 }
@@ -171,7 +174,9 @@ void LightDriver::MotionEventNight_(event::eventPtr evPtr)
 	MotionDetected* motionDet = dynamic_cast<MotionDetected*>(evPtr.get());
 	if (motionDet)
 	{
+		#ifdef LOG
 		io::StdIO::StandardOutput(motionDet->ToString());
+		#endif
 
 		for (auto &led : leds_)
 		{
@@ -188,14 +193,19 @@ void LightDriver::LightEventDay_(event::eventPtr evPtr)
 	LightDetected* lightDet = dynamic_cast<LightDetected*>(evPtr.get());
 	if (lightDet)
 	{
+		#ifdef LOG
 		io::StdIO::StandardOutput(lightDet->ToString());
+		#endif
 
 		auto lightRead = lightDet->GetLightReadVal();
 		//val <= threshold ?
 		if (!lightRead())
 		{
 			state_ = State::Night;
+
+			#ifdef LOG
 			io::StdIO::StandardOutput("=====__NIGHT__=====");
+			#endif
 		}
 		eventHanled = true;
 	}
@@ -207,14 +217,19 @@ void LightDriver::LightEventNight_(event::eventPtr evPtr)
 	LightDetected* lightDet = dynamic_cast<LightDetected*>(evPtr.get());
 	if (lightDet)
 	{
+		#ifdef LOG
 		io::StdIO::StandardOutput(lightDet->ToString());
+		#endif
 
 		auto lightRead = lightDet->GetLightReadVal();
 		//val > threshold ?
 		if (lightRead())
 		{
 			state_ = State::Day;
+
+			#ifdef LOG
 			io::StdIO::StandardOutput("=====''DAY''=====");
+			#endif
 		}
 		eventHanled = true;
 	}
@@ -226,7 +241,9 @@ void LightDriver::LEDExpiredHandler_(event::eventPtr evPtr)
 	LEDExpired* ledExp = dynamic_cast<LEDExpired*>(evPtr.get());
 	if (ledExp)
 	{
+		#ifdef LOG
 		io::StdIO::StandardOutput(ledExp->ToString());
+		#endif
 
 		for (auto &led : leds_)
 		{
