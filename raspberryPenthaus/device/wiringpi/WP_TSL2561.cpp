@@ -29,9 +29,9 @@ bool WP_LightSensorTSL2561::_isOn(false);
 WP_LightSensorTSL2561::WP_LightSensorTSL2561(int id, double threshold)
 	:	LightSensor(id, threshold),
 		_fd(-1),
-		_lux(0.0),
 		_ch0(0.0),
 		_ch1(0.0),
+		_lux(0.0),
 		_gain(Gain::X16),
 		_intTiming(IntegrationTiming::MS_402)
 {

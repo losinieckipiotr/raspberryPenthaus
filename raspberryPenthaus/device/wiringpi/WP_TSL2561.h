@@ -46,13 +46,13 @@ namespace device
 		protected:
 			virtual double _Read();
 
+			int _fd;
 			double _ch0;
 			double _ch1;
 			double _lux;
-
-			int _fd;
-			IntegrationTiming _intTiming;
 			Gain _gain;
+			IntegrationTiming _intTiming;
+
 		private:
 			static bool _isOn;
 
@@ -60,7 +60,7 @@ namespace device
 			{
 				ADDR_LOW = 0x29,//GND ADDR
 				ADDR_FLOAT = 0x39,//Default I2C  ADDR
-				ADDR_HIGH = 0x49,//VCC ADDR 
+				ADDR_HIGH = 0x49,//VCC ADDR
 
 				//////////////COMMAND REGISTER no adress//////////////////////
 

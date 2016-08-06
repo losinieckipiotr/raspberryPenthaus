@@ -29,11 +29,10 @@ int main()
 		cin.get();
 		prog->StopAll();
 		cout << "Stopping program...";
+		th.join();
 		cin.get();
-
 		//usuwanie instancji glownej klasy
 		prog->ExitProgram();
-		th.join();
 
 		return 0;
 	}

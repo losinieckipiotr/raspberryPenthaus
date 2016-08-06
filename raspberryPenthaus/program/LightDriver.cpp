@@ -123,7 +123,6 @@ void LightDriver::Day_(event::eventPtr evPtr)
 	if (lightPtr)
 	{
 		auto lightRead = lightPtr->GetLightReadVal();
-		//lightRead() { return light > threshold; }
 		if (!lightRead())
 		{
 			state_ = State::Night;
@@ -149,7 +148,7 @@ void LightDriver::Night_(event::eventPtr evPtr)
 			led.second->On();
 			LEDExpiredCreator(led.second);
 		}
-		
+
 		eventHanled = true;
 		return;
 	}
@@ -165,7 +164,7 @@ void LightDriver::Night_(event::eventPtr evPtr)
 			state_ = State::Day;
 			io::StdIO::StandardOutput("=====''DAY''=====");
 		}
-		
+
 		eventHanled = true;
 		return;
 	}
@@ -177,14 +176,13 @@ void LightDriver::Default_(event::eventPtr evPtr)
 {
 	LEDExpired* ledPtr = dynamic_cast<LEDExpired*>(evPtr.get());
 	if (ledPtr)
-	{ 
+	{
 		io::StdIO::StandardOutput(ledPtr->ToString());
 
 		LED* dev = leds_[ledPtr->GetDeviceID()];
 		if (dev)
 		{
 			dev->Off();
-			//timers_.clear();
 			eventHanled = true;
 			return;
 		}

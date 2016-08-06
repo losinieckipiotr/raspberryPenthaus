@@ -70,7 +70,14 @@ void DeviceReader::StopRead()
 	readFlag = false;
 	for (auto &th : readThreads)
 	{
-		th.detach();
+        try
+        {
+            th.join();
+		}
+		catch(exception)
+		{
+            //ingore
+		}
 	}
 	readThreads.clear();
 }
