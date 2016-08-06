@@ -30,7 +30,10 @@ namespace program
 		Program(const Program&) = delete;
 		Program(const Program&&) = delete;
 
-		static ItemsPool<event::eventPtr>& GetEventPool();
+		inline static ItemsPool<event::eventPtr>& GetEventPool()
+		{
+			return _eventPool;
+		}
 
 		void ExitProgram();
 
@@ -56,9 +59,6 @@ namespace program
 
 		void _Setup();
 		void _SaveAll();
-		void _CheckDelay(std::chrono::time_point
-			< std::chrono::system_clock,
-			std::chrono::system_clock::duration >);
 
 		static Program* _instance;
 		static ItemsPool<event::eventPtr> _eventPool;

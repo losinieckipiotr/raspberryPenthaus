@@ -14,6 +14,9 @@
 #include "../event/LightDetected.hpp"
 #include "../event/MotionDetected.hpp"
 
+//TO DO:
+//logowanie tylko na rzadanie przy kompilacji
+
 #ifdef STATS
 std::deque<long long> statistics;
 #endif
@@ -49,7 +52,8 @@ void Program::ExitProgram()
 	}
 }
 
-//konstruktor, inicjuje sciezki do plikow konfiguracyjnych
+//konstruktor, inicjuje sciezki do plikow konfiguracyjnych,
+//tworzy odpowiedni komponenty
 Program::Program()
 	:	_serializeFile("files/serialize.xml"),
 		_deviceReader(_deviceManager),
@@ -84,8 +88,7 @@ Program::~Program()
 	#endif
 }
 
-//inicjalizacja - czytanie plikow konfiguracyjnych,
-//tworzenie obiektow, konfiguracjia GPIO
+//inicjalizacja - tworzenie obiektow, konfiguracjia GPIO
 bool Program::Init()
 {
 	try
@@ -113,7 +116,6 @@ bool Program::Init()
 //konfiguracja listy zobowiazan driverow,
 //pogrupowanie urzadzen do czytania w DeviceReader,
 //ustawienie GPIO(wywolanie wiringPiSetup),
-//probne odczyty z urzadzen
 void Program::_Setup()
 {
 	auto it = _drivers.begin();
@@ -132,13 +134,14 @@ void Program::_Setup()
 
 	_deviceReader.BiuldDeviceMap();
 	//setup urzadzen podlaczonych do GPIO
+	//zazwyczaj tez probny odczyt/zapis
 	_bus->SetupGPIO();
 	//opoznienie, dla inicjalizacji urzadzen
 	this_thread::sleep_for(chrono::milliseconds(500));
 }
 
 //glowna petla programu sterujacego,
-//sterowanie to 1 watek odbierajacy eventy gdy tylko jest dostepny
+//sterowanie to 1 watek odbierajacy eventy gdy tylko sa dostepne
 //eventy powstaja w kilku watkach czytajacych z urzadzen
 //obsluga evenow przez lancuch  zobowiazan - poczatek lancucha to 1 driver
 //TO DO: stworzyc driver konczacy lancuch ktroy odbierze wszystkie eventy
@@ -172,14 +175,14 @@ void Program::CoreLoop()
 
 		//nastapilo normalne zamkniecie aplikacji
 		lock_guard<mutex> lck(_program_mutex);
+		//zamkniecie serwera
+		_io->StopIO();
 		//zapisanie stanu do plikow konfiguracyjncyh
 		_SaveAll();
-		//zapisanie wartosci domyslnych do urzadzen
+		//zapis do urzadzen wyjsciowych wartosci domyslnych
 		_bus->WriteDefaultAll();
 		//usuniecie wszystkich obiektow urzadzen(zwalnianie pamieci)
 		_deviceManager.DeleteAllDevices();
-		//zamkniecie serwera
-		_io->StopIO();
 	}
 	catch (exception& ex)
 	{
@@ -231,123 +234,41 @@ void Program::StopAll()
 	_coreQuit = true;
 }
 
-ItemsPool<std::shared_ptr<event::IEvent>>& program::Program::GetEventPool()
-{
-	return _eventPool;
-}
-
-//metoda tworzy nowe zdarzenie(trigger albo akcje)
-//przy wyjsciu z programu zostanie zapisane do pliku
-//konfiguracyjnego i przy ponownym uruchomieniu bedzie dzialac
+//TO DO:
+//metoda do dodawania nowych driverow przez uzytkownika
+//trzeba zmienic nazwe
 string Program::Add(string& line)
 {
-	/*string reply;
-	try
-	{
-		lock_guard<mutex> lck(_program_mutex);
-		reply = _creator.CreateEvents(line);
-	}
-	catch (exception& ex)
-	{
-		reply = ex.what();
-		_io->ErrorOutput(reply);
-	}
-	return reply;*/
-
 	return "No implementation exception";
 }
 
-//metoda implementuje funkcjonalnosc dodawanie nowych urzadzen
-//oraz zasad podczas dzialania aplikacji
+//TO DO:
+//metoda implementuje funkcjonalnosc dodawanie nowych urzadzen do driverow
+//zmienic nazwe
 string Program::Create(string& line)
 {
-	string reply;
-	try
-	{
-		string buffer;
-		stringstream str(line);
-		str >> buffer >> buffer;
-		//dodawanie urzadzen
-		if (buffer != "Rule")
-		{
-			/*device::IDevice* dev = _creator.CreateDevice(line);
-			if (dev != nullptr)
-			{
-				lock_guard<mutex> lck(_program_mutex);
-				_deviceManager.AddDevice(dev);
-				//jawny Setup
-				dev->Setup();
-				reply = "Created!";
-			}
-			else
-			{
-				reply = "Syntax error";
-			}
-			*/
-		}
-		//dodawanie "Rule"
-		else
-		{
-			//Rule* rule = _creator.CreateRule(line);
-			//if (rule != nullptr)
-			//{
-			//	lock_guard<mutex> lck(_program_mutex);
-			//	_ruleManager.AddRule(rule);
-			//	reply = "Created!";
-			//}
-			//else
-			//{
-			//	reply = "Syntax error";
-			//}
-
-			reply = "Syntax error";
-		}
-	}
-	catch (exception& ex)
-	{
-		reply = ex.what();
-		_io->ErrorOutput(reply);
-	}
-	return reply;
+	return "No implementation exception";
 }
 
+//TO DO:
+//metoda implementuje wykonywanie polecen urzytkownika
+//np. zapalenie swiatla na stale
+//tworzenie eventu i wyslanie do puli
 string Program::Execute(string& line)
 {
-	string reply;
-	try
-	{
-		lock_guard<mutex> lck(_program_mutex);
-		reply = _commander.ExecuteCommand(line);
-	}
-	catch (exception& ex)
-	{
-		reply = ex.what();
-		_io->ErrorOutput(reply);
-	}
-	return reply;
+	return "No implementation exception";
 }
 
+//TO DO:
+//usuwanie wszystkich driverow na rzadanie
 string Program::ClearAll()
 {
-	string reply;
-	lock_guard<mutex> lck(_program_mutex);
-	try
-	{
-		//utworzenie nowego
-		//_ruleManager.ClearRules();
-
-		_deviceManager.DeleteAllDevices();
-		reply = "All cleared!";
-	}
-	catch (exception& ex)
-	{
-		reply = ex.what();
-		_io->ErrorOutput(reply);
-	}
-
-	return reply;
+	return "No implementation exception";
 }
 
+//TO DO:
+//usuwanie urzadzenia
+//zmienic nazwe
 string Program::ClearEvents()
 {
 	string reply;
@@ -365,6 +286,9 @@ string Program::ClearEvents()
 	return reply;
 }
 
+//TO DO:
+//usuwanie drivera
+//zmienic nazwe
 string Program::ClearRules()
 {
 	string reply;
@@ -382,6 +306,7 @@ string Program::ClearRules()
 	return reply;
 }
 
+//wyswietlanie stanu urzadzen
 string Program::GetDevsString()
 {
 	lock_guard<mutex> lck(_program_mutex);
@@ -402,18 +327,3 @@ string Program::GetEventsString()
 	return "No implementation exception";
 }
 
-void Program::_CheckDelay(time_point<system_clock,
-	system_clock::duration> nextTime)
-{
-	auto now = system_clock::now();
-	#ifdef STATS
-	auto diff = nextTime - now;
-	statistics.push_back(duration_cast<milliseconds>(diff).count());
-	#endif
-	if (nextTime <= now)
-		return;
-	else
-	{
-		this_thread::sleep_for(nextTime - now);
-	}
-}
