@@ -45,6 +45,7 @@ void MiLightBulb::Setup()
 	_pilot.SetColor(0x00);
 	_pilot.SetLightInPerc(100);
 	_pilot.SetSeq(0x00);
+	WriteDefault();
 }
 
 void MiLightBulb::_Write(bool val)

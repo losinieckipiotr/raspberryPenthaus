@@ -11,7 +11,7 @@ using namespace std;
 using namespace device;
 using namespace milight;
 
-#ifdef RF24
+#ifdef WP
 MiLightPilot::MiLightPilot()
 	:	RF24_(RPI_V2_GPIO_P1_22, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_1MHZ),
 		PL1167_nRF24_(RF24_),

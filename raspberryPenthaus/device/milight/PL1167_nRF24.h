@@ -4,16 +4,7 @@
 #include "AbstractPL1167.h"
 #include "../../config.h"
 
-#ifdef RF24
-class RF24;
-#else
-class RF24
-{
-public:
-	RF24() { }
-	~RF24() { }
-};
-#endif // BMC
+#include <RF24/RF24.h>
 
 namespace device
 {

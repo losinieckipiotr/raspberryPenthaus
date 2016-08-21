@@ -106,24 +106,35 @@ void device::Bulb::On()
 	if (_isLocked)
 		return;
 	_lightingTime = system_clock::now() + _delay;
+
+	_Write(true);
+    _state = 1;
+
+	/*
 	if (!IsOn())
 	{
 		_Write(true);
 		_state = 1;
 	}
+	*/
 }
 
 void device::Bulb::Off()
 {
 	if (_isLocked)
 		return;
+
+    _Write(false);
+    _state = 0;
+
 	if (IsOn())
 	{
 		auto now = system_clock::now();
+
 		if (now >= _lightingTime)
 		{
-			_Write(false);
-			_state = 0;
+			//_Write(false);
+			//_state = 0;
 
 			#ifdef LOG
 			io::StdIO::StandardOutput(

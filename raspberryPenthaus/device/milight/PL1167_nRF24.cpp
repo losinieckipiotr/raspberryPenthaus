@@ -1,13 +1,9 @@
-#ifdef RF24
-#include <RF24/RF24.h>
-#endif
 #include "PL1167_nRF24.h"
 
 using namespace device;
 using namespace milight;
 
-#ifndef RF24
-
+/*
 PL1167_nRF24::PL1167_nRF24(RF24 &radio) : _radio(radio)
 {
 	_preambleLength = 1;
@@ -88,7 +84,7 @@ int PL1167_nRF24::internal_receive()
 	return 0;
 }
 
-#else
+*/
 
 static uint16_t calc_crc(uint8_t *data, size_t data_length);
 static uint8_t reverse_bits(uint8_t data);
@@ -432,7 +428,7 @@ int PL1167_nRF24::internal_receive()
 					return 0;
 				} break;
 			case 2:
-				if ((_syncwordLength == 4) && ((inbyte != _syncword3 & 0xFF))) {
+				if ((_syncwordLength == 4) && ((inbyte != (_syncword3 & 0xFF)))) {
 #ifdef DEBUG_PRINTF
 					printf("Sync 3l fail (%i: %02X)\n", inp, inbyte);
 #endif
@@ -510,5 +506,3 @@ static uint8_t reverse_bits(uint8_t data) {
 	}
 	return result;
 }
-
-#endif // RF24
