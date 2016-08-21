@@ -4,12 +4,11 @@
 #include <iostream>
 
 #include "MiLightPilot.h"
-#include "../../config.h"
 
-using namespace std;
 
 using namespace device;
 using namespace milight;
+using namespace std;
 
 #ifdef WP
 MiLightPilot::MiLightPilot()
@@ -23,13 +22,10 @@ MiLightPilot::MiLightPilot()
 void delay(unsigned int) { }
 
 MiLightPilot::MiLightPilot()
-	: RF24_(),
-	PL1167_nRF24_(RF24_),
-	radio_(PL1167_nRF24_)
 {
 
 }
-#endif // RF24
+#endif // WP
 
 MiLightPilot::~MiLightPilot()
 {

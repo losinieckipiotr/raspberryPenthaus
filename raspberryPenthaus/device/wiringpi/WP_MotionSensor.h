@@ -1,10 +1,7 @@
 #ifndef WP_MOTION_SENSOR_H
 #define WP_MOTION_SENSOR_H
-#include <random>
-#include <chrono>
 
 #include "../MotionSensor.h"
-#include "../../config.h"
 
 namespace device
 {
@@ -18,7 +15,7 @@ namespace device
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual unsigned int GetReadInterval() { return MOTION_INTERVAL; };
+			virtual unsigned int GetReadInterval();
 
 			virtual void Setup();
 
@@ -26,22 +23,6 @@ namespace device
 
 		protected:
 			virtual bool _Read();
-
-		private:
-			#ifndef WP
-			void pinMode(int i, int j)
-			{
-
-			}
-
-			static std::default_random_engine gen;
-			static std::bernoulli_distribution dist;
-			
-			int digitalRead(int pin)
-			{
-				return dist(gen);
-			}
-			#endif
 		};
 	}
 }

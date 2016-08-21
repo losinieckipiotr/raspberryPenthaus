@@ -3,24 +3,48 @@
 #include <stdexcept>
 #include <sstream>
 #include <iomanip>//setprecision
+#include <chrono>
 
-#include "../../gpio/GPIO.h"
 #include "WP_TSL2561.h"
+#include "../../gpio/GPIO.h"
+#include "../../config.h"
+
+#ifdef WP
+#include <wiringPiI2C.h>
+#else
+#include <random>
+static std::default_random_engine gen =
+    std::default_random_engine((unsigned)std::chrono::system_clock()
+    .now().time_since_epoch().count());
+static std::binomial_distribution<int> d0 = std::binomial_distribution<int>(0xFFFF, 0.01);
+static std::binomial_distribution<int> d1 = std::binomial_distribution<int>(0xFFFF, 0.001);
+
+int wiringPiI2CWriteReg8(int i, int j, int k)
+{
+    return 1;
+}
+
+int wiringPiI2CReadReg16(int i, int j)
+{
+    using namespace device::wiringpi;
+
+    if (j == (WP_LightSensorTSL2561::COMMAND_BIT | WP_LightSensorTSL2561::CHAN0_LOW_REGISTER))
+        return d0(gen);
+    if (j == (WP_LightSensorTSL2561::COMMAND_BIT | WP_LightSensorTSL2561::CHAN1_LOW_REGISTER))
+        return d1(gen);
+    return 160000;
+}
+
+int wiringPiI2CSetup(int i)
+{
+    return 0;
+}
+#endif // WP
 
 using namespace device;
 using namespace wiringpi;
 using namespace prototype;
 using namespace std;
-
-#ifdef WP
-#include <wiringPiI2C.h>
-#else
-default_random_engine WP_LightSensorTSL2561::gen(
-	(unsigned)chrono::system_clock()
-	.now().time_since_epoch().count());
-binomial_distribution<int> WP_LightSensorTSL2561::d0(0xFFFF, 0.01);
-binomial_distribution<int> WP_LightSensorTSL2561::d1(0xFFFF, 0.001);
-#endif // WP
 
 const WP_LightSensorTSL2561 WP_LightSensorTSL2561::prototype(-1, -1.0);
 
@@ -46,6 +70,11 @@ WP_LightSensorTSL2561::~WP_LightSensorTSL2561()
 IPrototype* WP_LightSensorTSL2561::Clone() const
 {
 	return new WP_LightSensorTSL2561(prototype);
+}
+
+unsigned int WP_LightSensorTSL2561::GetReadInterval()
+{
+    return LIGHT_INTERVAL;
 }
 
 string WP_LightSensorTSL2561::ToString() const

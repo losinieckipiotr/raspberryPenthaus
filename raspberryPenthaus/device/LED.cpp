@@ -129,12 +129,13 @@ void LED::On()
 {
 	#ifdef LOG
 	io::StdIO::StandardOutput(
-		print::TimeToString(system_clock::now())
-		+ " LED.On()");
+		print::TimeToString(system_clock::now()) +
+		" LED.On()" + " device ID: " + to_string(_id));
 	#endif
 
 	if (_isLocked)
 		return;
+
 	_lightingTime = system_clock::now() + _delay;
 	if (!IsOn())
 	{
@@ -145,8 +146,15 @@ void LED::On()
 
 void LED::Off()
 {
+    #ifdef LOG
+	io::StdIO::StandardOutput(
+		print::TimeToString(system_clock::now()) +
+		" LED.OFF()" + " device ID: " + to_string(_id));
+	#endif
+
 	if (_isLocked)
 		return;
+
 	if (IsOn())
 	{
 		auto now = system_clock::now();
@@ -154,19 +162,13 @@ void LED::Off()
 		{
 			_Write(!static_cast<int>(_logic));
 			_state = !static_cast<int>(_logic);
-
-			#ifdef LOG
-			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now())
-				+ " LED.Off()");
-			#endif
 		}
 		#ifdef LOG
 		else
 		{
 			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now())
-				+ " LED.Off() - IGNORED");
+				print::TimeToString(system_clock::now()) +
+				" LED.OFF()" + " device ID: " + to_string(_id) + " - IGNORED");
 		}
 		#endif
 	}

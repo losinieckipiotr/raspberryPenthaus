@@ -4,8 +4,25 @@
 #include <vector>
 #include <cstring>
 
+#include "../../config.h"
+
+#ifdef WP
 #include "MiLightRadio.h"
 #include "PL1167_nRF24.h"
+#else
+class MyRadio
+{
+public:
+    MyRadio() { }
+
+    int begin() { return 0; }
+    bool available() { return true; }
+    int read(uint8_t frame[], size_t &frame_length) { return 0; }
+    int dupesReceived() { return 0; }
+    int write(uint8_t frame[], size_t frame_length) { return 0; }
+    int resend() { return 0; }
+};
+#endif // WP
 
 namespace device
 {
@@ -100,9 +117,13 @@ namespace device
 			uint8_t frame_[7];
 
 		private:
+            #ifdef WP
 			RF24 RF24_;
 			PL1167_nRF24 PL1167_nRF24_;
 			MiLightRadio radio_;
+			#else
+			MyRadio radio_;
+			#endif // WP
 		};
 	}
 }

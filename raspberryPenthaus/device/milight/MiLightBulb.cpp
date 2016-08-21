@@ -10,8 +10,8 @@ using namespace prototype;
 
 const MiLightBulb MiLightBulb::prototype(-1, 0);
 
-unsigned int MiLightBulb::_resends = 4;
-unsigned int MiLightBulb::_seqLength = 4;
+unsigned int MiLightBulb::_resends = 1;
+unsigned int MiLightBulb::_seqLength = 16;
 
 MiLightPilot MiLightBulb::_pilot;
 

@@ -1,9 +1,10 @@
 #include "PL1167_nRF24.h"
+#include "../../config.h"
 
 using namespace device;
 using namespace milight;
 
-/*
+#ifndef WP
 PL1167_nRF24::PL1167_nRF24(RF24 &radio) : _radio(radio)
 {
 	_preambleLength = 1;
@@ -83,8 +84,7 @@ int PL1167_nRF24::internal_receive()
 {
 	return 0;
 }
-
-*/
+#else
 
 static uint16_t calc_crc(uint8_t *data, size_t data_length);
 static uint8_t reverse_bits(uint8_t data);
@@ -506,3 +506,4 @@ static uint8_t reverse_bits(uint8_t data) {
 	}
 	return result;
 }
+#endif //!WP

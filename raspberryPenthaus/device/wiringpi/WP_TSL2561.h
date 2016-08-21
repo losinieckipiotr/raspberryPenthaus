@@ -1,10 +1,7 @@
 #ifndef WP_LIGHT_SENSOR_TSL2561_H
 #define WP_LIGHT_SENSOR_TSL2561_H
-#include <random>
-#include <chrono>
 
 #include "../LightSensor.h"
-#include "../../config.h"
 
 namespace device
 {
@@ -31,7 +28,7 @@ namespace device
 
 			virtual prototype::IPrototype* Clone() const;
 
-			virtual unsigned int GetReadInterval() { return LIGHT_INTERVAL; };
+			virtual unsigned int GetReadInterval();
 
 			virtual void Setup();
 
@@ -56,6 +53,7 @@ namespace device
 		private:
 			static bool _isOn;
 
+        public:
 			enum Constants
 			{
 				ADDR_LOW = 0x29,//GND ADDR
@@ -106,31 +104,6 @@ namespace device
 				CHAN1_LOW_REGISTER = 0x0E,
 				CHAN1_HIGH_REGISTER = 0x0F
 			};
-
-			#ifndef WP
-			static std::default_random_engine gen;
-			static std::binomial_distribution<int> d0;
-			static std::binomial_distribution<int> d1;
-
-			int wiringPiI2CWriteReg8(int i, int j, int k)
-			{
-				return 1;
-			}
-
-			int wiringPiI2CReadReg16(int i, int j)
-			{
-				if (j == (COMMAND_BIT | CHAN0_LOW_REGISTER))
-					return d0(gen);
-				if (j == (COMMAND_BIT | CHAN1_LOW_REGISTER))
-					return d1(gen);
-				return 666;
-			}
-
-			int wiringPiI2CSetup(int i)
-			{
-				return 0;
-			}
-			#endif
 		};
 	}
 }

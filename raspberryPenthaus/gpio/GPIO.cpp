@@ -8,6 +8,16 @@
 #include "../device/DeviceManager.h"
 #include "../device/IWriteable.h"
 
+#include "../config.h"
+#ifndef WP
+void wiringPiSetup()
+{
+
+}
+#else
+#include <wiringPi.h>
+#endif // WP
+
 using namespace gpio;
 using namespace std;
 

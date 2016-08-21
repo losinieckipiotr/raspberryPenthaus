@@ -99,55 +99,48 @@ void device::Bulb::On()
 {
 	#ifdef LOG
 	io::StdIO::StandardOutput(
-		print::TimeToString(system_clock::now())
-		+ " Bulb.On()");
+		print::TimeToString(system_clock::now()) +
+		" Bulb.On()" + " device ID: " + to_string(_id));
 	#endif
 
 	if (_isLocked)
 		return;
+
 	_lightingTime = system_clock::now() + _delay;
 
-	_Write(true);
-    _state = 1;
-
-	/*
 	if (!IsOn())
 	{
 		_Write(true);
 		_state = 1;
 	}
-	*/
 }
 
 void device::Bulb::Off()
 {
+    #ifdef LOG
+    io::StdIO::StandardOutput(
+        print::TimeToString(system_clock::now()) +
+        " Bulb.Off()" + " device ID: " + to_string(_id));
+    #endif
+
 	if (_isLocked)
 		return;
-
-    _Write(false);
-    _state = 0;
 
 	if (IsOn())
 	{
 		auto now = system_clock::now();
-
 		if (now >= _lightingTime)
 		{
-			//_Write(false);
-			//_state = 0;
-
-			#ifdef LOG
-			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now())
-				+ " Bulb.Off()");
-			#endif
+			_Write(false);
+			_state = 0;
 		}
 		#ifdef LOG
 		else
 		{
 			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now())
-				+ " Bulb.Off() - IGNORED");
+				print::TimeToString(system_clock::now()) +
+				" Bulb.Off()" + " device ID: " +
+				to_string(_id) + " - IGNORED");
 		}
 		#endif
 	}

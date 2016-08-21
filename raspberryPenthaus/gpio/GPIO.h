@@ -5,8 +5,6 @@
 #include <mutex>
 #include <string>
 
-#include "../config.h"
-
 namespace device
 {
 	class DeviceManager;
@@ -30,20 +28,9 @@ namespace gpio
 		GPIO(device::DeviceManager &man);
 		~GPIO();
 
-		#ifndef WP
-		void wiringPiSetup()
-		{
-
-		}
-		#endif
-
 		static GPIO* _instance;
 
 		device::DeviceManager& man;
-
-		//unsigned int _checkCounter;
-
-		//std::vector<std::pair<int, device::IDevice*>> _checkTable;
 	};
 }
 
