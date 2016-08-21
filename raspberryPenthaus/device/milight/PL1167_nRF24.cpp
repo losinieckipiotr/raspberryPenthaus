@@ -1,5 +1,4 @@
 #include "PL1167_nRF24.h"
-#include "../../config.h"
 
 using namespace device;
 using namespace milight;

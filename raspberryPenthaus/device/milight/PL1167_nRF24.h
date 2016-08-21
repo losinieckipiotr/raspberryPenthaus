@@ -1,9 +1,18 @@
 #ifndef PL1167_NRF24_H_
 #define PL1167_NRF24_H_
-
-#include <RF24/RF24.h>
-
 #include "AbstractPL1167.h"
+#include "../../config.h"
+
+#ifdef WP
+#include <RF24/RF24.h>
+#else
+class RF24
+{
+public:
+	RF24() { }
+	~RF24() { }
+};
+#endif // WP
 
 namespace device
 {
