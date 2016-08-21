@@ -53,8 +53,9 @@ namespace device
 		virtual void _Write(bool) = 0;
 
 		std::chrono::seconds _delay;
-		bool _isLocked;
 		int _state;
+		bool _isLocked;
+
 		timePoint _lightingTime;
 	};
 }
