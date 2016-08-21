@@ -26,7 +26,6 @@ namespace device
 		std::vector<IWriteable*> GetWriteDevices() const;
 
 		std::string PrintDevices() const;
-		void SaveDevices(std::string &filename) const;
 
 	private:
 		struct devComp_

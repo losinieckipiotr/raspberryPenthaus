@@ -1,16 +1,12 @@
-/*
- * MiLightRadio.cpp
- *
- *  Created on: 29 May 2015
- *      Author: henryk
- */
-
 #include "MiLightRadio.h"
 
 #define PACKET_ID(packet) ( ((packet[1] & 0xF0)<<24) | (packet[2]<<16) | (packet[3]<<8) | (packet[7]) )
 
 static const uint8_t CHANNELS[] = {9, 40, 71};
 #define NUM_CHANNELS (sizeof(CHANNELS)/sizeof(CHANNELS[0]))
+
+using namespace device;
+using namespace milight;
 
 MiLightRadio::MiLightRadio(AbstractPL1167 &pl1167)
   : _pl1167(pl1167) {
@@ -114,7 +110,7 @@ int MiLightRadio::write(uint8_t frame[], size_t frame_length)
     return -1;
   }
 
-  _out_packet[0] = frame_length;
+  _out_packet[0] = (uint8_t)frame_length;
   memcpy(_out_packet + 1, frame, frame_length);
 
   int retval = resend();

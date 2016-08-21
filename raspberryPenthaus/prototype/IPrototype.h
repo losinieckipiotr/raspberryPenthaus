@@ -12,7 +12,7 @@ namespace prototype
 	public:
 		virtual ~IPrototype() { }
 
-		//czy to jest potrzebne ?
+		//TO DO:: usunac is initialized
 		virtual bool IsInitialized() const = 0;
 
 		virtual void SaveToTree(boost::property_tree::ptree&, const std::string&) const = 0;

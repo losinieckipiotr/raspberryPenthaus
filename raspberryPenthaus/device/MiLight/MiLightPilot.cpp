@@ -4,19 +4,32 @@
 #include <iostream>
 
 #include "MiLightPilot.h"
+#include "../../config.h"
 
 using namespace std;
 
-RF24 MiLightPilot::RF24_(RPI_V2_GPIO_P1_22, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_1MHZ);
-PL1167_nRF24 MiLightPilot::PL1167_nRF24_(RF24_);
-MiLightRadio MiLightPilot::radio_(PL1167_nRF24_);
+using namespace device;
+using namespace milight;
 
-static uint8_t outgoingPacket[7];
-
+#ifdef RF24
 MiLightPilot::MiLightPilot()
+	:	RF24_(RPI_V2_GPIO_P1_22, RPI_V2_GPIO_P1_24, BCM2835_SPI_SPEED_1MHZ),
+		PL1167_nRF24_(RF24_),
+		radio_(PL1167_nRF24_)
 {
 
 }
+#else
+void delay(unsigned int) { }
+
+MiLightPilot::MiLightPilot()
+	: RF24_(),
+	PL1167_nRF24_(RF24_),
+	radio_(PL1167_nRF24_)
+{
+
+}
+#endif // RF24
 
 MiLightPilot::~MiLightPilot()
 {
@@ -61,7 +74,7 @@ void MiLightPilot::SendFromBuf(const unsigned int resends, unsigned int seqLengt
 {
     for (unsigned int i = 0; i < seqLength; ++i)
     {
-        /*print frame
+        /*//print frame
         for (int k = 0; k < 7; ++k)
         {
             printf("%02X ", frame_[k]);
@@ -192,7 +205,7 @@ uint8_t MiLightPilot::GetLightVal(unsigned int lightInPerc)
     else if(lightInPerc == 0)
         return LIGHT_VALS::LIGHT_MIN;
 
-    uint8_t t = round(lightInPerc / 4.0f);
+    uint8_t t = static_cast<uint8_t>(round(lightInPerc / 4.0f));
     uint8_t v = 0xFF - 0x7E - t * 8;
     if(v < 0)
         v = 0xFF + 0x82 - t * 8;

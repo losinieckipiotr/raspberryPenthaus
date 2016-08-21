@@ -1,7 +1,7 @@
 #include <chrono>
 
-#include "../../gpio/GPIO.h"
 #include "WP_LED.h"
+#include "../../config.h"
 
 using namespace device;
 using namespace wiringpi;
@@ -10,6 +10,15 @@ using namespace std;
 
 #ifndef WP
 #define	OUTPUT 1
+void digitalWrite(int i, int k)
+{
+
+}
+
+void pinMode(int i, int j)
+{
+
+}
 #endif // !WP
 
 const WP_LED WP_LED::prototype(-1, -1, 0, false);

@@ -8,7 +8,7 @@
 
 #include "IO.h"
 #include "../program/Program.h"
-#include "../wp.h"
+#include "../config.h"
 
 using namespace program;
 using namespace io;

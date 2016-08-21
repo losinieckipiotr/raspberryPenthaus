@@ -9,7 +9,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 
 #include "Program.h"
-#include "../wp.h"
+#include "../config.h"
 
 #include "../event/LightDetected.hpp"
 #include "../event/MotionDetected.hpp"
@@ -118,6 +118,7 @@ bool Program::Init()
 //ustawienie GPIO(wywolanie wiringPiSetup),
 void Program::_Setup()
 {
+	//TO DO: program wysypuje sie przy pustej liscie driverow
 	auto it = _drivers.begin();
 	auto nextDriv = (++_drivers.begin());
 	auto endList = _drivers.end();

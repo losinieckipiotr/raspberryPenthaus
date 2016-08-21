@@ -5,7 +5,7 @@
 #include <mutex>
 #include <string>
 
-#include "../wp.h"
+#include "../config.h"
 
 namespace device
 {

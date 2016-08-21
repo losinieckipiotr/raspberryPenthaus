@@ -5,11 +5,9 @@
 #include <thread>
 #include <exception>
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-
 #include "LED.h"
-#include "../program/Program.h"
+#include "../io/StdIO.h"
+#include "../config.h"
 
 using namespace device;
 using namespace std;
@@ -59,20 +57,19 @@ string LED::ToString() const
 	return s;
 }
 
-void LED::SaveToTree(boost::property_tree::ptree& tree, const string& path) const
+void LED::SaveToTree(pt::ptree& tree, const string& path) const
 {
-	pt::ptree &ledNode = tree.add(path + "led", "");
-	ledNode.put("id", _id);
-	ledNode.put("pin", _pin);
-	ledNode.put("delay", _delay.count());
-	ledNode.put("logic", _logic);
+	pt::ptree &myNode = tree.add(path + name, "");
+	myNode.put("id", _id);
+	myNode.put("pin", _pin);
+	myNode.put("delay", _delay.count());
+	myNode.put("logic", _logic);
 }
 
 bool LED::LoadFromTree(pt::ptree::value_type &val)
 {
 	if (_isInit)
 		return false;
-
 	try
 	{
 		_id = val.second.get<int>("id");
@@ -86,7 +83,6 @@ bool LED::LoadFromTree(pt::ptree::value_type &val)
 		//TO DO: dodac logowanie bledu
 		return false;
 	}
-
 	_isInit = true;
 	return true;
 }
@@ -94,13 +90,8 @@ bool LED::LoadFromTree(pt::ptree::value_type &val)
 bool device::LED::Write(IWriteVal *val)
 {
 	LEDWriteVal *vPtr = dynamic_cast<LEDWriteVal*>(val);
-	if (vPtr)
-	{
-		_Write(vPtr->val);
-		return true;
-	}
-	else
-		return false;
+	if (vPtr) { _Write(vPtr->val); return true; }
+	else { return false; }
 }
 
 string LED::Execute(string& s)
@@ -170,6 +161,14 @@ void LED::Off()
 				+ " LED.Off()");
 			#endif
 		}
+		#ifdef LOG
+		else
+		{
+			io::StdIO::StandardOutput(
+				print::TimeToString(system_clock::now())
+				+ " LED.Off() - IGNORED");
+		}
+		#endif
 	}
 }
 
@@ -197,4 +196,3 @@ void LED::ChangeDelay(int delay)
 	duration<int> newDelay(delay);
 	_delay = newDelay;
 }
-

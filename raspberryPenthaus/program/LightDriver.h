@@ -13,6 +13,8 @@
 #include "../device/LightSensor.h"
 #include "../device/MotionSensor.h"
 
+#include "../device/Bulb.h"
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/asio.hpp>
 
@@ -29,6 +31,8 @@ namespace program
 	public:
 		LightDriver(device::DeviceManager& devMan);
 		virtual ~LightDriver();
+
+		inline int GetID() { return id_; }
 
 		virtual void HandleEvent(event::eventPtr evPtr);
 
@@ -49,12 +53,15 @@ namespace program
 		void MotionEventNight_(event::eventPtr evPtr);
 		void LightEventDay_(event::eventPtr evPtr);
 		void LightEventNight_(event::eventPtr evPtr);
-		void LEDExpiredHandler_(event::eventPtr evPtr);
+		void ExpiredHandler_(event::eventPtr evPtr);
 
-		void LEDExpiredCreator(device::LED* led);
+		void ExpiredCreator(device::IDevice* dev);
+
 		void AddDev_(device::IDevice* dev);
 
-		bool eventHanled;
+		int id_;
+		boost::posix_time::seconds delay_;
+		bool eventHanled_;
 		State state_;
 		ItemsPool<event::eventPtr>& eventPool_;
 		device::DeviceManager& devMan_;
@@ -63,6 +70,7 @@ namespace program
 		std::unordered_map<int, device::IDevice*> myDevs_;
 		std::unordered_map<int, device::LED*> leds_;
 		std::unordered_map<int, device::MotionSensor*> motionSensors_;
+		std::unordered_map<int, device::Bulb*> bulbs_;
 		device::LightSensor* lightSensor_;
 
 		boost::asio::io_service service_;

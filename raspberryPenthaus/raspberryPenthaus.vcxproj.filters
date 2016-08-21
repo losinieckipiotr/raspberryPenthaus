@@ -67,6 +67,12 @@
     <Filter Include="Source Files\device\wiringpi">
       <UniqueIdentifier>{9797c7e7-e5fd-40c6-88f3-84e77326942c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\device\milight">
+      <UniqueIdentifier>{11b3e5cb-352f-4969-8622-74fbaf35d20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\device\milight">
+      <UniqueIdentifier>{e62adcde-a392-48b0-a98f-c1d9aa38ad2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gpio\GPIO.h">
@@ -107,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="prototype\PrototypeManager.h">
       <Filter>Header Files\prototype</Filter>
-    </ClInclude>
-    <ClInclude Include="wp.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="device\DeviceBase.h">
       <Filter>Header Files\device</Filter>
@@ -171,6 +174,30 @@
     <ClInclude Include="event\IEventHandler.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="device\Bulb.h">
+      <Filter>Header Files\device</Filter>
+    </ClInclude>
+    <ClInclude Include="device\milight\MiLightBulb.h">
+      <Filter>Header Files\device\milight</Filter>
+    </ClInclude>
+    <ClInclude Include="device\milight\AbstractPL1167.h">
+      <Filter>Header Files\device\milight</Filter>
+    </ClInclude>
+    <ClInclude Include="device\milight\MiLightPilot.h">
+      <Filter>Header Files\device\milight</Filter>
+    </ClInclude>
+    <ClInclude Include="device\milight\MiLightRadio.h">
+      <Filter>Header Files\device\milight</Filter>
+    </ClInclude>
+    <ClInclude Include="device\milight\PL1167_nRF24.h">
+      <Filter>Header Files\device\milight</Filter>
+    </ClInclude>
+    <ClInclude Include="event\LightExpired.hpp">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gpio\GPIO.cpp">
@@ -229,6 +256,21 @@
     </ClCompile>
     <ClCompile Include="program\LightDriver.cpp">
       <Filter>Source Files\program</Filter>
+    </ClCompile>
+    <ClCompile Include="device\Bulb.cpp">
+      <Filter>Source Files\device</Filter>
+    </ClCompile>
+    <ClCompile Include="device\milight\MiLightPilot.cpp">
+      <Filter>Source Files\device\milight</Filter>
+    </ClCompile>
+    <ClCompile Include="device\milight\MiLightRadio.cpp">
+      <Filter>Source Files\device\milight</Filter>
+    </ClCompile>
+    <ClCompile Include="device\milight\PL1167_nRF24.cpp">
+      <Filter>Source Files\device\milight</Filter>
+    </ClCompile>
+    <ClCompile Include="device\milight\MiLightBulb.cpp">
+      <Filter>Source Files\device\milight</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

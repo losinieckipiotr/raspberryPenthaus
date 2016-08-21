@@ -6,18 +6,22 @@
 #include "../device/wiringpi/WP_MotionSensor.h"
 #include "../device/wiringpi/WP_TSL2561.h"
 
+#include "../device/milight/MiLightBulb.h"
+
+using namespace std;
+
 using namespace prototype;
 using namespace device;
-using namespace wiringpi;
-using namespace std;
 
 namespace pt = boost::property_tree;
 
 PrototypeManager::PrototypeManager()
 {
-	_prototypes[WP_LED::name] = &WP_LED::prototype;
-	_prototypes[WP_MotionSensor::name] = &WP_MotionSensor::prototype;
-	_prototypes[WP_LightSensorTSL2561::name] = &WP_LightSensorTSL2561::prototype;
+	_prototypes[wiringpi::WP_LED::name] = &wiringpi::WP_LED::prototype;
+	_prototypes[wiringpi::WP_MotionSensor::name] = &wiringpi::WP_MotionSensor::prototype;
+	_prototypes[wiringpi::WP_LightSensorTSL2561::name] = &wiringpi::WP_LightSensorTSL2561::prototype;
+
+	_prototypes[milight::MiLightBulb::name] = &milight::MiLightBulb::prototype;
 }
 
 PrototypeManager::~PrototypeManager()

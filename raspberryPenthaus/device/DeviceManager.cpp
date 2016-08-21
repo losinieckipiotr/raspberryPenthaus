@@ -96,29 +96,3 @@ std::string DeviceManager::PrintDevices() const
 	return s;
 }
 
-//TO DO: Zapisywanie urzadzen w jakims formacie
-//XML?
-//JSON?
-void DeviceManager::SaveDevices(std::string &filename) const
-{
-	/*ofstream file(filename, ofstream::trunc);
-	for (auto& dev : devices_)
-	{
-		file << "create ";
-		dev.second->Save(file);
-		file << endl;
-	}
-	file.close();*/
-
-	pt::ptree tree;
-	string path = "serialize.devices";
-	tree.put(path, "");
-	path.append(1, '.');
-
-	for (auto& dev : devices_)
-	{
-		dev.second->SaveToTree(tree, path);
-	}
-
-	pt::write_xml("serialize3.xml", tree);
-}

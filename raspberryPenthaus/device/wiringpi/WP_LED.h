@@ -1,7 +1,6 @@
 #ifndef WP_LED_H
 #define WP_LED_H
 #include "../LED.h"
-#include "../../wp.h"
 
 namespace device
 {
@@ -23,19 +22,6 @@ namespace device
 
 		protected:
 			virtual void _Write(bool val);
-
-		private:
-			#ifndef WP
-			void digitalWrite(int i, int k)
-			{
-
-			}
-
-			void pinMode(int i, int j)
-			{
-
-			}
-			#endif
 		};
 	}
 }

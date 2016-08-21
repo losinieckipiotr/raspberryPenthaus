@@ -3,7 +3,7 @@
 #include <sstream>
 #include <chrono>
 
-#include "../wp.h"
+#include "../config.h"
 #include "DeviceReader.h"
 #include "../device/IDevice.h"
 #include "Program.h"

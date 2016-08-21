@@ -1,11 +1,12 @@
 #include <stdexcept>
-#include <chrono>
 
 #include "LightDriver.h"
 #include "Program.h"
+
 #include "../event/LightDetected.hpp"
 #include "../event/MotionDetected.hpp"
-#include "../event/LEDExpired.hpp"
+#include "../event/LightExpired.hpp"
+
 #include "../io/StdIO.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -19,11 +20,13 @@ namespace ba = boost::asio;
 namespace pt = boost::property_tree;
 
 LightDriver::LightDriver(device::DeviceManager& devMan)
-	: state_(State::Day),
-	eventPool_(program::Program::GetEventPool()),
-	devMan_(devMan),
-	work_(service_),
-	timer_(service_)
+	:	 id_(0),
+		delay_(2),
+		state_(State::Night),
+		eventPool_(program::Program::GetEventPool()),
+		devMan_(devMan),
+		work_(service_),
+		timer_(service_)
 {
 	thread([this]()
 	{
@@ -53,19 +56,27 @@ void LightDriver::SaveToTree(pt::ptree& tree, const string& path) const
 {
 	string myPath = path + "lightdriver";
 	pt::ptree &driverNode = tree.add(myPath, "");
+	driverNode.put("id", id_);
+	driverNode.put("delay", static_cast<unsigned int>(delay_.total_seconds()));
 	myPath = "devices";
 	driverNode.put(myPath, "");
 	myPath.append(1, '.');
-
 	for (auto &led : leds_)
 	{
 		led.second->SaveToTree(driverNode, myPath);
+	}
+	for (auto &bulb : bulbs_)
+	{
+		bulb.second->SaveToTree(driverNode, myPath);
 	}
 	for (auto &motSen : motionSensors_)
 	{
 		motSen.second->SaveToTree(driverNode, myPath);
 	}
-	lightSensor_->SaveToTree(driverNode, myPath);
+	if (lightSensor_)
+	{
+		lightSensor_->SaveToTree(driverNode, myPath);
+	}
 }
 
 //wczytanie z drzewa
@@ -74,6 +85,8 @@ bool LightDriver::LoadFromTree(pt::ptree::value_type &v)
 	try
 	{
 		IDevice* dev = nullptr;
+		id_ = v.second.get<int>("id");
+		delay_ = boost::posix_time::seconds(v.second.get<unsigned int>("delay"));
 		pt::ptree &devsNode = v.second.get_child("devices");
 		for (pt::ptree::value_type &v : devsNode)
 		{
@@ -96,7 +109,7 @@ bool LightDriver::LoadFromTree(pt::ptree::value_type &v)
 //obsluga eventow
 void LightDriver::HandleEvent(event::eventPtr evPtr)
 {
-	eventHanled = false;
+	eventHanled_ = false;
 
 	if (isItMyDevEvent(evPtr->GetDeviceID()))
 	{
@@ -113,7 +126,7 @@ void LightDriver::HandleEvent(event::eventPtr evPtr)
 		}
 	}
 
-	if (!eventHanled)
+	if (!eventHanled_)
 		IEventHandler::HandleEvent(evPtr);
 }
 
@@ -121,11 +134,11 @@ void LightDriver::HandleEvent(event::eventPtr evPtr)
 void LightDriver::Day_(event::eventPtr evPtr)
 {
 	MotionEventDay_(evPtr);
-	if (eventHanled)
+	if (eventHanled_)
 		return;
 
 	LightEventDay_(evPtr);
-	if (eventHanled)
+	if (eventHanled_)
 		return;
 
 	Default_(evPtr);
@@ -135,11 +148,11 @@ void LightDriver::Day_(event::eventPtr evPtr)
 void LightDriver::Night_(event::eventPtr evPtr)
 {
 	MotionEventNight_(evPtr);
-	if (eventHanled)
+	if (eventHanled_)
 		return;
 
 	LightEventNight_(evPtr);
-	if (eventHanled)
+	if (eventHanled_)
 		return;
 
 	Default_(evPtr);
@@ -148,8 +161,8 @@ void LightDriver::Night_(event::eventPtr evPtr)
 //eventy niezalezne od pory dnia
 void LightDriver::Default_(event::eventPtr evPtr)
 {
-	LEDExpiredHandler_(evPtr);
-	if (eventHanled)
+	ExpiredHandler_(evPtr);
+	if (eventHanled_)
 		return;
 
 	//mozliwe nastepne eventy...
@@ -162,9 +175,10 @@ void LightDriver::MotionEventDay_(event::eventPtr evPtr)
 	if (motionDet)
 	{
 		#ifdef LOG
-		io::StdIO::StandardOutput(lightDet->ToString() + "- ignored");
+		io::StdIO::StandardOutput(motionDet->ToString() + " - IGNORED");
 		#endif
-		eventHanled = true;
+
+		eventHanled_ = true;
 	}
 }
 
@@ -178,12 +192,25 @@ void LightDriver::MotionEventNight_(event::eventPtr evPtr)
 		io::StdIO::StandardOutput(motionDet->ToString());
 		#endif
 
+		for (auto &bulb : bulbs_)
+		{
+			bulb.second->On();
+		}
 		for (auto &led : leds_)
 		{
 			led.second->On();
-			LEDExpiredCreator(led.second);
 		}
-		eventHanled = true;
+
+		if (bulbs_.size() != 0)
+		{
+			ExpiredCreator(bulbs_.begin()->second);
+		}
+		else if (leds_.size() != 0)
+		{
+			ExpiredCreator(leds_.begin()->second);
+		}
+
+		eventHanled_ = true;
 	}
 }
 
@@ -207,7 +234,7 @@ void LightDriver::LightEventDay_(event::eventPtr evPtr)
 			io::StdIO::StandardOutput("=====__NIGHT__=====");
 			#endif
 		}
-		eventHanled = true;
+		eventHanled_ = true;
 	}
 }
 
@@ -231,36 +258,40 @@ void LightDriver::LightEventNight_(event::eventPtr evPtr)
 			io::StdIO::StandardOutput("=====''DAY''=====");
 			#endif
 		}
-		eventHanled = true;
+		eventHanled_ = true;
 	}
 }
 
 //wylacz swiatla
-void LightDriver::LEDExpiredHandler_(event::eventPtr evPtr)
+void LightDriver::ExpiredHandler_(event::eventPtr evPtr)
 {
-	LEDExpired* ledExp = dynamic_cast<LEDExpired*>(evPtr.get());
-	if (ledExp)
+	LightExpired* lightExp = dynamic_cast<LightExpired*>(evPtr.get());
+	if (lightExp)
 	{
 		#ifdef LOG
-		io::StdIO::StandardOutput(ledExp->ToString());
+		io::StdIO::StandardOutput(lightExp->ToString());
 		#endif
 
+		for (auto &bulb : bulbs_)
+		{
+			bulb.second->Off();
+		}
 		for (auto &led : leds_)
 		{
 			led.second->Off();
 		}
-		eventHanled = true;
+		eventHanled_ = true;
 	}
 }
 
 //ustaw timer wylaczenia swiatla
-void LightDriver::LEDExpiredCreator(LED *led)
+void LightDriver::ExpiredCreator(IDevice* dev)
 {
-	auto handler = [this, led](const boost::system::error_code& ec)
+	auto handler = [this, dev](const boost::system::error_code& ec)
 	{
 		if (!ec)
 		{
-			auto exp = make_shared<LEDExpired>(*led);
+			auto exp = make_shared<LightExpired>(*dev, *this);
 			eventPool_.Push(exp);
 		}
 		else if (ec != ba::error::operation_aborted)
@@ -268,9 +299,7 @@ void LightDriver::LEDExpiredCreator(LED *led)
 			io::StdIO::ErrorOutput(ec.message());
 		}
 	};
-	unsigned int delay = static_cast<unsigned long>
-		(led->GetDelay().count());
-	timer_.expires_from_now(boost::posix_time::seconds(delay));
+	timer_.expires_from_now(delay_);
 	timer_.async_wait(handler);
 }
 
@@ -298,6 +327,14 @@ void LightDriver::AddDev_(IDevice *dev)
 	{
 		lightSensor_ = lighSens;
 		myDevs_[lighSens->GetID()] = lighSens;
+		return;
+	}
+
+	Bulb *bulb = dynamic_cast<Bulb*>(dev);
+	if (bulb)
+	{
+		bulbs_[bulb->GetID()] = bulb;
+		myDevs_[bulb->GetID()] = bulb;
 		return;
 	}
 

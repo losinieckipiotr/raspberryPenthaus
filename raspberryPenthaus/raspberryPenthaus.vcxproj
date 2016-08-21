@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="device\Bulb.h" />
     <ClInclude Include="device\DeviceBase.h" />
     <ClInclude Include="device\DeviceManager.h" />
     <ClInclude Include="device\IDevice.h" />
@@ -157,6 +158,11 @@
     <ClInclude Include="device\IWriteable.h" />
     <ClInclude Include="device\LED.h" />
     <ClInclude Include="device\LightSensor.h" />
+    <ClInclude Include="device\milight\AbstractPL1167.h" />
+    <ClInclude Include="device\milight\MiLightBulb.h" />
+    <ClInclude Include="device\milight\MiLightPilot.h" />
+    <ClInclude Include="device\milight\MiLightRadio.h" />
+    <ClInclude Include="device\milight\PL1167_nRF24.h" />
     <ClInclude Include="device\MotionSensor.h" />
     <ClInclude Include="device\wiringpi\WP_LED.h" />
     <ClInclude Include="device\wiringpi\WP_MotionSensor.h" />
@@ -165,6 +171,7 @@
     <ClInclude Include="event\IEventHandler.h" />
     <ClInclude Include="event\LEDExpired.hpp" />
     <ClInclude Include="event\LightDetected.hpp" />
+    <ClInclude Include="event\LightExpired.hpp" />
     <ClInclude Include="event\MotionDetected.hpp" />
     <ClInclude Include="gpio\GPIO.h" />
     <ClInclude Include="io\IO.h" />
@@ -183,12 +190,17 @@
     <ClInclude Include="prototype\IPrototype.h" />
     <ClInclude Include="prototype\PrototypeBase.h" />
     <ClInclude Include="prototype\PrototypeManager.h" />
-    <ClInclude Include="wp.h" />
+    <ClInclude Include="config.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="device\Bulb.cpp" />
     <ClCompile Include="device\DeviceManager.cpp" />
     <ClCompile Include="device\LED.cpp" />
     <ClCompile Include="device\LightSensor.cpp" />
+    <ClCompile Include="device\milight\MiLightBulb.cpp" />
+    <ClCompile Include="device\milight\MiLightPilot.cpp" />
+    <ClCompile Include="device\milight\MiLightRadio.cpp" />
+    <ClCompile Include="device\milight\PL1167_nRF24.cpp" />
     <ClCompile Include="device\MotionSensor.cpp" />
     <ClCompile Include="device\wiringpi\WP_LED.cpp" />
     <ClCompile Include="device\wiringpi\WP_MotionSensor.cpp" />

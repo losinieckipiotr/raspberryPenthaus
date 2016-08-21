@@ -4,7 +4,7 @@
 #include <chrono>
 
 #include "../LightSensor.h"
-#include "../../wp.h"
+#include "../../config.h"
 
 namespace device
 {
