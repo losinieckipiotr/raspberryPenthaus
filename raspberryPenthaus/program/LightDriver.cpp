@@ -9,6 +9,8 @@
 
 #include "../io/StdIO.h"
 
+#include "../config.h"
+
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace program;
@@ -311,6 +313,18 @@ void LightDriver::AddDev_(IDevice *dev)
 	{
 		leds_[led->GetID()] = led;
 		myDevs_[led->GetID()] = led;
+		std::chrono::seconds s(static_cast<unsigned int>(delay_.total_seconds()));
+		led->SetDelay(s);
+		return;
+	}
+
+	Bulb *bulb = dynamic_cast<Bulb*>(dev);
+	if (bulb)
+	{
+		bulbs_[bulb->GetID()] = bulb;
+		myDevs_[bulb->GetID()] = bulb;
+		std::chrono::seconds s(static_cast<unsigned int>(delay_.total_seconds()));
+		bulb->SetDelay(s);
 		return;
 	}
 
@@ -330,14 +344,6 @@ void LightDriver::AddDev_(IDevice *dev)
 		return;
 	}
 
-	Bulb *bulb = dynamic_cast<Bulb*>(dev);
-	if (bulb)
-	{
-		bulbs_[bulb->GetID()] = bulb;
-		myDevs_[bulb->GetID()] = bulb;
-		return;
-	}
-
-	throw std::logic_error("Try to add unknow device");
+	throw std::logic_error("Try to add unknown device");
 }
 

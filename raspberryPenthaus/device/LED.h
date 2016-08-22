@@ -2,7 +2,6 @@
 #define LED_H
 #include <string>
 #include <chrono>
-#include <atomic>
 
 #include "DeviceBase.h"
 #include "IWriteable.h"
@@ -26,7 +25,7 @@ namespace device
 	class LED : public DeviceBase, public IWriteable
 	{
 	public:
-		LED(int, int, int, bool = true);
+		LED(int, int, bool = true, unsigned int = 0);
 		virtual ~LED() { }
 
 		virtual std::string ToString() const;
@@ -44,11 +43,11 @@ namespace device
 		void LockOn();
 		void LockOff();
 		void Unlock();
-		void ChangeDelay(int);
 
 		bool IsOn() const { return _state == static_cast<int>(_logic); }
 		bool IsLocked() const { return _isLocked; }
 		std::chrono::seconds GetDelay() const { return _delay; }
+		void SetDelay(std::chrono::seconds& delay) { _delay = delay; }
 
 		static const std::string name;
 
@@ -56,11 +55,12 @@ namespace device
 		virtual void _Write(bool val) = 0;
 
 		int _pin;
-		std::chrono::seconds _delay;
 		bool _logic;
 		int _defaultValue;
 		bool _isLocked;
 		int _state;
+		std::chrono::seconds _delay;
+
 		timePoint _lightingTime;
 	};
 }

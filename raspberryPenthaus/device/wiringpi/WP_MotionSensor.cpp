@@ -3,14 +3,14 @@
 #include "WP_MotionSensor.h"
 #include "../../config.h"
 
-#ifndef WP
+#ifdef SYMULATOR
 #define	INPUT 0
 #include <random>
 static std::default_random_engine gen =
     std::default_random_engine((unsigned)std::chrono::system_clock()
         .now().time_since_epoch().count());
 static std::bernoulli_distribution dist =
-    std::bernoulli_distribution(0.3);
+    std::bernoulli_distribution(0.4);
 
 static void pinMode(int i, int j)
 {
@@ -23,7 +23,7 @@ static int digitalRead(int pin)
 }
 #else
 #include <wiringPi.h>
-#endif //!WP
+#endif //!SYMULATOR
 
 using namespace device;
 using namespace wiringpi;

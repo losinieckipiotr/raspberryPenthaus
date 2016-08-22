@@ -62,7 +62,6 @@ void Bulb::SaveToTree(pt::ptree& tree, const string& path) const
 {
 	pt::ptree &myNode = tree.add(path + name, "");
 	myNode.put("id", _id);
-	myNode.put("delay", _delay.count());
 }
 
 bool Bulb::LoadFromTree(pt::ptree::value_type& val)
@@ -72,11 +71,14 @@ bool Bulb::LoadFromTree(pt::ptree::value_type& val)
 	try
 	{
 		_id = val.second.get<int>("id");
-		_delay = seconds(val.second.get<unsigned int>("delay"));
 	}
-	catch (exception&)
+	catch (exception& e)
 	{
-		//TO DO: dodac logowanie bledu
+		string err = "Bulb.LoadFromTree() returned false! ";
+		err += "device ID: " + to_string(_id);
+		err += "what(): ";
+		err += e.what();
+		io::StdIO::ErrorOutput(err);
 		return false;
 	}
 	_isInit = true;
@@ -118,9 +120,8 @@ void device::Bulb::On()
 void device::Bulb::Off()
 {
     #ifdef LOG
-    io::StdIO::StandardOutput(
-        print::TimeToString(system_clock::now()) +
-        " Bulb.Off()" + " device ID: " + to_string(_id));
+	string s = print::TimeToString(system_clock::now()) +
+		" Bulb.Off()" + " device ID: " + to_string(_id);
     #endif
 
 	if (_isLocked)
@@ -136,14 +137,12 @@ void device::Bulb::Off()
 		}
 		#ifdef LOG
 		else
-		{
-			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now()) +
-				" Bulb.Off()" + " device ID: " +
-				to_string(_id) + " - IGNORED");
-		}
+			s +=" - IGNORED";
 		#endif
 	}
+	#ifdef LOG
+	io::StdIO::StandardOutput(s);
+	#endif
 }
 
 void device::Bulb::LockOn()

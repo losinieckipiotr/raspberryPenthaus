@@ -30,9 +30,10 @@ int main()
 		prog->StopAll();
 		cout << "Stopping program...";
 		th.join();
-		cin.get();
 		//usuwanie instancji glownej klasy
 		prog->ExitProgram();
+		cout << endl;
+		cout << "Good bye!" << endl;
 
 		return 0;
 	}

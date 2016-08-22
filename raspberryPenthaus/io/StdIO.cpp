@@ -30,7 +30,7 @@ list<string> StdIO::Input(string& message, network::Session& session)
 	return reply;
 }
 
-void StdIO::StandardOutput(const string line)
+void StdIO::StandardOutput(const string& line)
 {
 	//nie blokujace wyslanie na standardowe wyjscie 
 	std::async(launch::async, [&line]()
@@ -40,7 +40,7 @@ void StdIO::StandardOutput(const string line)
 	});
 }
 
-void StdIO::ErrorOutput(const string line)
+void StdIO::ErrorOutput(const string& line)
 {
 	//nie blokujace wyslanie na strumien bledow
 	std::async(launch::async, [&line]()

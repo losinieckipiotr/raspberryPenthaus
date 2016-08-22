@@ -17,12 +17,12 @@ namespace pt = boost::property_tree;
 
 const string LED::name = "led";
 
-LED::LED(int id, int pin, int delay, bool logic)
-	: DeviceBase(id), _pin(pin), _delay(delay),
-	_logic(logic), _defaultValue(!static_cast<int>(logic))
+LED::LED(int id, int pin, bool logic, unsigned int delay)
+	:	DeviceBase(id), _pin(pin),
+		_logic(logic), _defaultValue(!static_cast<int>(logic)),
+		_delay(delay), _isLocked(false), _state(-1)
 {
-	_state = -1;
-	_isLocked = false;
+
 }
 
 string LED::ToString() const
@@ -62,7 +62,6 @@ void LED::SaveToTree(pt::ptree& tree, const string& path) const
 	pt::ptree &myNode = tree.add(path + name, "");
 	myNode.put("id", _id);
 	myNode.put("pin", _pin);
-	myNode.put("delay", _delay.count());
 	myNode.put("logic", _logic);
 }
 
@@ -74,13 +73,16 @@ bool LED::LoadFromTree(pt::ptree::value_type &val)
 	{
 		_id = val.second.get<int>("id");
 		_pin = val.second.get<int>("pin");
-		_delay = seconds(val.second.get<int>("delay"));
 		_logic = val.second.get<bool>("logic");
 		_defaultValue = !static_cast<int>(_logic);
 	}
-	catch (exception&)
+	catch (exception& e)
 	{
-		//TO DO: dodac logowanie bledu
+		string err = "LED.LoadFromTree() returned false! ";
+		err += "device ID: " + to_string(_id);
+		err += "what(): ";
+		err += e.what();
+		io::StdIO::ErrorOutput(err);
 		return false;
 	}
 	_isInit = true;
@@ -110,7 +112,7 @@ string LED::Execute(string& s)
 		this->LockOff();
 	else if (buffer == "Unlock")
 		this->Unlock();
-	else if (buffer == "Change_Delay")
+	/*else if (buffer == "Change_Delay")
 	{
 		ss >> buffer;
 		if (buffer != "delay")
@@ -118,7 +120,7 @@ string LED::Execute(string& s)
 		int delay;
 		ss >> delay;
 		this->ChangeDelay(delay);
-	}
+	}*/
 	else
 		return "Syntax error";
 
@@ -146,10 +148,9 @@ void LED::On()
 
 void LED::Off()
 {
-    #ifdef LOG
-	io::StdIO::StandardOutput(
-		print::TimeToString(system_clock::now()) +
-		" LED.OFF()" + " device ID: " + to_string(_id));
+	#ifdef LOG
+	string s = print::TimeToString(system_clock::now()) +
+		" LED.Off()" + " device ID: " + to_string(_id);
 	#endif
 
 	if (_isLocked)
@@ -165,13 +166,12 @@ void LED::Off()
 		}
 		#ifdef LOG
 		else
-		{
-			io::StdIO::StandardOutput(
-				print::TimeToString(system_clock::now()) +
-				" LED.OFF()" + " device ID: " + to_string(_id) + " - IGNORED");
-		}
+			s += " - IGNORED";
 		#endif
 	}
+	#ifdef LOG
+	io::StdIO::StandardOutput(s);
+	#endif
 }
 
 void LED::LockOn()
@@ -193,8 +193,3 @@ void LED::Unlock()
 	_isLocked = false;
 }
 
-void LED::ChangeDelay(int delay)
-{
-	duration<int> newDelay(delay);
-	_delay = newDelay;
-}

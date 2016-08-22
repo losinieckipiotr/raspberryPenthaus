@@ -3,7 +3,7 @@
 #include "WP_LED.h"
 #include "../../config.h"
 
-#ifndef WP
+#ifdef SYMULATOR
 #define	OUTPUT 1
 static void digitalWrite(int i, int k)
 {
@@ -16,17 +16,17 @@ static void pinMode(int i, int j)
 }
 #else
 #include <wiringPi.h>
-#endif // !WP
+#endif
 
 using namespace device;
 using namespace wiringpi;
 using namespace prototype;
 using namespace std;
 
-const WP_LED WP_LED::prototype(-1, -1, 0, false);
+const WP_LED WP_LED::prototype(-1, -1, false, 0);
 
-WP_LED::WP_LED(int id, int pin, int delay, bool logic)
-	: LED(id, pin, delay, logic)
+WP_LED::WP_LED(int id, int pin, bool logic, unsigned int delay)
+	: LED(id, pin, logic, delay)
 {
 
 }

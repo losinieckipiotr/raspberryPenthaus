@@ -243,5 +243,11 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/penthaus notatki.txt
+
+#my
+notatki.txt
+raspberryPenthaus/files/copy
+
+
+
 

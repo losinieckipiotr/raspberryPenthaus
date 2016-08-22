@@ -9,7 +9,7 @@ namespace device
 		class WP_LED : public device::LED
 		{
 		public:
-			WP_LED(int, int, int, bool = true);
+			WP_LED(int, int, bool = true, unsigned int = 0);
 			virtual ~WP_LED();
 
 			virtual prototype::IPrototype* Clone() const;

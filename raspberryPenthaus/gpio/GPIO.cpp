@@ -9,14 +9,14 @@
 #include "../device/IWriteable.h"
 
 #include "../config.h"
-#ifndef WP
+#ifdef SYMULATOR
 void wiringPiSetup()
 {
 
 }
 #else
 #include <wiringPi.h>
-#endif // WP
+#endif
 
 using namespace gpio;
 using namespace std;

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<serialize><drivers><lightdriver><id>0</id><delay>2</delay><devices><led><id>0</id><pin>0</pin><delay>2</delay><logic>true</logic></led><bulb><id>1</id><delay>2</delay></bulb><motionsensor><id>2</id><pin>2</pin><logic>true</logic></motionsensor></devices></lightdriver></drivers></serialize>
+<serialize><drivers><lightdriver><id>0</id><delay>2</delay><devices><led><id>0</id><pin>0</pin><logic>true</logic></led><bulb><id>1</id></bulb><motionsensor><id>2</id><pin>2</pin><logic>true</logic></motionsensor></devices></lightdriver></drivers></serialize>

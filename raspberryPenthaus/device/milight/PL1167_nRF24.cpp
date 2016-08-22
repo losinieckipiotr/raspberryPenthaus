@@ -3,7 +3,7 @@
 using namespace device;
 using namespace milight;
 
-#ifndef WP
+#ifdef SYMULATOR
 PL1167_nRF24::PL1167_nRF24(RF24 &radio) : _radio(radio)
 {
 	_preambleLength = 1;
@@ -505,4 +505,4 @@ static uint8_t reverse_bits(uint8_t data) {
 	}
 	return result;
 }
-#endif //!WP
+#endif

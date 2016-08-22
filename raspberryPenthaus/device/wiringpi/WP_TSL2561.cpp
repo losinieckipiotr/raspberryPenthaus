@@ -9,7 +9,7 @@
 #include "../../gpio/GPIO.h"
 #include "../../config.h"
 
-#ifdef WP
+#ifndef SYMULATOR
 #include <wiringPiI2C.h>
 #else
 #include <random>
@@ -39,7 +39,7 @@ int wiringPiI2CSetup(int i)
 {
     return 0;
 }
-#endif // WP
+#endif
 
 using namespace device;
 using namespace wiringpi;

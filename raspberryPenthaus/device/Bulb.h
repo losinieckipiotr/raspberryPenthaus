@@ -46,6 +46,7 @@ namespace device
 		bool IsOn() const { return (_state >= 1); }
 		bool IsLocked() const { return _isLocked; }
 		std::chrono::seconds GetDelay() const { return _delay; }
+		void SetDelay(std::chrono::seconds& delay) { _delay = delay; }
 
 		static const std::string name;
 

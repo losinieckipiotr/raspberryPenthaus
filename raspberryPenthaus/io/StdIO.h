@@ -17,8 +17,8 @@ namespace io
 		StdIO();
 		virtual ~StdIO();
 
-		static void StandardOutput(const std::string line);
-		static void ErrorOutput(const std::string line);
+		static void StandardOutput(const std::string& line);
+		static void ErrorOutput(const std::string& line);
 
 		inline const std::list<std::string>& GetHello(){ return _helloMsg; }
 

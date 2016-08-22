@@ -3,7 +3,7 @@
 #include "AbstractPL1167.h"
 #include "../../config.h"
 
-#ifdef WP
+#ifndef SYMULATOR
 #include <RF24/RF24.h>
 #else
 class RF24
@@ -12,7 +12,7 @@ public:
 	RF24() { }
 	~RF24() { }
 };
-#endif // WP
+#endif
 
 namespace device
 {
