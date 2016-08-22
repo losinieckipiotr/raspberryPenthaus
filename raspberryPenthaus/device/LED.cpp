@@ -19,8 +19,9 @@ const string LED::name = "led";
 
 LED::LED(int id, int pin, bool logic, unsigned int delay)
 	:	DeviceBase(id), _pin(pin),
-		_logic(logic), _defaultValue(!static_cast<int>(logic)),
-		_delay(delay), _isLocked(false), _state(-1)
+		_logic(logic), _delay(delay),
+		_defaultValue(!static_cast<int>(logic)),
+		_isLocked(false), _state(-1)
 {
 
 }

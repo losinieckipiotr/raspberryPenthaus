@@ -56,10 +56,10 @@ namespace device
 
 		int _pin;
 		bool _logic;
+		std::chrono::seconds _delay;
 		int _defaultValue;
 		bool _isLocked;
 		int _state;
-		std::chrono::seconds _delay;
 
 		timePoint _lightingTime;
 	};
