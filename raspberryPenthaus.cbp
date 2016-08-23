@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="raspberryPenthaus" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/raspberryPenthaus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/raspberryPenthaus" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="source/raspberryPenthaus/ItemsPool.hpp" />
+		<Unit filename="source/raspberryPenthaus/config.h" />
+		<Unit filename="source/raspberryPenthaus/device/Bulb.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/Bulb.h" />
+		<Unit filename="source/raspberryPenthaus/device/DeviceBase.h" />
+		<Unit filename="source/raspberryPenthaus/device/DeviceManager.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/DeviceManager.h" />
+		<Unit filename="source/raspberryPenthaus/device/IDevice.h" />
+		<Unit filename="source/raspberryPenthaus/device/IReadable.h" />
+		<Unit filename="source/raspberryPenthaus/device/IWriteable.h" />
+		<Unit filename="source/raspberryPenthaus/device/LED.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/LED.h" />
+		<Unit filename="source/raspberryPenthaus/device/LightSensor.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/LightSensor.h" />
+		<Unit filename="source/raspberryPenthaus/device/MotionSensor.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/MotionSensor.h" />
+		<Unit filename="source/raspberryPenthaus/device/milight/AbstractPL1167.h" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightBulb.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightBulb.h" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightPilot.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightPilot.h" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightRadio.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/milight/MiLightRadio.h" />
+		<Unit filename="source/raspberryPenthaus/device/milight/PL1167_nRF24.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/milight/PL1167_nRF24.h" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_LED.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_LED.h" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_MotionSensor.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_MotionSensor.h" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_TSL2561.cpp" />
+		<Unit filename="source/raspberryPenthaus/device/wiringpi/WP_TSL2561.h" />
+		<Unit filename="source/raspberryPenthaus/event/IEvent.h" />
+		<Unit filename="source/raspberryPenthaus/event/IEventHandler.h" />
+		<Unit filename="source/raspberryPenthaus/event/LEDExpired.hpp" />
+		<Unit filename="source/raspberryPenthaus/event/LightDetected.hpp" />
+		<Unit filename="source/raspberryPenthaus/event/LightExpired.hpp" />
+		<Unit filename="source/raspberryPenthaus/event/MotionDetected.hpp" />
+		<Unit filename="source/raspberryPenthaus/gpio/GPIO.cpp" />
+		<Unit filename="source/raspberryPenthaus/gpio/GPIO.h" />
+		<Unit filename="source/raspberryPenthaus/io/IO.cpp" />
+		<Unit filename="source/raspberryPenthaus/io/IO.h" />
+		<Unit filename="source/raspberryPenthaus/io/StdIO.cpp" />
+		<Unit filename="source/raspberryPenthaus/io/StdIO.h" />
+		<Unit filename="source/raspberryPenthaus/io/network/Server.cpp" />
+		<Unit filename="source/raspberryPenthaus/io/network/Server.h" />
+		<Unit filename="source/raspberryPenthaus/io/network/Session.cpp" />
+		<Unit filename="source/raspberryPenthaus/io/network/Session.h" />
+		<Unit filename="source/raspberryPenthaus/io/network/transport/MyFrame.hpp" />
+		<Unit filename="source/raspberryPenthaus/main.cpp" />
+		<Unit filename="source/raspberryPenthaus/print/IToString.h" />
+		<Unit filename="source/raspberryPenthaus/program/Commander.cpp" />
+		<Unit filename="source/raspberryPenthaus/program/Commander.h" />
+		<Unit filename="source/raspberryPenthaus/program/Creator.cpp" />
+		<Unit filename="source/raspberryPenthaus/program/Creator.h" />
+		<Unit filename="source/raspberryPenthaus/program/DeviceReader.cpp" />
+		<Unit filename="source/raspberryPenthaus/program/DeviceReader.h" />
+		<Unit filename="source/raspberryPenthaus/program/IDriver.h" />
+		<Unit filename="source/raspberryPenthaus/program/LightDriver.cpp" />
+		<Unit filename="source/raspberryPenthaus/program/LightDriver.h" />
+		<Unit filename="source/raspberryPenthaus/program/Program.cpp" />
+		<Unit filename="source/raspberryPenthaus/program/Program.h" />
+		<Unit filename="source/raspberryPenthaus/prototype/IPrototype.h" />
+		<Unit filename="source/raspberryPenthaus/prototype/PrototypeBase.h" />
+		<Unit filename="source/raspberryPenthaus/prototype/PrototypeManager.cpp" />
+		<Unit filename="source/raspberryPenthaus/prototype/PrototypeManager.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

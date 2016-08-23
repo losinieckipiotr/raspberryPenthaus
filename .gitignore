@@ -244,6 +244,11 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
+#codeblocks
+*.layout
+*.html
+files/
+
 #my
 notatki.txt
 raspberryPenthaus/files/copy
