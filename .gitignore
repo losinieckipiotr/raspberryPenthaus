@@ -246,6 +246,7 @@ ModelManifest.xml
 
 #codeblocks
 *.layout
+*.depend
 *.html
 files/
 
